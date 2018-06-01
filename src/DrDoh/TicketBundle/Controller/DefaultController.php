@@ -10,4 +10,5 @@ class DefaultController extends Controller
     {
         return $this->render('DrDohTicketBundle:Default:index.html.twig');
     }
+
 }
