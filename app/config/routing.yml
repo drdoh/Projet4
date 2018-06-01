@@ -1,3 +1,7 @@
+dr_doh_ticket:
+    resource: "@DrDohTicketBundle/Resources/config/routing.yml"
+    prefix:   /
+
 app:
     resource: '@AppBundle/Controller/'
     type: annotation
