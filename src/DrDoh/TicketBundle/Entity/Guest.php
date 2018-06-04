@@ -84,6 +84,13 @@ class Guest
      */
     private $email;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="main_guest", type="boolean")
+     */
+    private $main_guest = false;
+
 
     /**
      * Get id
@@ -309,6 +316,30 @@ class Guest
     public function getEmail()
     {
         return $this->email;
+    }
+
+    /**
+     * Set main_guest
+     *
+     * @param boolean $main_guest
+     *
+     * @return Guest
+     */
+    public function setMainGuest($main_guest)
+    {
+        $this->main_guest = $main_guest;
+
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return boolean
+     */
+    public function getMainGuest()
+    {
+        return $this->main_guest;
     }
 }
 
