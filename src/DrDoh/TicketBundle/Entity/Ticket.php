@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Ticket
 {
+/***************************** ATTRIBUTE *************************/
     /**
      * @var int
      *
@@ -42,7 +43,7 @@ class Ticket
      */
     private $qteSold;
 
-
+/***************************** GETTER & SETTER *************************/
     /**
      * Get id
      *

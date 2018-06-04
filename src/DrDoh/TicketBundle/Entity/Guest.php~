@@ -108,7 +108,7 @@ class Guest
 
     }
 
-/***************************** GETTER & SETTER *************************/
+/***************************** GETTER 1 SETTER *************************/
 
     /**
      * Get id
@@ -345,42 +345,5 @@ class Guest
     {
         return $this->main_guest;
     }
-
-    /**
-     * Set bookingDate
-     *
-     * @param \DateTime $bookingDate
-     *
-     * @return Guest
-     */
-    public function setBookingDate($bookingDate)
-    {
-        $this->bookingDate = $bookingDate;
-
-        return $this;
-    }
-
-    /**
-     * Set reservedDateId
-     *
-     * @param \DrDoh\TicketBundle\Entity\Ticket $reservedDateId
-     *
-     * @return Guest
-     */
-    public function setReservedDateId(\DrDoh\TicketBundle\Entity\Ticket $reservedDateId)
-    {
-        $this->reservedDateId = $reservedDateId;
-
-        return $this;
-    }
-
-    /**
-     * Get reservedDateId
-     *
-     * @return \DrDoh\TicketBundle\Entity\Ticket
-     */
-    public function getReservedDateId()
-    {
-        return $this->reservedDateId;
-    }
 }
+
