@@ -1,0 +1,78 @@
+{% extends "::layout.html.twig"%}
+
+{% block title %} 
+    {{parent()}} - Billetterie 
+{% endblock %}
+
+{% block body  %}
+
+    <div class="container">
+        <h2 class="text-white m-4">Bienvenue</h2> 
+        <div id="form_contener"></div>
+    
+        <div class="card text-white bg-dark mb-3">
+            <h3 class="card-header text-center">
+                Choissiez la date de votre visite
+            </h3>
+            <div class="card-body">
+                <div class="well">
+                    <form methode="post" action="{{path('dr_doh_ticket_billetterie_2')}}">
+                        <div class="form-group">    
+                            <label for="ticket_qte">Nombre de places (Maximum 6)</label><br />
+                            <select id="choix" class="form-control">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                            </select>
+                        
+                        <hr>
+                        
+                        <div class="form-group">  
+                            <label for="choix">Durée de votre visite</label>
+                            <select id="choix" class="form-control">
+                                <option value="journee">Billet journée</option>
+                                <option value="demi-journee">Billet demi journée (a partir de 14h00)</option>
+                            </select>
+                        </div>
+                        
+                        <hr>
+                        
+                        <div class="form-group date">
+                            <label for="date">Date de votre visite</label>
+                            <input id="date" type="text" class="form-control">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                        </div>
+   
+
+                        <div class="form-group mt-5">
+                            <input type="submit" class="form-control" value="Poursuivre">
+                        </div>
+                    </form>
+                </div>
+        </div>
+        
+    </div> 
+
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+
+<script type="text/javascript">
+    $('.form-group.date').datepicker({
+        startDate: '0d',
+        maxViewMode: 0,
+        autoclose: true,
+        todayHighlight: true,
+        datesDisabled: ['06/06/2018', '06/21/2018'],
+        language: 'fr',
+        todayBtn: "linked",
+        orientation: "auto "
+    });
+</script>
+
+{% endblock %}
+    
