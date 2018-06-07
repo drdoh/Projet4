@@ -23,7 +23,10 @@
         "php": ">=5.5.9",
         "doctrine/doctrine-bundle": "^1.6",
         "doctrine/orm": "^2.5",
+<<<<<<< HEAD
         "doctrine/doctrine-fixtures-bundle":"~2.3",
+=======
+>>>>>>> e352ce1178b2df6670ec6beee44b614b37815c88
         "incenteev/composer-parameter-handler": "^2.0",
         "sensio/distribution-bundle": "^5.0.19",
         "sensio/framework-extra-bundle": "^3.0.2",

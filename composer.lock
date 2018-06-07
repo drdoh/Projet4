@@ -4,7 +4,11 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
+<<<<<<< HEAD
     "content-hash": "7976d0eea07eacf063fa515616f51833",
+=======
+    "content-hash": "0411d5cf223a824593537627ef8cee53",
+>>>>>>> e352ce1178b2df6670ec6beee44b614b37815c88
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -345,6 +349,7 @@
             "time": "2017-08-31T08:43:38+00:00"
         },
         {
+<<<<<<< HEAD
             "name": "doctrine/data-fixtures",
             "version": "v1.3.1",
             "source": {
@@ -405,6 +410,8 @@
             "time": "2018-03-20T09:06:36+00:00"
         },
         {
+=======
+>>>>>>> e352ce1178b2df6670ec6beee44b614b37815c88
             "name": "doctrine/dbal",
             "version": "v2.7.1",
             "source": {
@@ -653,6 +660,7 @@
             "time": "2018-03-27T09:22:12+00:00"
         },
         {
+<<<<<<< HEAD
             "name": "doctrine/doctrine-fixtures-bundle",
             "version": "v2.4.1",
             "source": {
@@ -710,6 +718,8 @@
             "time": "2017-10-30T19:26:42+00:00"
         },
         {
+=======
+>>>>>>> e352ce1178b2df6670ec6beee44b614b37815c88
             "name": "doctrine/inflector",
             "version": "v1.3.0",
             "source": {
@@ -1201,6 +1211,7 @@
         },
         {
             "name": "paragonie/random_compat",
+<<<<<<< HEAD
             "version": "v2.99.99",
             "source": {
                 "type": "git",
@@ -1219,6 +1230,25 @@
             "require-dev": {
                 "phpunit/phpunit": "4.*|5.*",
                 "vimeo/psalm": "^1"
+=======
+            "version": "v2.0.12",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/paragonie/random_compat.git",
+                "reference": "258c89a6b97de7dfaf5b8c7607d0478e236b04fb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/258c89a6b97de7dfaf5b8c7607d0478e236b04fb",
+                "reference": "258c89a6b97de7dfaf5b8c7607d0478e236b04fb",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.*|5.*"
+>>>>>>> e352ce1178b2df6670ec6beee44b614b37815c88
             },
             "suggest": {
                 "ext-libsodium": "Provides a modern crypto API that can be used to generate random bytes."
@@ -1243,11 +1273,18 @@
             "description": "PHP 5.x polyfill for random_bytes() and random_int() from PHP 7",
             "keywords": [
                 "csprng",
+<<<<<<< HEAD
                 "polyfill",
                 "pseudorandom",
                 "random"
             ],
             "time": "2018-06-06T05:12:00+00:00"
+=======
+                "pseudorandom",
+                "random"
+            ],
+            "time": "2018-04-04T21:24:14+00:00"
+>>>>>>> e352ce1178b2df6670ec6beee44b614b37815c88
         },
         {
             "name": "psr/cache",
@@ -1490,6 +1527,7 @@
         },
         {
             "name": "sensio/distribution-bundle",
+<<<<<<< HEAD
             "version": "v5.0.22",
             "source": {
                 "type": "git",
@@ -1500,6 +1538,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/sensiolabs/SensioDistributionBundle/zipball/209b11f8cee5bf71986dd703e45e27d3ed7a6d15",
                 "reference": "209b11f8cee5bf71986dd703e45e27d3ed7a6d15",
+=======
+            "version": "v5.0.21",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sensiolabs/SensioDistributionBundle.git",
+                "reference": "eb6266b3b472e4002538610b28a0a04bcf94891a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sensiolabs/SensioDistributionBundle/zipball/eb6266b3b472e4002538610b28a0a04bcf94891a",
+                "reference": "eb6266b3b472e4002538610b28a0a04bcf94891a",
+>>>>>>> e352ce1178b2df6670ec6beee44b614b37815c88
                 "shasum": ""
             },
             "require": {
@@ -1538,7 +1588,11 @@
                 "configuration",
                 "distribution"
             ],
+<<<<<<< HEAD
             "time": "2018-06-07T06:22:12+00:00"
+=======
+            "time": "2017-08-25T16:55:44+00:00"
+>>>>>>> e352ce1178b2df6670ec6beee44b614b37815c88
         },
         {
             "name": "sensio/framework-extra-bundle",

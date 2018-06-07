@@ -1,7 +1,11 @@
 {% extends "::layout.html.twig"%}
 
 {% block title %} 
+<<<<<<< HEAD
     {{parent()}} Billetterie 
+=======
+    {{parent()}} - Billetterie 
+>>>>>>> e352ce1178b2df6670ec6beee44b614b37815c88
 {% endblock %}
 
 {% block body  %}
@@ -16,10 +20,17 @@
             </h3>
             <div class="card-body">
                 <div class="well">
+<<<<<<< HEAD
                     <form method="post" action="{{path('dr_doh_ticket_billetterie_2')}}">
                         <div class="form-group">    
                             <label for="ticket_qte">Nombre de places (Maximum 6)</label><br />
                             <select name="ticket_qte" id="ticket_qte" class="form-control">
+=======
+                    <form methode="post" action="{{path('dr_doh_ticket_billetterie_2')}}">
+                        <div class="form-group">    
+                            <label for="ticket_qte">Nombre de places (Maximum 6)</label><br />
+                            <select id="choix" class="form-control">
+>>>>>>> e352ce1178b2df6670ec6beee44b614b37815c88
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
@@ -32,7 +43,11 @@
                         
                         <div class="form-group">  
                             <label for="choix">Durée de votre visite</label>
+<<<<<<< HEAD
                             <select name="choix" id="choix" class="form-control">
+=======
+                            <select id="choix" class="form-control">
+>>>>>>> e352ce1178b2df6670ec6beee44b614b37815c88
                                 <option value="journee">Billet journée</option>
                                 <option value="demi-journee">Billet demi journée (a partir de 14h00)</option>
                             </select>

@@ -75,7 +75,11 @@ class Guest
     /**
      * @var string
      *
+<<<<<<< HEAD
      * @ORM\ManyToMany(targetEntity="DrDroh\TicketBundle\Entity\Discounts", cascade={"persist"})
+=======
+     * @ORM\Column(name="discount_type", type="string", length=255, nullable=true)
+>>>>>>> e352ce1178b2df6670ec6beee44b614b37815c88
      */
     private $discountType;
 
@@ -108,7 +112,11 @@ class Guest
 
     }
 
+<<<<<<< HEAD
 /***************************** GETTER & SETTER *************************/
+=======
+/***************************** GETTER 1 SETTER *************************/
+>>>>>>> e352ce1178b2df6670ec6beee44b614b37815c88
 
     /**
      * Get id
@@ -345,6 +353,7 @@ class Guest
     {
         return $this->main_guest;
     }
+<<<<<<< HEAD
 
     /**
      * Set bookingDate
@@ -384,3 +393,7 @@ class Guest
         return $this->reservedDateId;
     }
 }
+=======
+}
+
+>>>>>>> e352ce1178b2df6670ec6beee44b614b37815c88
