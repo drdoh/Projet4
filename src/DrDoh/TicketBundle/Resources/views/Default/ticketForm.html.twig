@@ -1,0 +1,94 @@
+{% extends "::layout.html.twig"%}
+
+{% block title %} 
+    {{parent()}} Billetterie 
+{% endblock %}
+
+{% block body  %}
+
+    <div class="container">
+        <h2 class="text-white m-4">Bienvenue</h2> 
+        <div id="form_contener"></div>
+    
+        <div class="card text-white bg-dark mb-3">
+            <h3 class="card-header text-center">
+                Choissiez la date de votre visite
+            </h3>
+            <div class="card-body">
+                <div class="well">
+                    <form method="post" action="{{path('dr_doh_ticket_billetterie_2')}}">
+                        <div class="form-group">    
+                            <label for="ticket_qte">Nombre de places (Maximum 6)</label><br />
+                            <select name="ticket_qte" id="ticket_qte" class="form-control">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                            </select>
+                        
+                        <hr>
+                        
+                        <div class="form-group">  
+                            <label for="choix">Durée de votre visite</label>
+                            <select name="choix" id="choix" class="form-control">
+                                <option value="journee">Billet journée</option>
+                                <option value="demi-journee">Billet demi journée (a partir de 14h00)</option>
+                            </select>
+                        </div>
+                        
+                        <hr>
+                        
+                        <div class="form-group">
+                            <label>Date de votre visite</label>
+                            <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+                                <input type="text" name="date" class="form-control datetimepicker-input" data-target="#datetimepicker1"/>
+                                <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                            </div>
+                        </div>
+   
+
+                        <div class="form-group mt-5">
+                            <input type="submit" class="form-control btn btn-info" value="Poursuivre">
+                        </div>
+
+                    </form>
+                </div>
+        </div>
+        
+    </div> 
+
+{% endblock %}
+
+{% block javascripts %}
+
+    {{parent()}}
+
+    <script type="text/javascript">
+        $(function () {
+
+            $('#datetimepicker1').datetimepicker(
+                {
+                format: 'L',
+                viewDate: 'moment',
+                locale: 'fr',
+                disabledDates: [
+                    {% for fullDate in listFullDate %}
+                    "{{fullDate}}" ,
+                    {% endfor %}
+                    "99/99/9999 99:99"
+                ]});
+        
+        // --VVV-- Reglage de la date mini de reservation --VVV-- 
+        $('#datetimepicker1').datetimepicker('minDate', 'moment');
+
+        // --VVV-- Reglage format de la date --VVV-- 
+        $('#datetimepicker1').datetimepicker('format', 'DD/MM/YYYY');
+        });
+    </script>
+
+{% endblock %}
+    

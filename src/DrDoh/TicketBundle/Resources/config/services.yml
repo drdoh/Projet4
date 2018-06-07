@@ -1,0 +1,4 @@
+services:
+   dr_doh_ticket.ticket_verification:
+       class: DrDoh\TicketBundle\TicketVerification\DrDohTicketVerification
+

@@ -1,0 +1,7 @@
+dr_doh_ticket_billetterie:
+    path:     /
+    defaults: { _controller: DrDohTicketBundle:Booking:ticketForm }
+
+dr_doh_ticket_billetterie_2:
+    path:     /visiteur
+    defaults: { _controller: DrDohTicketBundle:Booking:guestForm }
