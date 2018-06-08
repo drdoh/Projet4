@@ -5,7 +5,6 @@ namespace DrDoh\TicketBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
 
 class TicketType extends AbstractType
 {
@@ -15,12 +14,10 @@ class TicketType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('date', DateType::class)
-            ->add('qteMax')
-            ->add('qteSold');
-    }
-    
-    /**
+            ->add('date')
+            ->add('ticketId');
+
+    }/**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)

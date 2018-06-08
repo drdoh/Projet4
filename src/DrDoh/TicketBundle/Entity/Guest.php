@@ -46,65 +46,24 @@ class Guest
     /**
      * @var int
      *
-     * @ORM\Column(name="ticket_id", type="integer")
+     * @ORM\OneToOne(targetEntity="DrDoh\TicketBundle\Entity\Ticket", cascade={"persist"})
      */
     private $ticketId;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="reserved_date", type="datetime")
-     */
-    private $reservedDate;
-
-    /**
-     * @var int
-     *
-     * @ORM\ManyToOne(targetEntity="DrDoh\TicketBundle\Entity\Ticket")
-     * @ORM\JoinColumn(name="reserved_date_id", nullable=false)
-     */
-    private $reservedDateId;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="booking_date", type="datetime")
-     */
-    private $bookingDate;
-
-    /**
      * @var string
      *
-     * @ORM\ManyToMany(targetEntity="DrDoh\TicketBundle\Entity\Discounts", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="DrDoh\TicketBundle\Entity\Discount", cascade={"persist"})
      */
     private $discountType;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="amount_paid", type="integer", nullable=true)
-     */
-    private $amountPaid;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="email", type="string", length=255)
-     */
-    private $email;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="main_guest", type="boolean")
-     */
-    private $main_guest = false;
 
 /***************************** CONSTRUCTOR *************************/
         
     public function __construct(){
 
-        $this->bookingDate = new \Datetime();
+        
 
     }
 
@@ -217,40 +176,6 @@ class Guest
     }
 
     /**
-     * Set reservedDate
-     *
-     * @param \DateTime $reservedDate
-     *
-     * @return Guest
-     */
-    public function setReservedDate($reservedDate)
-    {
-        $this->reservedDate = $reservedDate;
-
-        return $this;
-    }
-
-    /**
-     * Get reservedDate
-     *
-     * @return \DateTime
-     */
-    public function getReservedDate()
-    {
-        return $this->reservedDate;
-    }
-
-    /**
-     * Get bookingDate
-     *
-     * @return \DateTime
-     */
-    public function getBookingDate()
-    {
-        return $this->bookingDate;
-    }
-
-    /**
      * Set discountType
      *
      * @param string $discountType
@@ -274,126 +199,16 @@ class Guest
         return $this->discountType;
     }
 
-    /**
-     * Set amountPaid
-     *
-     * @param integer $amountPaid
-     *
-     * @return Guest
-     */
-    public function setAmountPaid($amountPaid)
-    {
-        $this->amountPaid = $amountPaid;
-
-        return $this;
-    }
-
-    /**
-     * Get amountPaid
-     *
-     * @return int
-     */
-    public function getAmountPaid()
-    {
-        return $this->amountPaid;
-    }
-
-    /**
-     * Set email
-     *
-     * @param string $email
-     *
-     * @return Guest
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * Get email
-     *
-     * @return string
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * Set main_guest
-     *
-     * @param boolean $main_guest
-     *
-     * @return Guest
-     */
-    public function setMainGuest($main_guest)
-    {
-        $this->main_guest = $main_guest;
-
-        return $this;
-    }
-
-    /**
-     * Get email
-     *
-     * @return boolean
-     */
-    public function getMainGuest()
-    {
-        return $this->main_guest;
-    }
-
-    /**
-     * Set bookingDate
-     *
-     * @param \DateTime $bookingDate
-     *
-     * @return Guest
-     */
-    public function setBookingDate($bookingDate)
-    {
-        $this->bookingDate = $bookingDate;
-
-        return $this;
-    }
-
-    /**
-     * Set reservedDateId
-     *
-     * @param \DrDoh\TicketBundle\Entity\Ticket $reservedDateId
-     *
-     * @return Guest
-     */
-    public function setReservedDateId(\DrDoh\TicketBundle\Entity\Ticket $reservedDateId)
-    {
-        $this->reservedDateId = $reservedDateId;
-
-        return $this;
-    }
-
-    /**
-     * Get reservedDateId
-     *
-     * @return \DrDoh\TicketBundle\Entity\Ticket
-     */
-    public function getReservedDateId()
-    {
-        return $this->reservedDateId;
-    }
-
 /***************************** ADD & REMOVE *************************/
 
     /**
      * Add discountType.
      *
-     * @param \DrDroh\TicketBundle\Entity\Discounts $discountType
+     * @param \DrDroh\TicketBundle\Entity\Discount $discountType
      *
      * @return Guest
      */
-    public function addDiscountType(\DrDroh\TicketBundle\Entity\Discounts $discountType)
+    public function addDiscountType(\DrDroh\TicketBundle\Entity\Discount $discountType)
     {
         $this->discountType[] = $discountType;
 
@@ -403,11 +218,11 @@ class Guest
     /**
      * Remove discountType.
      *
-     * @param \DrDroh\TicketBundle\Entity\Discounts $discountType
+     * @param \DrDroh\TicketBundle\Entity\Discount $discountType
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeDiscountType(\DrDroh\TicketBundle\Entity\Discounts $discountType)
+    public function removeDiscountType(\DrDroh\TicketBundle\Entity\Discount $discountType)
     {
         return $this->discountType->removeElement($discountType);
     }

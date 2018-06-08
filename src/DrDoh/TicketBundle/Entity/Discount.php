@@ -5,12 +5,12 @@ namespace DrDoh\TicketBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Discounts
+ * Discount
  *
  * @ORM\Table(name="discounts")
- * @ORM\Entity(repositoryClass="DrDoh\TicketBundle\Repository\DiscountsRepository")
+ * @ORM\Entity(repositoryClass="DrDoh\TicketBundle\Repository\DiscountRepository")
  */
-class Discounts
+class Discount
 {
     /**
      * @var int
@@ -44,7 +44,7 @@ class Discounts
      *
      * @param string|null $type
      *
-     * @return Discounts
+     * @return Discount
      */
     public function setType($type = null)
     {

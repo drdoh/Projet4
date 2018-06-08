@@ -12,10 +12,9 @@ class DrDohTicketVerification
      * 
      */
     
-    public function getFullDate($datas){
+    public function getFullDate($datas, $qteMax){
         
         foreach($datas as $data){
-            $qteMax = $data->getQteMax();
             $qteSold = $data->getqteSold();
             
             if(($qteMax-$qteSold)===0){

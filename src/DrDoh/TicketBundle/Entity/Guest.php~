@@ -57,54 +57,21 @@ class Guest
      */
     private $reservedDate;
 
-    /**
-     * @var int
-     *
-     * @ORM\ManyToOne(targetEntity="DrDoh\TicketBundle\Entity\Ticket")
-     * @ORM\JoinColumn(name="reserved_date_id", nullable=false)
-     */
-    private $reservedDateId;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="booking_date", type="datetime")
-     */
-    private $bookingDate;
-
+  
     /**
      * @var string
      *
-     * @ORM\ManyToMany(targetEntity="DrDroh\TicketBundle\Entity\Discounts", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="DrDoh\TicketBundle\Entity\Discount", cascade={"persist"})
      */
     private $discountType;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="amount_paid", type="integer", nullable=true)
-     */
-    private $amountPaid;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="email", type="string", length=255)
-     */
-    private $email;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="main_guest", type="boolean")
-     */
-    private $main_guest = false;
 
 /***************************** CONSTRUCTOR *************************/
         
     public function __construct(){
 
-        $this->bookingDate = new \Datetime();
+        
 
     }
 
@@ -241,16 +208,6 @@ class Guest
     }
 
     /**
-     * Get bookingDate
-     *
-     * @return \DateTime
-     */
-    public function getBookingDate()
-    {
-        return $this->bookingDate;
-    }
-
-    /**
      * Set discountType
      *
      * @param string $discountType
@@ -274,113 +231,31 @@ class Guest
         return $this->discountType;
     }
 
+/***************************** ADD & REMOVE *************************/
+
     /**
-     * Set amountPaid
+     * Add discountType.
      *
-     * @param integer $amountPaid
+     * @param \DrDroh\TicketBundle\Entity\Discount $discountType
      *
      * @return Guest
      */
-    public function setAmountPaid($amountPaid)
+    public function addDiscountType(\DrDroh\TicketBundle\Entity\Discount $discountType)
     {
-        $this->amountPaid = $amountPaid;
+        $this->discountType[] = $discountType;
 
         return $this;
     }
 
     /**
-     * Get amountPaid
+     * Remove discountType.
      *
-     * @return int
+     * @param \DrDroh\TicketBundle\Entity\Discount $discountType
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function getAmountPaid()
+    public function removeDiscountType(\DrDroh\TicketBundle\Entity\Discount $discountType)
     {
-        return $this->amountPaid;
-    }
-
-    /**
-     * Set email
-     *
-     * @param string $email
-     *
-     * @return Guest
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * Get email
-     *
-     * @return string
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * Set main_guest
-     *
-     * @param boolean $main_guest
-     *
-     * @return Guest
-     */
-    public function setMainGuest($main_guest)
-    {
-        $this->main_guest = $main_guest;
-
-        return $this;
-    }
-
-    /**
-     * Get email
-     *
-     * @return boolean
-     */
-    public function getMainGuest()
-    {
-        return $this->main_guest;
-    }
-
-    /**
-     * Set bookingDate
-     *
-     * @param \DateTime $bookingDate
-     *
-     * @return Guest
-     */
-    public function setBookingDate($bookingDate)
-    {
-        $this->bookingDate = $bookingDate;
-
-        return $this;
-    }
-
-    /**
-     * Set reservedDateId
-     *
-     * @param \DrDoh\TicketBundle\Entity\Ticket $reservedDateId
-     *
-     * @return Guest
-     */
-    public function setReservedDateId(\DrDoh\TicketBundle\Entity\Ticket $reservedDateId)
-    {
-        $this->reservedDateId = $reservedDateId;
-
-        return $this;
-    }
-
-    /**
-     * Get reservedDateId
-     *
-     * @return \DrDoh\TicketBundle\Entity\Ticket
-     */
-    public function getReservedDateId()
-    {
-        return $this->reservedDateId;
+        return $this->discountType->removeElement($discountType);
     }
 }

@@ -4,9 +4,9 @@ namespace DrDoh\TicketBundle\DataFixtures\ORM;
 
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use DrDoh\TicketBundle\Entity\Discounts;
+use DrDoh\TicketBundle\Entity\Discount;
 
-class LoadDiscounts extends Fixture
+class LoadDiscount extends Fixture
 {
     public function load(ObjectManager $manager)
     {
@@ -19,7 +19,7 @@ class LoadDiscounts extends Fixture
         );
         
         foreach($discountsType as $discountType){
-            $discount = new Discounts;
+            $discount = new Discount;
             $discount->setType($discountType);
 
             $manager->persist($discount);

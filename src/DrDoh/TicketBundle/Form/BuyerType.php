@@ -15,7 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\DiscountType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-class GuestType extends AbstractType
+class BuyerType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -23,31 +23,18 @@ class GuestType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('lastName')
-            ->add('firstName')
-            ->add('birthDate')
-            ->add('ticketId')
-            ->add('discountType', EntityType::class, array(
-                'class' => "DrDohTicketBundle:Discount",
-                'choice_label'=>"type",
-                'multiple'=>false,
-                'expanded'=>false
-            ))
-            ->add('country', CountryType::class, [
-                'mapped' => false,
-                'required' => false,
-                'preferred_choices' => [
-                    'FR', 'DE', 'US', 'ES', 'GB', 'IT', 'JP',
-                ],
-            ])
-            ->add('save', SubmitType::class);
+            ->add('orderId')
+            ->add('orderDate')
+            ->add('amountPaid')
+            ->add('email');
+         
     }/**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'DrDoh\TicketBundle\Entity\Guest'
+            'data_class' => 'DrDoh\TicketBundle\Entity\Buyer'
         ));
     }
 
@@ -56,7 +43,7 @@ class GuestType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'drdoh_ticketbundle_guest';
+        return 'drdoh_ticketbundle_buyer';
     }
 
 

@@ -21,8 +21,10 @@ class BookingController extends Controller
         $dateTikets = $repository->findAll();
         
         $tiketsVerfification = $this->container->get('dr_doh_ticket.ticket_verification');
-     
-        $fullDateArray = $tiketsVerfification->getFullDate($dateTikets);
+        
+        $qteMax = $this->container->getParameter('ticketverification_qteMax');
+
+        $fullDateArray = $tiketsVerfification->getFullDate($dateTikets, $qteMax);
         
         return $this->render('DrDohTicketBundle:Default:ticketForm.html.twig', array(
             'listFullDate' => $fullDateArray
