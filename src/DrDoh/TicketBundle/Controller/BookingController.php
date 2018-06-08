@@ -31,6 +31,7 @@ class BookingController extends Controller
         //     var_dump($ticketsArray);
         // }
 
+
         $repository = $this
             ->getDoctrine()
             ->getManager()

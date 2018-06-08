@@ -16,17 +16,15 @@ class DrDohTicketVerification
         $soldTicketsArray = [];
         
         foreach($tickets as $ticket){
-            var_dump($tickets);
             $ticketDate = $ticket->getDate()->format('Y-m-d');
             
             if(array_key_exists($ticketDate,$soldTicketsArray)){ 
-                var_dump($ticketDate);
                 $soldTicketsArray[$ticketDate] ++;
             }else{
                 $soldTicketsArray[$ticketDate] = 1 ;
-            }
-            return $soldTicketsArray;
+            }   
         }
+        return $soldTicketsArray;
     }
 
 
@@ -40,18 +38,19 @@ class DrDohTicketVerification
         
 
         $soldTickets = $this->getSoldTickets($tickets);
-        var_dump($soldTickets);
+        
+        var_dump($qteMax);
+        
+        foreach($soldTickets as $soldTicket){
+            var_dump($soldTicket);
 
-        foreach($tickets as $tickets){
-
-            if(($qteMax - $soldTickets)===0){
-                $dates = $data->getDate();
-                $date = $dates->format('m/d/Y h:i');
-                $fullDatesArray[] = $date;
+            if(($qteMax - $soldTicket)===0){
+                // $dates = $data->getDate();
+                // $date = $dates->format('m/d/Y h:i');
+                // $fullDatesArray[] = $date;
             }
         };
 
-        //var_dump($fullDatesArray);
         
         return $fullDatesArray;
     }
