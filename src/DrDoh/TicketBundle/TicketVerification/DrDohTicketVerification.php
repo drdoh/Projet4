@@ -6,24 +6,53 @@ class DrDohTicketVerification
 {
     
     /**
-     * Recupere les date ou il ne reste plus de billets
+     * Récupère le nombre de billets vendus par date
      * 
-     * @return array $dateTikets
+     * @return array $soldTicketsArray 'date'=>'val'
      * 
      */
-    
-    public function getFullDate($datas, $qteMax){
+    public function getSoldTickets($tickets){
+
+        $soldTicketsArray = [];
         
-        foreach($datas as $data){
-            $qteSold = $data->getqteSold();
+        foreach($tickets as $ticket){
+            var_dump($tickets);
+            $ticketDate = $ticket->getDate()->format('Y-m-d');
             
-            if(($qteMax-$qteSold)===0){
+            if(array_key_exists($ticketDate,$soldTicketsArray)){ 
+                var_dump($ticketDate);
+                $soldTicketsArray[$ticketDate] ++;
+            }else{
+                $soldTicketsArray[$ticketDate] = 1 ;
+            }
+            return $soldTicketsArray;
+        }
+    }
+
+
+    /**
+     * Récupère les dates complètes
+     * 
+     * @return array $fullDatesArray 
+     * 
+     */
+    public function getFullDate($tickets, $qteMax){
+        
+
+        $soldTickets = $this->getSoldTickets($tickets);
+        var_dump($soldTickets);
+
+        foreach($tickets as $tickets){
+
+            if(($qteMax - $soldTickets)===0){
                 $dates = $data->getDate();
                 $date = $dates->format('m/d/Y h:i');
                 $fullDatesArray[] = $date;
             }
-        }
+        };
 
+        //var_dump($fullDatesArray);
+        
         return $fullDatesArray;
     }
 }
