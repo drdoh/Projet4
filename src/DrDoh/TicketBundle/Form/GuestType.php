@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\DiscountType;
+use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class GuestType extends AbstractType
@@ -25,8 +26,7 @@ class GuestType extends AbstractType
         $builder
             ->add('lastName')
             ->add('firstName')
-            ->add('birthDate')
-            ->add('ticketId')
+            ->add('birthDate', BirthdayType::class)
             ->add('discountType', EntityType::class, array(
                 'class' => "DrDohTicketBundle:Discount",
                 'choice_label'=>"type",

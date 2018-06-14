@@ -16,13 +16,28 @@
                 Indiquez vos coordonnées pour la reservation de {{app.request.request.get("ticket_qte")}} billet(s).  
             <em>
             </h3>
-            <div class="card-body">
-                <div class="well">
-                    {{form(form)}}
 
+            <div class="card-body">
+                <div class="text-right">
+                    <h4 class="text-right">Visiteur 1</h4>
+                </div>    
+                <div class="well">
+                    {{form(main_form)}}
                 </div>
             </div>
         </div>
+        {# <hr>
+        <div class="card text-white bg-dark mb-3">
+        
+            <div class="card-body">
+                <div class="text-right">
+                    <h4 class="text-right">Visiteur 2</h4>
+                </div>    
+                <div class="well">
+                    {{form(form)}}
+                </div>
+            </div> 
+        </div>   #}
 
         <br>
         

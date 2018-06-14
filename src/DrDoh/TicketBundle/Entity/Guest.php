@@ -2,6 +2,7 @@
 
 namespace DrDoh\TicketBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -48,24 +49,16 @@ class Guest
      *
      * @ORM\OneToOne(targetEntity="DrDoh\TicketBundle\Entity\Ticket", cascade={"persist"})
      */
-    private $ticketId;
+    private $ticket; //Liste d'objet
 
     /**
      * @var string
      *
-     * @ORM\ManyToMany(targetEntity="DrDoh\TicketBundle\Entity\Discount", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="DrDoh\TicketBundle\Entity\Discount", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $discountType;
+    private $discountType; 
 
-
-
-/***************************** CONSTRUCTOR *************************/
-        
-    public function __construct(){
-
-        
-
-    }
 
 /***************************** GETTER & SETTER *************************/
 
@@ -152,37 +145,39 @@ class Guest
     }
 
     /**
-     * Set ticketId
+     * Set ticket.
      *
-     * @param integer $ticketId
+     * @param \DrDoh\TicketBundle\Entity\Ticket|null $ticket
      *
      * @return Guest
      */
-    public function setTicketId($ticketId)
+    public function setTicket(\DrDoh\TicketBundle\Entity\Ticket $ticket = null)
     {
-        $this->ticketId = $ticketId;
+        $this->ticket = $ticket;
 
         return $this;
     }
 
     /**
-     * Get ticketId
+     * Get ticket.
      *
-     * @return int
+     * @return \DrDoh\TicketBundle\Entity\Ticket|null
      */
-    public function getTicketId()
+    public function getTicket()
     {
-        return $this->ticketId;
+        return $this->ticket;
     }
 
+
+
     /**
-     * Set discountType
+     * Set discountType.
      *
-     * @param string $discountType
+     * @param \DrDoh\TicketBundle\Entity\Discount|null $discountType
      *
      * @return Guest
      */
-    public function setDiscountType($discountType)
+    public function setDiscountType(\DrDoh\TicketBundle\Entity\Discount $discountType = null)
     {
         $this->discountType = $discountType;
 
@@ -190,40 +185,12 @@ class Guest
     }
 
     /**
-     * Get discountType
+     * Get discountType.
      *
-     * @return string
+     * @return \DrDoh\TicketBundle\Entity\Discount|null
      */
     public function getDiscountType()
     {
         return $this->discountType;
-    }
-
-/***************************** ADD & REMOVE *************************/
-
-    /**
-     * Add discountType.
-     *
-     * @param \DrDroh\TicketBundle\Entity\Discount $discountType
-     *
-     * @return Guest
-     */
-    public function addDiscountType(\DrDroh\TicketBundle\Entity\Discount $discountType)
-    {
-        $this->discountType[] = $discountType;
-
-        return $this;
-    }
-
-    /**
-     * Remove discountType.
-     *
-     * @param \DrDroh\TicketBundle\Entity\Discount $discountType
-     *
-     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
-     */
-    public function removeDiscountType(\DrDroh\TicketBundle\Entity\Discount $discountType)
-    {
-        return $this->discountType->removeElement($discountType);
     }
 }

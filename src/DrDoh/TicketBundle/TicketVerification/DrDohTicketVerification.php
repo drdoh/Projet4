@@ -39,19 +39,12 @@ class DrDohTicketVerification
 
         $soldTickets = $this->getSoldTickets($tickets);
         
-        var_dump($qteMax);
-        
-        foreach($soldTickets as $soldTicket){
-            var_dump($soldTicket);
-
+        foreach($soldTickets as $date => $soldTicket){         
             if(($qteMax - $soldTicket)===0){
-                // $dates = $data->getDate();
-                // $date = $dates->format('m/d/Y h:i');
-                // $fullDatesArray[] = $date;
+                $fullDatesArray[] = $date;
             }
         };
 
-        
         return $fullDatesArray;
     }
 }

@@ -32,7 +32,7 @@ class Ticket
     /**
      * @var int
      *
-     * @ORM\Column(name="qte_max", type="integer")
+     * @ORM\Column(name="ticket_id", type="string", unique=true)
      */
     private $ticketId;
 
@@ -69,30 +69,6 @@ class Ticket
     public function getDate()
     {
         return $this->date;
-    }
-
-    /**
-     * Set qteSold
-     *
-     * @param integer $qteSold
-     *
-     * @return Ticket
-     */
-    public function setQteSold($qteSold)
-    {
-        $this->qteSold = $qteSold;
-
-        return $this;
-    }
-
-    /**
-     * Get qteSold
-     *
-     * @return int
-     */
-    public function getQteSold()
-    {
-        return $this->qteSold;
     }
 
     /**
