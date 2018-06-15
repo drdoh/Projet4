@@ -16,54 +16,102 @@
                 Indiquez vos coordonnées pour la reservation de {{app.request.request.get("ticket_qte")}} billet(s).  
             <em>
             </h3>
-
+{# vvvvv ------------vvvvvvv---------FORMULAIRE(S) BUYER ------------vvvvvvv---------vvvvv #}
             <div class="card-body">
                 <div class="text-right">
                     <h4 class="text-right">Visiteur 1</h4>
                 </div>    
                 <div class="well">
-                    {{form_start(main_form)}}
-                        {{form_errors(main_form)}}
-
+                    {{form_start(buyer_form)}}
+                        {{form_errors(buyer_form)}}
+                        {# NOM + PRENOM #}
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                {{form_label(main_form.lastName,"Nom")}}
-                                {{form_errors(main_form.lastName)}}
-                                {{form_widget(main_form.lastName)}}
+                                {{form_label(buyer_form.lastName,"Nom")}}
+                                {{form_errors(buyer_form.lastName)}}
+                                {{form_widget(buyer_form.lastName)}}
                             </div>
 
                             <div class="form-group col-md-6">
-                                {{form_label(main_form.firstName,"Prénom")}}
-                                {{form_errors(main_form.firstName)}}
-                                {{form_widget(main_form.firstName)}}
+                                {{form_label(buyer_form.firstName,"Prénom")}}
+                                {{form_errors(buyer_form.firstName)}}
+                                {{form_widget(buyer_form.firstName)}}
+                            </div>
+                        </div>
+                        {# DATE DE NAISSANCE + REDUCTION + PAYS #}
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                {{form_label(buyer_form.birthDate,"Date de naissance")}}
+                                {{form_errors(buyer_form.birthDate)}}
+                                {{form_widget(buyer_form.birthDate)}}
+                            </div>
+                            <div class="form-group col-md-4">
+                                {{form_label(buyer_form.discountType,"Réduction")}}
+                                {{form_errors(buyer_form.discountType)}}
+                                {{form_widget(buyer_form.discountType)}}
+                            </div>
+                            <div class="form-group col-md-4">
+                                {{form_label(buyer_form.country,"Pays")}}
+                                {{form_errors(buyer_form.country)}}
+                                {{form_widget(buyer_form.country)}}
                             </div>
                         </div>
                         <div class="form-row">
-                            <div class="form-group col-md-4">
-                                {{form_label(main_form.birthDate,"Date de naissance")}}
-                                {{form_errors(main_form.birthDate)}}
-                                {{form_widget(main_form.birthDate)}}
-                            </div>
-                            <div class="form-group col-md-4">
-                                {{form_label(main_form.discountType,"Réduction")}}
-                                {{form_errors(main_form.discountType)}}
-                                {{form_widget(main_form.discountType)}}
-                            </div>
-                            <div class="form-group col-md-4">
-                                {{form_label(main_form.country,"Pays")}}
-                                {{form_errors(main_form.country)}}
-                                {{form_widget(main_form.country)}}
+                        <div class="form-group col-md-12">
+                                {{form_label(buyer_form.email,"Adresse Email")}}
+                                {{form_errors(buyer_form.email)}}
+                                {{form_widget(buyer_form.email)}}
                             </div>
                         </div>
+                </div>
+            </div>
+{# vvvvv ------------vvvvvvv---------FORMULAIRE(S) GUEST ------------vvvvvvv---------vvvvv #}
+{% if guest_form is defined %}
+            <div class="card-body">
+                <div class="text-right">
+                    <h4 class="text-right">Visiteur 2</h4>
+                </div>    
+                <div class="well">
+                    {{form_start(guest_form)}}
+                        {{form_errors(guest_form)}}
+                        {# NOM + PRENOM #}
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                {{form_label(guest_form.lastName,"Nom")}}
+                                {{form_errors(guest_form.lastName)}}
+                                {{form_widget(guest_form.lastName)}}
+                            </div>
 
-
-                    
+                            <div class="form-group col-md-6">
+                                {{form_label(guest_form.firstName,"Prénom")}}
+                                {{form_errors(guest_form.firstName)}}
+                                {{form_widget(guest_form.firstName)}}
+                            </div>
+                        </div>
+                        {# DATE DE NAISSANCE + REDUCTION + PAYS #}
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                {{form_label(guest_form.birthDate,"Date de naissance")}}
+                                {{form_errors(guest_form.birthDate)}}
+                                {{form_widget(guest_form.birthDate)}}
+                            </div>
+                            <div class="form-group col-md-4">
+                                {{form_label(guest_form.discountType,"Réduction")}}
+                                {{form_errors(guest_form.discountType)}}
+                                {{form_widget(guest_form.discountType)}}
+                            </div>
+                            <div class="form-group col-md-4">
+                                {{form_label(guest_form.country,"Pays")}}
+                                {{form_errors(guest_form.country)}}
+                                {{form_widget(guest_form.country)}}
+                            </div>
+                        </div>
                 </div>
             </div>
         </div>
-
+{% endif %}
         <br>
-        
+{# vvvvv ------------vvvvvvv---------TABLEAU DE PRIX ------------vvvvvvv---------vvvvv #}       
         <div class="card text-white bg-dark mb-3">
             <h3 class="card-header text-center">
                 Montant de votre commande
@@ -118,19 +166,24 @@
                             </tr>
                         </tfooter>
                     </table>
-                
+{# vvvvv ------------vvvvvvv---------VALIDATION DE FORMULAIRE ------------vvvvvvv---------vvvvv #}                  
                 <div class="mx-auto text-center alert alert-secondary">
                     <input id="checkBox" type="checkbox"><span> En cochant cette case, vous confirmez avoir lu et accepter les <a href="#">conditions générales d'utilisation</a></span>
                 </div>
                 
                 <div class="mx-auto ">
-                    {{form_widget(main_form.save,{ 'label': 'Poursuivre','attr':{'class':'btn btn-info btn-lg btn-block'}})}}
-                    {{form_end(main_form)}}
+                    {{form_widget(buyer_form.save,{ 'label': 'Poursuivre','attr':{'class':'btn btn-info btn-lg btn-block'}})}}
+
+                    {{form_rest(buyer_form)}}
+                    {{form_end(buyer_form)}}
                 </div>
             </div>
         </div>
     </div> 
 {% endblock %}
+
+
+{# vvvvv ------------vvvvvvv--------- SCRIPT JS ------------vvvvvvv---------vvvvv #} 
 
 {% block javascripts %}
  {{parent()}}
@@ -150,7 +203,7 @@ $(function(){
     var discount_price = 10;
 
 // --VVV-- Gestion de la colonne quantité --VVV-- 
-    $('#qte_full_price').text(10);
+    $('#qte_full_price').text("{{ticket_qte}}");
     $('#qte_child_price').text(0);
     $('#qte_baby_price').text(0);
     $('#qte_older_price').text(0);

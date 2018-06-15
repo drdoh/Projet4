@@ -48,6 +48,7 @@ class Guest
      * @var int
      *
      * @ORM\OneToOne(targetEntity="DrDoh\TicketBundle\Entity\Ticket", cascade={"persist"})
+     * 
      */
     private $ticket; //Liste d'objet
 
@@ -55,11 +56,15 @@ class Guest
      * @var string
      *
      * @ORM\ManyToOne(targetEntity="DrDoh\TicketBundle\Entity\Discount", cascade={"persist"})
-     * 
+     * @ORM\JoinColumn(nullable=false)
      */
     private $discountType; 
 
-
+    /**
+     * @ORM\OneToOne(targetEntity="DrDoh\TicketBundle\Entity\Buyer", cascade={"persist"})
+     * @ORM\JoinColumn(name="related1_id", referencedColumnName="id")
+     */
+    protected $mappedRelated1;
 /***************************** GETTER & SETTER *************************/
 
     /**

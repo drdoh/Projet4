@@ -49,15 +49,14 @@ class Buyer extends Guest
      * @ORM\Column(name="email", type="string", length=255)
      */
     private $email;
-
 /***************************** CONSTRUCTOR *************************/
-  /*      
+      
 public function __construct(){
-
-        
-
+    $uniqueId =  sha1(uniqid('',true));
+    $this->orderId = $uniqueId;
+    $this->orderDate = new \Datetime();    
 }
-*/
+
 /***************************** GETTER & SETTER *************************/
     /**
      * Get id.

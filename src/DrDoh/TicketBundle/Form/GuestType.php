@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\DiscountType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class GuestType extends AbstractType
@@ -24,8 +25,8 @@ class GuestType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('lastName')
-            ->add('firstName')
+            ->add('lastName', TextType::class)
+            ->add('firstName', TextType::class)
             ->add('birthDate', BirthdayType::class,array(
                 'input' => 'datetime',
                 'placeholder' => [
@@ -33,13 +34,12 @@ class GuestType extends AbstractType
                     'year' => 'Année',
                     'day' => 'Jours',],
                     'format' => 'dd MM yyyy',
-
             ))
             ->add('discountType', EntityType::class, array(
                 'class' => "DrDohTicketBundle:Discount",
                 'choice_label'=>"type",
                 'multiple'=>false,
-                'expanded'=>false
+                'expanded'=>false,
             ))
             ->add('country', CountryType::class, [
                 'mapped' => false,

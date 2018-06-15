@@ -44,43 +44,70 @@ class BookingController extends Controller
 /* -------- \\\\\ Action -=> guestForm : Controle la seconde page de formulaire /////-------- */
     public function guestFormAction(Request $request)
     {
-    /* -------- \\\\\$_POST = ticket_qte, choix, date /////-------- */ 
-    /* -------- \\\\\Creation d'un formulaire pour l'acheteur /////-------- */     
-   $buyer = new Buyer();
-        $uniqueId =  sha1(uniqid('',true));
-        $buyer->setOrderId($uniqueId);
-        $buyer->setOrderDate(new \DateTime);
-        $buyer->setAmountPaid(159);
-        
-        $ticket = new Ticket();
-        $ticket->setTicketId($uniqueId);
-        $ticket->setDate(new \DateTime);
-        $buyer->setTicket($ticket);
-        $buyerForm = $this->get('form.factory')->create(BuyerType::class, $buyer);
+        /* -------- \\\\\$_POST = ticket_qte, choix, date /////-------- */ 
+    
 
-/*
-        $guest = new Guest();
-        $uniqueId =  sha1(uniqid('',true));
+        if(isset($_POST['ticket_qte'])&& isset($_POST['ticket_qte'])&& isset($_POST['ticket_qte'])){
+            $ticket_qte = intval($_POST['ticket_qte']);
+            $choix = $_POST['choix'];
+            $date = $_POST['date'];
+            $date = \DateTime::createFromFormat('d/m/Y', $date)->format('Y-m-d');
+            $date = new \DateTime($date);
+        }else{
+            $ticket_qte = count($_POST);
+            $choix = 'journee'; // COMMENT REUCPERER CETTE VARIABLE ...
+            $date = '01/02/1900'; // COMMENT REUCPERER CETTE VARIABLE ...
+            $date = \DateTime::createFromFormat('d/m/Y', $date)->format('Y-m-d');
+            $date = new \DateTime($date);
+        }
         
-        $ticket = new Ticket();
-        $ticket->setTicketId($uniqueId);
-        $ticket->setDate(new \DateTime);
-        $guest->setTicket($ticket);
-        $mainForm = $this->get('form.factory')->create(GuestType::class, $guest);
-*/
-           
-        
-    /* -------- \\\\\Validation du formulaire /////-------- */
-    if ($request->isMethod('POST') && $buyerForm->handleRequest($request)->isValid()){
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($buyer);
-        $em->flush();
-    }
-    
-    
-    return $this->render('DrDohTicketBundle:Default:guestForm.html.twig', array(
-        'buyer_form' => $buyerForm->createView(),
-    )); 
+        if($ticket_qte > 1){
+            $buyer = new Buyer();
+            $buyer->setAmountPaid(159);
+            $ticket = new Ticket();
+            $ticket->setDate($date);
+            $guest = new Guest();
+            $ticket->setDate($date);
+            $guest->setTicket($ticket);
+            $buyer->setTicket($ticket);
+            $form_qte = $ticket_qte - 2;
+            $guestForm = $this->get('form.factory')->create(GuestType::class, $guest);
+            $buyerForm = $this->get('form.factory')->create(BuyerType::class, $buyer);
+            
+            if ($request->isMethod('POST') && $buyerForm->handleRequest($request)->isValid()){
+                if ($request->isMethod('POST') && $guestForm->handleRequest($request)->isValid()){
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($buyer);
+                    $em->persist($guest);
+                    $em->flush();
+                }
+            }
+
+            return $this->render('DrDohTicketBundle:Default:guestForm.html.twig', array(
+                'buyer_form' => $buyerForm->createView(), 'ticket_qte' => $ticket_qte,
+                'guest_form' => $guestForm->createView(),
+                'form_qte' => $form_qte,
+
+            ));
+        }else{
+            $buyer = new Buyer();
+            $buyer->setAmountPaid(159);
+            $ticket = new Ticket();
+            $ticket->setDate($date);
+            $buyer->setTicket($ticket);
+
+            $buyerForm = $this->get('form.factory')->create(BuyerType::class, $buyer);
+
+            if ($request->isMethod('POST') && $buyerForm->handleRequest($request)->isValid()){
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($buyer);
+                $em->flush();
+            }
+
+            return $this->render('DrDohTicketBundle:Default:guestForm.html.twig', array(
+                'buyer_form' => $buyerForm->createView(), 
+            ));
+        }
     }
 
 }

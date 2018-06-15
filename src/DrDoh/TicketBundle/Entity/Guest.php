@@ -10,6 +10,9 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="guest")
  * @ORM\Entity(repositoryClass="DrDoh\TicketBundle\Repository\GuestRepository")
+ * @ORM\InheritanceType("SINGLE_TABLE")
+ * @ORM\DiscriminatorColumn(name="discr", type="string")
+ * @ORM\DiscriminatorMap({"guest" = "Guest", "buyer" = "Buyer"})
  */
 class Guest
 {   
@@ -194,4 +197,6 @@ class Guest
     {
         return $this->discountType;
     }
+
+
 }

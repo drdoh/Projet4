@@ -36,6 +36,11 @@ class Ticket
      */
     private $ticketId;
 
+/***************************** CONSTRUCT *************************/
+    public function __construct(){
+        $uniqueId =  sha1(uniqid('',true));
+        $this->ticketId = $uniqueId;
+    }
 /***************************** GETTER & SETTER *************************/
     /**
      * Get id
