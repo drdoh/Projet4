@@ -48,6 +48,7 @@ class Guest
      * @var int
      *
      * @ORM\OneToOne(targetEntity="DrDoh\TicketBundle\Entity\Ticket", cascade={"persist"})
+     * 
      */
     private $ticket; //Liste d'objet
 

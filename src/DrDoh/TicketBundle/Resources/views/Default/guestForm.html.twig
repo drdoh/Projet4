@@ -22,22 +22,45 @@
                     <h4 class="text-right">Visiteur 1</h4>
                 </div>    
                 <div class="well">
-                    {{form(main_form)}}
+                    {{form_start(main_form)}}
+                        {{form_errors(main_form)}}
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                {{form_label(main_form.lastName,"Nom")}}
+                                {{form_errors(main_form.lastName)}}
+                                {{form_widget(main_form.lastName)}}
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                {{form_label(main_form.firstName,"Prénom")}}
+                                {{form_errors(main_form.firstName)}}
+                                {{form_widget(main_form.firstName)}}
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                {{form_label(main_form.birthDate,"Date de naissance")}}
+                                {{form_errors(main_form.birthDate)}}
+                                {{form_widget(main_form.birthDate)}}
+                            </div>
+                            <div class="form-group col-md-4">
+                                {{form_label(main_form.discountType,"Réduction")}}
+                                {{form_errors(main_form.discountType)}}
+                                {{form_widget(main_form.discountType)}}
+                            </div>
+                            <div class="form-group col-md-4">
+                                {{form_label(main_form.country,"Pays")}}
+                                {{form_errors(main_form.country)}}
+                                {{form_widget(main_form.country)}}
+                            </div>
+                        </div>
+
+
+                    
                 </div>
             </div>
         </div>
-        {# <hr>
-        <div class="card text-white bg-dark mb-3">
-        
-            <div class="card-body">
-                <div class="text-right">
-                    <h4 class="text-right">Visiteur 2</h4>
-                </div>    
-                <div class="well">
-                    {{form(form)}}
-                </div>
-            </div> 
-        </div>   #}
 
         <br>
         
@@ -59,29 +82,29 @@
                         <tbody>
                             <tr>
                             <th scope="row">Plein Tarif</th>
-                            <td id="qte_full_price" class="text-center">1</td>
+                            <td id="qte_full_price" class="text-center">0</td>
                             <td id="one_full_price" class="text-center">16,00 €</td>
                             <td id="total_full_price" class="text-center"></td>
                             </tr>
                             <tr>
                             <th scope="row">Tarif enfant</th>
-                            <td id="qte_child_price" class="text-center">4</td>
+                            <td id="qte_child_price" class="text-center">0</td>
                             <td id="one_child_price" class="text-center">8,00 €</td>
                             <td id="total_child_price" class="text-center"></td>
                             </tr>
                             <tr>
                             <th scope="row">Tarif bébé</th>
-                            <td id="qte_baby_price" class="text-center">2</td>
+                            <td id="qte_baby_price" class="text-center">0</td>
                             <td id="one_baby_price" class="text-center">0,00 €</td>
                             <td id="total_baby_price" class="text-center"></td>
                             </tr>
                             <th scope="row">Tarif Senior</th>
-                            <td id="qte_older_price" class="text-center">2</td>
+                            <td id="qte_older_price" class="text-center">0</td>
                             <td id="one_older_price" class="text-center">12,00 €</td>
                             <td id="total_older_price" class="text-center"></td>
                             </tr>
                             <th scope="row">Tarif réduit</th>
-                            <td id="qte_discount_price" class="text-center">1</td>
+                            <td id="qte_discount_price" class="text-center">0</td>
                             <td id="one_discount_price" class="text-center">10,00 €</td>
                             <td id="total_discount_price" class="text-center"></td>
                             </tr>
@@ -101,48 +124,102 @@
                 </div>
                 
                 <div class="mx-auto ">
-                    <input id="button_submit" class="btn btn-info btn-lg btn-block" type="submit" value="Poursuivre">
+                    {{form_widget(main_form.save,{ 'label': 'Poursuivre','attr':{'class':'btn btn-info btn-lg btn-block'}})}}
+                    {{form_end(main_form)}}
                 </div>
             </div>
         </div>
     </div> 
-
 {% endblock %}
 
 {% block javascripts %}
  {{parent()}}
 
 <script>
+
+var choix = "{{app.request.request.get("choix")}}";
+console.log(choix);
+
 $(function(){
 
+// --VVV-- Tarifs --VVV-- 
+    var full_price = 16;
+    var child_price = 8;
+    var baby_price = 0;
+    var older_price = 12;
+    var discount_price = 10;
 
-    $('#drdoh_ticketbundle_guest_birthDate_month').change(function(){
-        console.log(
-            $('#drdoh_ticketbundle_guest_birthDate_month, option').val()
-        )   
-    }); 
-    $('#drdoh_ticketbundle_guest_birthDate_day').change(function(){
-        console.log(
-            $('#drdoh_ticketbundle_guest_birthDate_day').val()
-        )   
-    }); 
-    $('#drdoh_ticketbundle_guest_birthDate_year').change(function(){
-        console.log(
-            $('#drdoh_ticketbundle_guest_birthDate_year').val()
-        )   
-    }); 
+// --VVV-- Gestion de la colonne quantité --VVV-- 
+    $('#qte_full_price').text(10);
+    $('#qte_child_price').text(0);
+    $('#qte_baby_price').text(0);
+    $('#qte_older_price').text(0);
+    $('#qte_discount_price').text(0);
+
+
+// --VVV-- Recuperation des quantités --VVV-- 
+    var qte_full_price = $('#qte_full_price').text();
+    var qte_child_price = $('#qte_child_price').text();
+    var qte_baby_price = $('#qte_baby_price').text();
+    var qte_older_price = $('#qte_older_price').text();
+    var qte_discount_price = $('#qte_discount_price').text();
+
+// --VVV-- Gestion de l'age --VVV-- 
+
+    $('#drdoh_ticketbundle_guest_birthDate').change(function(){
+
+        var jours = $('#drdoh_ticketbundle_guest_birthDate_day').val();
+        var mois = $('#drdoh_ticketbundle_guest_birthDate_month').val();
+        var année = $('#drdoh_ticketbundle_guest_birthDate_year').val();
+        birthDate= new Date(année,mois,jours);
+        visiteDate = new Date();
+        console.log(birthDate);
+        console.log(date);
+
+    })
+
+
+// --VVV-- Gestion des reduction --VVV--
 
     $('#drdoh_ticketbundle_guest_discountType').change(function(){
-        console.log(
-            $('#drdoh_ticketbundle_guest_discountType').val()
-        )   
-    }); 
-        
+        var discountType = $('#drdoh_ticketbundle_guest_discountType').val();
+        if(discountType != 50){
+            qte_discount_price ++ ;
+            if(qte_full_price>0){
+                qte_full_price -- ;
+            }
+            $('#qte_discount_price').text(qte_discount_price);
+            $('#qte_full_price').text(qte_full_price);
+        }else{
+            qte_discount_price -- ;
+            qte_full_price ++ ;
+            $('#qte_discount_price').text(qte_discount_price);
+            $('#qte_full_price').text(qte_full_price);
+        }
+    });
 
 
 
 
+// --VVV-- Calcul --VVV--     
+    var total_full_price = qte_full_price * full_price;
+    var total_child_price = qte_child_price * child_price;
+    var total_baby_price = qte_baby_price * baby_price;
+    var total_older_price = qte_older_price * older_price;
+    var total_discount_price = qte_discount_price * discount_price;
+    var total_price = total_full_price+total_child_price+total_baby_price+total_older_price+total_discount_price;
+
+// --VVV-- Modification des valeur du tableau --VVV-- 
+    $('#total_full_price').text(total_full_price+",00 €");
+    $('#total_child_price').text(total_child_price+",00 €");
+    $('#total_baby_price').text(total_baby_price+",00 €");
+    $('#total_older_price').text(total_older_price+",00 €");
+    $('#total_discount_price').text(total_discount_price+",00 €");
+    $('#total_price').text(total_price+",00 €");
+
+   
 })
+
 
 </script>
 

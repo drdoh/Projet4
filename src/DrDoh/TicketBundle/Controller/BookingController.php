@@ -32,7 +32,8 @@ class BookingController extends Controller
 
         $tickets = $repository->findAll();
         $qteMax = $this->container->getParameter('ticketverification_qteMax');
-        $fullDateArray = $ticketsVerfification->getFullDate($tickets, $qteMax);
+        $yearMax = $this->container->getParameter('ticketverification_yearMax');
+        $fullDateArray = $ticketsVerfification->getFullDate($tickets, $qteMax, $yearMax);
 
     /* -------- \\\\\ Appelle de la vue avec parametres /////-------- */     
         return $this->render('DrDohTicketBundle:Default:ticketForm.html.twig', array(
@@ -45,7 +46,7 @@ class BookingController extends Controller
     {
     /* -------- \\\\\$_POST = ticket_qte, choix, date /////-------- */ 
     /* -------- \\\\\Creation d'un formulaire pour l'acheteur /////-------- */     
-/*   $buyer = new Buyer();
+   $buyer = new Buyer();
         $uniqueId =  sha1(uniqid('',true));
         $buyer->setOrderId($uniqueId);
         $buyer->setOrderDate(new \DateTime);
@@ -55,9 +56,9 @@ class BookingController extends Controller
         $ticket->setTicketId($uniqueId);
         $ticket->setDate(new \DateTime);
         $buyer->setTicket($ticket);
-        $mainForm = $this->get('form.factory')->create(BuyerType::class, $buyer);
-        var_dump($buyer);
-*/
+        $buyerForm = $this->get('form.factory')->create(BuyerType::class, $buyer);
+
+/*
         $guest = new Guest();
         $uniqueId =  sha1(uniqid('',true));
         
@@ -66,19 +67,19 @@ class BookingController extends Controller
         $ticket->setDate(new \DateTime);
         $guest->setTicket($ticket);
         $mainForm = $this->get('form.factory')->create(GuestType::class, $guest);
-        var_dump($guest);
+*/
            
         
     /* -------- \\\\\Validation du formulaire /////-------- */
-    if ($request->isMethod('POST') && $mainForm->handleRequest($request)->isValid()){
+    if ($request->isMethod('POST') && $buyerForm->handleRequest($request)->isValid()){
         $em = $this->getDoctrine()->getManager();
-        $em->persist($guest);
+        $em->persist($buyer);
         $em->flush();
     }
     
     
     return $this->render('DrDohTicketBundle:Default:guestForm.html.twig', array(
-        'main_form' => $mainForm->createView(),
+        'buyer_form' => $buyerForm->createView(),
     )); 
     }
 

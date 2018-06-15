@@ -19,3 +19,4 @@ parameters:
     secret: ThisTokenIsNotSoSecretChangeIt
 
     ticketverification_qteMax : 1
+    ticketverification_yearMax : 2020

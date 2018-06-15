@@ -27,6 +27,38 @@ class DrDohTicketVerification
         return $soldTicketsArray;
     }
 
+    public function getSaturday(){
+        
+    }
+
+
+    /**
+     * Récupère les jours feriés
+     * 
+     * @return array $holidaysArray 
+     * 
+     */
+    public function getHolidays($maxYear){
+        
+        $N= date('Y');
+        $holidays = [];
+        $holidaysArray = [];
+
+        for($N ; $N <= $maxYear ; $N++){
+            $Pr_mai = $N.'-05-01'; 
+            $Pr_novembre = $N.'-11-01'; 
+            $noel = $N.'-12-25'; 
+            
+            if($holidays === null){
+                $holidays = array ($Pr_mai,$Pr_novembre, $noel);
+            }else{
+                $holidaysArray = array_push($holidays,$Pr_mai,$Pr_novembre,$noel);
+            }
+        }
+
+        return $holidays;
+    }
+
 
     /**
      * Récupère les dates complètes
@@ -34,8 +66,9 @@ class DrDohTicketVerification
      * @return array $fullDatesArray 
      * 
      */
-    public function getFullDate($tickets, $qteMax){
+    public function getFullDate($tickets, $qteMax, $yearMax){
         
+        $holidaysArray = $this->getHolidays($yearMax);
 
         $soldTickets = $this->getSoldTickets($tickets);
         
@@ -44,7 +77,7 @@ class DrDohTicketVerification
                 $fullDatesArray[] = $date;
             }
         };
-
+        $fullDatesArray = array_merge_recursive($holidaysArray, $fullDatesArray);
         return $fullDatesArray;
     }
 }

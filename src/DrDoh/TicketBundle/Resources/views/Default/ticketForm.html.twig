@@ -33,8 +33,7 @@
                         <div class="form-group">  
                             <label for="choix">Durée de votre visite</label>
                             <select name="choix" id="choix" class="form-control">
-                                <option value="journee">Billet journée</option>
-                                <option value="demi-journee">Billet demi journée (a partir de 14h00)</option>
+                                
                             </select>
                         </div>
                         
@@ -68,6 +67,29 @@
     {{parent()}}
 
     <script type="text/javascript">
+
+                                
+        function heure(){
+            var date = new Date();
+            var heure = date.getHours();
+            return heure;
+        }
+        function heureCheck(heure){
+            if(heure>=14){
+                $('#choix').append('<option value="demi-journee" id="BDJ">Billet demi journée (a partir de 14h00)</option>');
+                $('#choix').append('<option value="journee" id="BJ">Billet journée</option>');
+                $('#BJ').attr('disabled',true);
+                $('#BDJ').attr('selected',true);
+            }else{
+                $('#choix').append('<option value="demi-journee" id="BDJ">Billet demi journée (a partir de 14h00)</option>');
+                $('#choix').append('<option value="journee" id="BJ">Billet journée</option>');
+            }
+        }
+
+        var heure = heure();
+        setInterval(heure,1000);
+        heureCheck(heure);
+       
         $(function () {
 
             $('#datetimepicker1').datetimepicker(
@@ -75,6 +97,7 @@
                 format: 'L',
                 viewDate: 'moment',
                 locale: 'fr',
+                daysOfWeekDisabled:[0],
                 disabledDates: [
                     {% for fullDate in listFullDate %}
                     "{{fullDate}}" ,
@@ -87,6 +110,7 @@
 
         // --VVV-- Reglage format de la date --VVV-- 
         $('#datetimepicker1').datetimepicker('format', 'DD/MM/YYYY');
+        
         });
     </script>
 

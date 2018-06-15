@@ -26,7 +26,15 @@ class GuestType extends AbstractType
         $builder
             ->add('lastName')
             ->add('firstName')
-            ->add('birthDate', BirthdayType::class)
+            ->add('birthDate', BirthdayType::class,array(
+                'input' => 'datetime',
+                'placeholder' => [
+                    'month' => 'Mois',
+                    'year' => 'Année',
+                    'day' => 'Jours',],
+                    'format' => 'dd MM yyyy',
+
+            ))
             ->add('discountType', EntityType::class, array(
                 'class' => "DrDohTicketBundle:Discount",
                 'choice_label'=>"type",
