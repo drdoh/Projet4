@@ -23,9 +23,9 @@ class LoadGuest extends Fixture
             $ticket1->setTicketId(123456789);
             $ticket1->setDate(new \DateTime);
         $guest1->setTicket($ticket1);
-            $discount1 = new Discount;
-            $discount1->setType('');
-        $guest1->setDiscountType($discount1);
+        $guest1->setDiscount('none');
+        $guest1->setAgreed(true);
+        $guest1->setCountry('france');
         
 
         $manager->persist($guest1);

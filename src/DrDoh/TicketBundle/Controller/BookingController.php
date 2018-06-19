@@ -45,9 +45,8 @@ class BookingController extends Controller
     public function guestFormAction(Request $request)
     {
         /* -------- \\\\\$_POST = ticket_qte, choix, date /////-------- */ 
-    
 
-        if(isset($_POST['ticket_qte'])&& isset($_POST['ticket_qte'])&& isset($_POST['ticket_qte'])){
+        if(isset($_POST['ticket_qte'])&& isset($_POST['choix'])&& isset($_POST['date'])){
             $ticket_qte = intval($_POST['ticket_qte']);
             $choix = $_POST['choix'];
             $date = $_POST['date'];
@@ -61,53 +60,30 @@ class BookingController extends Controller
             $date = new \DateTime($date);
         }
         
-        if($ticket_qte > 1){
-            $buyer = new Buyer();
-            $buyer->setAmountPaid(159);
-            $ticket = new Ticket();
-            $ticket->setDate($date);
-            $guest = new Guest();
-            $ticket->setDate($date);
-            $guest->setTicket($ticket);
-            $buyer->setTicket($ticket);
-            $form_qte = $ticket_qte - 2;
-            $guestForm = $this->get('form.factory')->create(GuestType::class, $guest);
-            $buyerForm = $this->get('form.factory')->create(BuyerType::class, $buyer);
-            
-            if ($request->isMethod('POST') && $buyerForm->handleRequest($request)->isValid()){
-                if ($request->isMethod('POST') && $guestForm->handleRequest($request)->isValid()){
-                    $em = $this->getDoctrine()->getManager();
-                    $em->persist($buyer);
-                    $em->persist($guest);
-                    $em->flush();
-                }
-            }
+        $buyer = new Buyer();
+        $buyer->setAmountPaid(159);
+        $ticket = new Ticket();
+        $ticket->setDate($date);
+        $buyer->setTicket($ticket);
 
-            return $this->render('DrDohTicketBundle:Default:guestForm.html.twig', array(
-                'buyer_form' => $buyerForm->createView(), 'ticket_qte' => $ticket_qte,
-                'guest_form' => $guestForm->createView(),
-                'form_qte' => $form_qte,
+        $buyerForm = $this->get('form.factory')->create(BuyerType::class, $buyer);
 
-            ));
-        }else{
-            $buyer = new Buyer();
-            $buyer->setAmountPaid(159);
-            $ticket = new Ticket();
-            $ticket->setDate($date);
-            $buyer->setTicket($ticket);
-
-            $buyerForm = $this->get('form.factory')->create(BuyerType::class, $buyer);
-
-            if ($request->isMethod('POST') && $buyerForm->handleRequest($request)->isValid()){
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($buyer);
-                $em->flush();
-            }
-
-            return $this->render('DrDohTicketBundle:Default:guestForm.html.twig', array(
-                'buyer_form' => $buyerForm->createView(), 
-            ));
+        if ($request->isMethod('POST') && $buyerForm->handleRequest($request)->isValid()){
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($buyer);
+            $em->flush();
+            return $this->redirectToRoute('dr_doh_ticket_billetterie_stipe');
         }
+
+        return $this->render('DrDohTicketBundle:Default:guestForm.html.twig', array(
+            'form' => $buyerForm->createView(), 
+            'ticket_qte' => $ticket_qte,
+        ));
+     }
+
+    public function stripeFormAction(Request $request)
+    {
+        return $this->render('DrDohTicketBundle:Default:stripeForm.html.twig');   
     }
 
 }

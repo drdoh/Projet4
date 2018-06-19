@@ -17,99 +17,49 @@
             <em>
             </h3>
 {# vvvvv ------------vvvvvvv---------FORMULAIRE(S) BUYER ------------vvvvvvv---------vvvvv #}
-            <div class="card-body">
+                    {{form_start(form)}}
+            <div class="card-body" id="form_card">
                 <div class="text-right">
-                    <h4 class="text-right">Visiteur 1</h4>
+                    <h4 class="text-right" id="guest_index"></h4>
                 </div>    
                 <div class="well">
-                    {{form_start(buyer_form)}}
-                        {{form_errors(buyer_form)}}
+                        {{form_errors(form)}}
                         {# NOM + PRENOM #}
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                {{form_label(buyer_form.lastName,"Nom")}}
-                                {{form_errors(buyer_form.lastName)}}
-                                {{form_widget(buyer_form.lastName)}}
+                                {{form_errors(form.lastName)}}
+                                {{form_widget(form.lastName)}}
                             </div>
 
                             <div class="form-group col-md-6">
-                                {{form_label(buyer_form.firstName,"Prénom")}}
-                                {{form_errors(buyer_form.firstName)}}
-                                {{form_widget(buyer_form.firstName)}}
+                                {# {{form_errors(form.firstName)}}
+                                {{form_widget(form.firstName)}} #}
                             </div>
                         </div>
                         {# DATE DE NAISSANCE + REDUCTION + PAYS #}
                         <div class="form-row">
                             <div class="form-group col-md-4">
-                                {{form_label(buyer_form.birthDate,"Date de naissance")}}
-                                {{form_errors(buyer_form.birthDate)}}
-                                {{form_widget(buyer_form.birthDate)}}
+                                {# {{form_errors(form.birthDate)}}
+                                {{form_widget(form.birthDate)}} #}
                             </div>
                             <div class="form-group col-md-4">
-                                {{form_label(buyer_form.discountType,"Réduction")}}
-                                {{form_errors(buyer_form.discountType)}}
-                                {{form_widget(buyer_form.discountType)}}
+                                {# {{form_errors(form.discount)}}
+                                {{form_widget(form.discount)}} #}
                             </div>
                             <div class="form-group col-md-4">
-                                {{form_label(buyer_form.country,"Pays")}}
-                                {{form_errors(buyer_form.country)}}
-                                {{form_widget(buyer_form.country)}}
+                                {# {{form_errors(form.country)}}
+                                {{form_widget(form.country)}} #}
                             </div>
                         </div>
+                        {# EMAIL #}
                         <div class="form-row">
                         <div class="form-group col-md-12">
-                                {{form_label(buyer_form.email,"Adresse Email")}}
-                                {{form_errors(buyer_form.email)}}
-                                {{form_widget(buyer_form.email)}}
+                                {# {{form_errors(form.email)}}
+                                {{form_widget(form.email)}} #}
                             </div>
                         </div>
                 </div>
             </div>
-{# vvvvv ------------vvvvvvv---------FORMULAIRE(S) GUEST ------------vvvvvvv---------vvvvv #}
-{% if guest_form is defined %}
-            <div class="card-body">
-                <div class="text-right">
-                    <h4 class="text-right">Visiteur 2</h4>
-                </div>    
-                <div class="well">
-                    {{form_start(guest_form)}}
-                        {{form_errors(guest_form)}}
-                        {# NOM + PRENOM #}
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                {{form_label(guest_form.lastName,"Nom")}}
-                                {{form_errors(guest_form.lastName)}}
-                                {{form_widget(guest_form.lastName)}}
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                {{form_label(guest_form.firstName,"Prénom")}}
-                                {{form_errors(guest_form.firstName)}}
-                                {{form_widget(guest_form.firstName)}}
-                            </div>
-                        </div>
-                        {# DATE DE NAISSANCE + REDUCTION + PAYS #}
-                        <div class="form-row">
-                            <div class="form-group col-md-4">
-                                {{form_label(guest_form.birthDate,"Date de naissance")}}
-                                {{form_errors(guest_form.birthDate)}}
-                                {{form_widget(guest_form.birthDate)}}
-                            </div>
-                            <div class="form-group col-md-4">
-                                {{form_label(guest_form.discountType,"Réduction")}}
-                                {{form_errors(guest_form.discountType)}}
-                                {{form_widget(guest_form.discountType)}}
-                            </div>
-                            <div class="form-group col-md-4">
-                                {{form_label(guest_form.country,"Pays")}}
-                                {{form_errors(guest_form.country)}}
-                                {{form_widget(guest_form.country)}}
-                            </div>
-                        </div>
-                </div>
-            </div>
-        </div>
-{% endif %}
         <br>
 {# vvvvv ------------vvvvvvv---------TABLEAU DE PRIX ------------vvvvvvv---------vvvvv #}       
         <div class="card text-white bg-dark mb-3">
@@ -168,33 +118,78 @@
                     </table>
 {# vvvvv ------------vvvvvvv---------VALIDATION DE FORMULAIRE ------------vvvvvvv---------vvvvv #}                  
                 <div class="mx-auto text-center alert alert-secondary">
-                    <input id="checkBox" type="checkbox"><span> En cochant cette case, vous confirmez avoir lu et accepter les <a href="#">conditions générales d'utilisation</a></span>
+                    {{form_widget(form.agreed, {'label': "En cochant cette case, vous confirmez avoir lu et accepter les <a href=''>conditions générales d'utilisation</a>"})}}
                 </div>
                 
                 <div class="mx-auto ">
-                    {{form_widget(buyer_form.save,{ 'label': 'Poursuivre','attr':{'class':'btn btn-info btn-lg btn-block'}})}}
+                    {{form_widget(form.save,{ 'label': 'Poursuivre','attr':{'class':'btn btn-info btn-lg btn-block'}})}}
 
-                    {{form_rest(buyer_form)}}
-                    {{form_end(buyer_form)}}
+                    {{form_rest(form)}}
+                    {{form_end(form)}}
                 </div>
             </div>
         </div>
     </div> 
 {% endblock %}
-
-
 {# vvvvv ------------vvvvvvv--------- SCRIPT JS ------------vvvvvvv---------vvvvv #} 
-
 {% block javascripts %}
  {{parent()}}
 
 <script>
 
-var choix = "{{app.request.request.get("choix")}}";
-console.log(choix);
+ $(document).ready(function() {
 
+
+    var $container = $('form');
+    var index = parseInt("{{app.request.request.get("ticket_qte")}}");
+    var i = 1;
+    var div = 'div#drdoh_ticketbundle_buyer_';
+    while(i <= index){
+        if(i === 1 ){
+            addCollection($('div#drdoh_ticketbundle_buyer_lastName'),$('div#drdoh_ticketbundle_buyer_lastName'), 'Nom');
+            //addCollection($('div#drdoh_ticketbundle_buyer_firstName'),$('div#drdoh_ticketbundle_buyer_firstName'), 'Prenom');
+            //addCollection($(div + 'birthDate'),$(div + 'birthDate'), 'Date de naissance');
+            //addCollection($(div + 'discount'),$(div + 'discount'), 'Réduction');
+            //addCollection($(div + 'country'),$(div + 'country'), 'Pays');
+            //addCollection($(div + 'email'),$(div + 'email'), 'E-mail');
+            $('#guest_index').text("Visiteur "+ i);
+            i++;    
+       }else{
+
+            $('#form_card').append('<div class="text-right"><h4 class="text-right" id="guest_index">Visiteur '+i+'</h4></div>');
+            $('#form_card').append('<div class="well" id="form_'+i+'"></div>');
+            $('#form_' + i ).append('<div class="form-row 1"></div>');
+            $('#form_' + i ).append('<div class="form-row 2"></div>');
+            addCollection($('div#drdoh_ticketbundle_buyer_lastName'),$('#form_' + i + ' .1'), 'Nom');
+            //addCollection($('div#drdoh_ticketbundle_buyer_firstName'),$('#form_' + i + ' .1'), 'Prenom');
+            $('#form_' + i + ' .1 div').attr('class','form-group col-md-6');
+
+
+            //addCollection($('div#drdoh_ticketbundle_buyer_birthDate'),$('#form_'+i+ ' .2'), 'Date de naissance');
+            //addCollection($('div#drdoh_ticketbundle_buyer_discount'),$('#form_'+i+' .2'), 'Réduction');
+            //addCollection($('div#drdoh_ticketbundle_buyer_country'),$('#form_'+i+' .2'), 'Pays');
+            //$('#form_' + i + ' .2 > div').attr('class','form-group col-md-4');
+            $('#form_' + i ).append('<hr>')
+            i++;   
+       }
+    }
+
+    // La fonction qui ajoute un formulaire
+    function addCollection($model, $cible, label) {
+        var $newModel= $model.clone()
+        var template = $newModel.attr('data-prototype')
+            .replace(/__name__label__/g, label)
+            .replace(/__name__/g,        i)
+        ;
+        var $prototype = $(template);
+        $cible.append($prototype);
+    }
+
+  });
+
+
+// --VVV--________________GESTION DU TABLEAU DE PRIX__________________--VVV-- 
 $(function(){
-
 // --VVV-- Tarifs --VVV-- 
     var full_price = 16;
     var child_price = 8;
@@ -234,9 +229,9 @@ $(function(){
 
 // --VVV-- Gestion des reduction --VVV--
 
-    $('#drdoh_ticketbundle_guest_discountType').change(function(){
-        var discountType = $('#drdoh_ticketbundle_guest_discountType').val();
-        if(discountType != 50){
+    $('#drdoh_ticketbundle_guest_discount').change(function(){
+        var discount = $('#drdoh_ticketbundle_guest_discount').val();
+        if(discount != 50){
             qte_discount_price ++ ;
             if(qte_full_price>0){
                 qte_full_price -- ;
@@ -270,7 +265,6 @@ $(function(){
     $('#total_discount_price').text(total_discount_price+",00 €");
     $('#total_price').text(total_price+",00 €");
 
-   
 })
 
 

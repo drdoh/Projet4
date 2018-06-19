@@ -41,6 +41,13 @@ class Guest
     private $firstName;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="country", type="string", length=255)
+     */
+    private $country;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="birth_date", type="date")
@@ -58,10 +65,16 @@ class Guest
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="DrDoh\TicketBundle\Entity\Discount", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\Column(name="discount", type="string", length=255))
      */
-    private $discountType; 
+    private $discount; 
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="agreed", type="boolean", length=255))
+     */
+    private $agreed; 
 
 
 /***************************** GETTER & SETTER *************************/
@@ -175,28 +188,74 @@ class Guest
 
 
     /**
-     * Set discountType.
+     * Set country.
      *
-     * @param \DrDoh\TicketBundle\Entity\Discount|null $discountType
+     * @param string $country
      *
      * @return Guest
      */
-    public function setDiscountType(\DrDoh\TicketBundle\Entity\Discount $discountType = null)
+    public function setCountry($country)
     {
-        $this->discountType = $discountType;
+        $this->country = $country;
 
         return $this;
     }
 
     /**
-     * Get discountType.
+     * Get country.
      *
-     * @return \DrDoh\TicketBundle\Entity\Discount|null
+     * @return string
      */
-    public function getDiscountType()
+    public function getCountry()
     {
-        return $this->discountType;
+        return $this->country;
     }
 
+    /**
+     * Set discount.
+     *
+     * @param string $discount
+     *
+     * @return Guest
+     */
+    public function setDiscount($discount)
+    {
+        $this->discount = $discount;
 
+        return $this;
+    }
+
+    /**
+     * Get discount.
+     *
+     * @return string
+     */
+    public function getDiscount()
+    {
+        return $this->discount;
+    }
+
+    /**
+     * Set agreed.
+     *
+     * @param bool $agreed
+     *
+     * @return Guest
+     */
+    public function setAgreed($agreed)
+    {
+        $this->agreed = $agreed;
+
+        return $this;
+    }
+
+    /**
+     * Get agreed.
+     *
+     * @return bool
+     */
+    public function getAgreed()
+    {
+        return $this->agreed;
+    }
 }

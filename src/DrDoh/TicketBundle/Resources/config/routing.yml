@@ -5,3 +5,7 @@ dr_doh_ticket_billetterie:
 dr_doh_ticket_billetterie_2:
     path:     /visiteur
     defaults: { _controller: DrDohTicketBundle:Booking:guestForm }
+
+dr_doh_ticket_billetterie_stipe:
+    path:     /payement
+    defaults: { _controller: DrDohTicketBundle:Booking:stripeForm }
