@@ -20,7 +20,6 @@ class LoadGuest extends Fixture
         $guest1->setFirstName('GERMAIN');
         $guest1->setBirthDate(new \DateTime);
             $ticket1 = new Ticket();
-            $ticket1->setTicketId(123456789);
             $ticket1->setDate(new \DateTime);
         $guest1->setTicket($ticket1);
         $guest1->setDiscount('none');

@@ -32,30 +32,30 @@
                             </div>
 
                             <div class="form-group col-md-6">
-                                {# {{form_errors(form.firstName)}}
-                                {{form_widget(form.firstName)}} #}
+                                {{form_errors(form.firstName)}}
+                                {{form_widget(form.firstName)}}
                             </div>
                         </div>
                         {# DATE DE NAISSANCE + REDUCTION + PAYS #}
                         <div class="form-row">
                             <div class="form-group col-md-4">
-                                {# {{form_errors(form.birthDate)}}
-                                {{form_widget(form.birthDate)}} #}
+                                {{form_errors(form.birthDate)}}
+                                {{form_widget(form.birthDate)}}
                             </div>
                             <div class="form-group col-md-4">
-                                {# {{form_errors(form.discount)}}
-                                {{form_widget(form.discount)}} #}
+                                {{form_errors(form.discount)}}
+                                {{form_widget(form.discount)}}
                             </div>
                             <div class="form-group col-md-4">
-                                {# {{form_errors(form.country)}}
-                                {{form_widget(form.country)}} #}
+                                {{form_errors(form.country)}}
+                                {{form_widget(form.country)}}
                             </div>
                         </div>
                         {# EMAIL #}
                         <div class="form-row">
                         <div class="form-group col-md-12">
-                                {# {{form_errors(form.email)}}
-                                {{form_widget(form.email)}} #}
+                                {{form_errors(form.email)}}
+                                {{form_widget(form.email)}}
                             </div>
                         </div>
                 </div>
@@ -130,145 +130,34 @@
             </div>
         </div>
     </div> 
+
 {% endblock %}
 {# vvvvv ------------vvvvvvv--------- SCRIPT JS ------------vvvvvvv---------vvvvv #} 
 {% block javascripts %}
  {{parent()}}
-
+<script type="text/javascript" src="{{ asset('js/form_generator.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/ticket_price_calculator.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/mybox.js') }}"></script>
 <script>
 
- $(document).ready(function() {
+$(document).ready(function() {
+
+    var Qte = parseInt("{{ticket_qte}}");
+    var formSelector = "#drdoh_ticketbundle_buyer_";
+    var items = ["full" , "child" , "baby" , "older" , "discount" ];
+    var labels = ["lastName","firstName","birthDate","discount","country",]
 
 
-    var $container = $('form');
-    var index = parseInt("{{app.request.request.get("ticket_qte")}}");
-    var i = 1;
-    var div = 'div#drdoh_ticketbundle_buyer_';
-    while(i <= index){
-        if(i === 1 ){
-            addCollection($('div#drdoh_ticketbundle_buyer_lastName'),$('div#drdoh_ticketbundle_buyer_lastName'), 'Nom');
-            //addCollection($('div#drdoh_ticketbundle_buyer_firstName'),$('div#drdoh_ticketbundle_buyer_firstName'), 'Prenom');
-            //addCollection($(div + 'birthDate'),$(div + 'birthDate'), 'Date de naissance');
-            //addCollection($(div + 'discount'),$(div + 'discount'), 'Réduction');
-            //addCollection($(div + 'country'),$(div + 'country'), 'Pays');
-            //addCollection($(div + 'email'),$(div + 'email'), 'E-mail');
-            $('#guest_index').text("Visiteur "+ i);
-            i++;    
-       }else{
+    formGenerator.init(Qte,formSelector,labels);
+    price.init(Qte,formSelector,items);
+    
+    mybox.init();
 
-            $('#form_card').append('<div class="text-right"><h4 class="text-right" id="guest_index">Visiteur '+i+'</h4></div>');
-            $('#form_card').append('<div class="well" id="form_'+i+'"></div>');
-            $('#form_' + i ).append('<div class="form-row 1"></div>');
-            $('#form_' + i ).append('<div class="form-row 2"></div>');
-            addCollection($('div#drdoh_ticketbundle_buyer_lastName'),$('#form_' + i + ' .1'), 'Nom');
-            //addCollection($('div#drdoh_ticketbundle_buyer_firstName'),$('#form_' + i + ' .1'), 'Prenom');
-            $('#form_' + i + ' .1 div').attr('class','form-group col-md-6');
-
-
-            //addCollection($('div#drdoh_ticketbundle_buyer_birthDate'),$('#form_'+i+ ' .2'), 'Date de naissance');
-            //addCollection($('div#drdoh_ticketbundle_buyer_discount'),$('#form_'+i+' .2'), 'Réduction');
-            //addCollection($('div#drdoh_ticketbundle_buyer_country'),$('#form_'+i+' .2'), 'Pays');
-            //$('#form_' + i + ' .2 > div').attr('class','form-group col-md-4');
-            $('#form_' + i ).append('<hr>')
-            i++;   
-       }
-    }
-
-    // La fonction qui ajoute un formulaire
-    function addCollection($model, $cible, label) {
-        var $newModel= $model.clone()
-        var template = $newModel.attr('data-prototype')
-            .replace(/__name__label__/g, label)
-            .replace(/__name__/g,        i)
-        ;
-        var $prototype = $(template);
-        $cible.append($prototype);
-    }
-
-  });
-
-
-// --VVV--________________GESTION DU TABLEAU DE PRIX__________________--VVV-- 
-$(function(){
-// --VVV-- Tarifs --VVV-- 
-    var full_price = 16;
-    var child_price = 8;
-    var baby_price = 0;
-    var older_price = 12;
-    var discount_price = 10;
-
-// --VVV-- Gestion de la colonne quantité --VVV-- 
-    $('#qte_full_price').text("{{ticket_qte}}");
-    $('#qte_child_price').text(0);
-    $('#qte_baby_price').text(0);
-    $('#qte_older_price').text(0);
-    $('#qte_discount_price').text(0);
-
-
-// --VVV-- Recuperation des quantités --VVV-- 
-    var qte_full_price = $('#qte_full_price').text();
-    var qte_child_price = $('#qte_child_price').text();
-    var qte_baby_price = $('#qte_baby_price').text();
-    var qte_older_price = $('#qte_older_price').text();
-    var qte_discount_price = $('#qte_discount_price').text();
-
-// --VVV-- Gestion de l'age --VVV-- 
-
-    $('#drdoh_ticketbundle_guest_birthDate').change(function(){
-
-        var jours = $('#drdoh_ticketbundle_guest_birthDate_day').val();
-        var mois = $('#drdoh_ticketbundle_guest_birthDate_month').val();
-        var année = $('#drdoh_ticketbundle_guest_birthDate_year').val();
-        birthDate= new Date(année,mois,jours);
-        visiteDate = new Date();
-        console.log(birthDate);
-        console.log(date);
-
-    })
-
-
-// --VVV-- Gestion des reduction --VVV--
-
-    $('#drdoh_ticketbundle_guest_discount').change(function(){
-        var discount = $('#drdoh_ticketbundle_guest_discount').val();
-        if(discount != 50){
-            qte_discount_price ++ ;
-            if(qte_full_price>0){
-                qte_full_price -- ;
-            }
-            $('#qte_discount_price').text(qte_discount_price);
-            $('#qte_full_price').text(qte_full_price);
-        }else{
-            qte_discount_price -- ;
-            qte_full_price ++ ;
-            $('#qte_discount_price').text(qte_discount_price);
-            $('#qte_full_price').text(qte_full_price);
-        }
-    });
-
-
-
-
-// --VVV-- Calcul --VVV--     
-    var total_full_price = qte_full_price * full_price;
-    var total_child_price = qte_child_price * child_price;
-    var total_baby_price = qte_baby_price * baby_price;
-    var total_older_price = qte_older_price * older_price;
-    var total_discount_price = qte_discount_price * discount_price;
-    var total_price = total_full_price+total_child_price+total_baby_price+total_older_price+total_discount_price;
-
-// --VVV-- Modification des valeur du tableau --VVV-- 
-    $('#total_full_price').text(total_full_price+",00 €");
-    $('#total_child_price').text(total_child_price+",00 €");
-    $('#total_baby_price').text(total_baby_price+",00 €");
-    $('#total_older_price').text(total_older_price+",00 €");
-    $('#total_discount_price').text(total_discount_price+",00 €");
-    $('#total_price').text(total_price+",00 €");
-
+    
 })
 
-
 </script>
+
 
 {% endblock %}
 

@@ -35,6 +35,7 @@ class BookingController extends Controller
         $yearMax = $this->container->getParameter('ticketverification_yearMax');
         $fullDateArray = $ticketsVerfification->getFullDate($tickets, $qteMax, $yearMax);
 
+        
     /* -------- \\\\\ Appelle de la vue avec parametres /////-------- */     
         return $this->render('DrDohTicketBundle:Default:ticketForm.html.twig', array(
             'listFullDate' => $fullDateArray
@@ -59,19 +60,73 @@ class BookingController extends Controller
             $date = \DateTime::createFromFormat('d/m/Y', $date)->format('Y-m-d');
             $date = new \DateTime($date);
         }
-        
-        $buyer = new Buyer();
-        $buyer->setAmountPaid(159);
-        $ticket = new Ticket();
-        $ticket->setDate($date);
-        $buyer->setTicket($ticket);
 
+
+        /* -------- \\\\\ STRIPE /////-------- */ 
+                
+        \Stripe\Stripe::setApiKey("sk_test_VwDCVvhFbm8X0lNDfgBII72L");
+
+        $charge = \Stripe\Charge::create([
+            'amount' => 999,
+            'currency' => 'usd',
+            'source' => 'tok_visa',
+            'receipt_email' => 'jenny.rosen@example.com',
+        ]);
+
+        /* -------- \\\\\Generation du formulaire /////-------- */ 
+
+        $buyer = new Buyer();
         $buyerForm = $this->get('form.factory')->create(BuyerType::class, $buyer);
+
+        /* -------- \\\\\Verification et envoi du formulaire /////-------- */ 
 
         if ($request->isMethod('POST') && $buyerForm->handleRequest($request)->isValid()){
             $em = $this->getDoctrine()->getManager();
-            $em->persist($buyer);
+
+            // Recuperation des valeur du formulaire 
+            $orderedKeys = $buyerForm->getData("orderedKeys");
+            var_dump($orderedKeys);
+            
+            foreach($orderedKeys->getFirstName() as $key => $firstName)
+            {
+                if($key > 1){
+                    var_dump($orderedKeys);
+
+                    $guest = new Guest();
+                    $ticket = new Ticket();
+
+                    $ticket ->setDate($date);
+
+                    $guest  ->setFirstName($firstName)
+                            ->setLastName($orderedKeys->getLastName()[$key])            
+                            ->setCountry($orderedKeys->getCountry()[$key])             
+                            ->setBirthDate($orderedKeys->getBirthDate()[$key])             
+                            ->setDiscount($orderedKeys->getDiscount()[$key])
+                            ->setAgreed($orderedKeys->getAgreed())
+                            ->setTicket($ticket);             
+                    $em->persist($ticket);
+                    $em->persist($guest);
+                }else{
+                    $buyer = new Buyer();
+                    $ticket = new Ticket();
+                    $ticket->setDate($date);
+                    $buyer->setFirstName($firstName)
+                        ->setLastName($orderedKeys->getLastName()[$key])
+                        ->setEmail($orderedKeys->getEmail()[$key])
+                        ->setBirthDate($orderedKeys->getBirthDate()[$key])
+                        ->setDiscount($orderedKeys->getDiscount()[$key])
+                        ->setAgreed($orderedKeys->getAgreed())
+                        ->setCountry($orderedKeys->getCountry()[$key])
+                        ->setAmountPaid(159)
+                        ->setTicket($ticket);
+                    $em->persist($ticket);        
+                    $em->persist($buyer);
+                }
+                
+            }
+
             $em->flush();
+
             return $this->redirectToRoute('dr_doh_ticket_billetterie_stipe');
         }
 

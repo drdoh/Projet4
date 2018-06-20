@@ -53,7 +53,7 @@ class Buyer extends Guest
       
 public function __construct(){
     $uniqueId =  sha1(uniqid('',true));
-    
+    $this->orderId = $uniqueId;
     $this->orderDate = new \Datetime();    
 }
 

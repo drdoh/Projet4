@@ -27,7 +27,7 @@ class GuestType extends AbstractType
                 'allow_add' => true, 
                 'allow_delete' => true)
             )
-            /*->add('firstName', CollectionType::class, array(
+            ->add('firstName', CollectionType::class, array(
                 'entry_type' => TextType::class, 
                 'allow_add' => true, 
                 'allow_delete' => true)
@@ -63,13 +63,13 @@ class GuestType extends AbstractType
                 'allow_delete' => true,
                 'entry_type' => CountryType::class, 
                 'entry_options' => [
-                    'mapped' => false,
+                    'mapped' => true,
                     'required' => false,
                     'preferred_choices' => [
                         'FR', 'DE', 'US', 'ES', 'GB', 'IT', 'JP',
                     ],
                 ]
-            ])*/
+            ])
             ->add('agreed', CheckBoxType::class)
             ->add('save', SubmitType::class);
     }/**

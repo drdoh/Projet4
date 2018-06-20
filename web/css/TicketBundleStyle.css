@@ -10,3 +10,41 @@ body {
   background-color: rgba(52, 58, 64, 0.9)!important;
 }
 
+#mybox{}
+#mybox #mybox_aplat{
+  position: fixed;
+  background: #000;
+  top :0 ;
+  left: 0 ;
+  width: 100%;
+  height: 100%;
+  opacity: 0.7; 
+  z-index: 9998;
+}
+
+#mybox #mybox_contener{
+  position: fixed;
+ 
+  top: 50%;
+  left: 50%;
+  background: #FFF;
+  z-index: 9999;
+}
+
+#mybox #mybox_relative{
+  padding: 10px;
+  width: 50%;
+  margin: auto;
+  position: relative;
+  background: rgb(49, 49, 49);
+}
+#mybox #mybox_close{
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  width: 24px;
+  height: 24px;
+  background: url('/Projet4/web/img/red_close_cross.png');
+  cursor: pointer;
+}
+
