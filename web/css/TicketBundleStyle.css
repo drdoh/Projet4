@@ -10,7 +10,10 @@ body {
   background-color: rgba(52, 58, 64, 0.9)!important;
 }
 
-#mybox{}
+#mybox{
+  color: white;
+}
+
 #mybox #mybox_aplat{
   position: fixed;
   background: #000;
@@ -24,19 +27,19 @@ body {
 
 #mybox #mybox_contener{
   position: fixed;
- 
-  top: 50%;
-  left: 50%;
-  background: #FFF;
+  top: 33%;
+  left: 33%;
+  background-image: radial-gradient(circle at center, white, green);
   z-index: 9999;
+  border-radius : 10px;
 }
 
 #mybox #mybox_relative{
   padding: 10px;
-  width: 50%;
-  margin: auto;
+  margin: 10px;
   position: relative;
   background: rgb(49, 49, 49);
+  border-radius : inherit;
 }
 #mybox #mybox_close{
   position: absolute;

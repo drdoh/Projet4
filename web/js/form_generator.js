@@ -13,24 +13,17 @@ formGenerator = {
         $container = $('form');
 
         while(formGenerator.i <= formGenerator.Qte){
-
             if(formGenerator.i === 1 ){
-
                 for(var index in formGenerator.labels){
-
                     var modelName = "div"+formGenerator.formSelector+formGenerator.labels[index] ;
                     var cibleName = "div"+formGenerator.formSelector+formGenerator.labels[index];
                     var labelFr = formGenerator.labels[index];
                     formGenerator.add($(modelName),$(cibleName), labelFr);
-
                 }
-
                 formGenerator.add($("div"+formGenerator.formSelector +"email"),$("div"+formGenerator.formSelector +"email"), 'E-mail');
                 $('#guest_index').text("Visiteur "+ formGenerator.i);
                 formGenerator.i++;    
-
            }else{
-
                 $('#form_card').append('<div class="text-right"><h4 class="text-right" id="guest_index">Visiteur '+formGenerator.i+'</h4></div>');
                 $('#form_card').append('<div class="well" id="form_'+formGenerator.i+'"></div>');
                 $('#form_' + formGenerator.i ).append('<div class="form-row 1"></div>');
@@ -58,6 +51,12 @@ formGenerator = {
         ;
         var $prototype = $(template);
         $cible.append($prototype);
+    }, 
+
+    frName : function(){
+        for(var i in formGenerator.labels){
+            
+        } 
     }
 }
 

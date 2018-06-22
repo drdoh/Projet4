@@ -27,9 +27,7 @@ price={
 
         $('#qte_full_price').text(ticketQte);
         price.unit();
-        price.setQte();
-
-        
+        price.setQte();      
 
     },
 
@@ -65,11 +63,11 @@ price={
             array.push(total);
             
             $('#qte_'+ price.items[i]+'_price').text(Qte);
-            $('#total_'+ price.items[i]+'_price').text(total);
+            $('#total_'+ price.items[i]+'_price').text(total+ price.devise);
            
         }
         var totalGeneral = price.global(array)
-        $('#total_price').text(totalGeneral);
+        $('#total_price').text(totalGeneral + price.devise);
     },
     
     unit: function(Qte, $){

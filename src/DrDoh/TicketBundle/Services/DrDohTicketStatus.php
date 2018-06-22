@@ -1,8 +1,8 @@
 <?php 
 
-namespace DrDoh\TicketBundle\TicketVerification;
+namespace DrDoh\TicketBundle\Services;
 
-class DrDohTicketVerification
+class DrDohTicketStatus
 {
     
     /**

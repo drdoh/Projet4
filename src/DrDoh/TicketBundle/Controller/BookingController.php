@@ -26,7 +26,7 @@ class BookingController extends Controller
 
     /* -------- \\\\\ Recuperation des services /////-------- */ 
 
-        $ticketsVerfification = $this->container->get('dr_doh_ticket.ticket_verification');
+        $ticketsVerfification = $this->container->get('dr_doh_services.tickets_status');
 
     /* -------- \\\\\ Utilisation des services /////-------- */ 
 
