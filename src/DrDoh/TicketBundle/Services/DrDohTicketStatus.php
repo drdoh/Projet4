@@ -4,7 +4,15 @@ namespace DrDoh\TicketBundle\Services;
 
 class DrDohTicketStatus
 {
-    
+    private $qteMax;
+    private $yearMax;
+
+    public function __construct($qteMax, $yearMax)
+    {
+        $this->qteMax = $qteMax;
+        $this->yearMax = $yearMax;
+    }
+
     /**
      * Récupère le nombre de billets vendus par date
      * 
@@ -24,13 +32,9 @@ class DrDohTicketStatus
                 $soldTicketsArray[$ticketDate] = 1 ;
             }   
         }
+
         return $soldTicketsArray;
     }
-
-    public function getSaturday(){
-        
-    }
-
 
     /**
      * Récupère les jours feriés
@@ -38,13 +42,13 @@ class DrDohTicketStatus
      * @return array $holidaysArray 
      * 
      */
-    public function getHolidays($maxYear){
+    public function getHolidays(){
         
         $N= date('Y');
         $holidays = [];
         $holidaysArray = [];
-
-        for($N ; $N <= $maxYear ; $N++){
+        
+        for($N ; $N <= 2020 ; $N++){
             $Pr_mai = $N.'-05-01'; 
             $Pr_novembre = $N.'-11-01'; 
             $noel = $N.'-12-25'; 
@@ -66,14 +70,13 @@ class DrDohTicketStatus
      * @return array $fullDatesArray 
      * 
      */
-    public function getFullDate($tickets, $qteMax, $yearMax){
-        
-        $holidaysArray = $this->getHolidays($yearMax);
-
+    public function getFullDate($tickets){
+        $holidaysArray = $this->getHolidays($this->yearMax);
         $soldTickets = $this->getSoldTickets($tickets);
-        
-        foreach($soldTickets as $date => $soldTicket){         
-            if(($qteMax - $soldTicket)===0){
+        $fullDatesArray = [];
+        foreach($soldTickets as $date => $soldTicket){ 
+      
+            if(($this->qteMax - $soldTicket) === 0){
                 $fullDatesArray[] = $date;
             }
         };

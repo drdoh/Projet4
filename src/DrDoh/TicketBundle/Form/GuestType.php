@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 
 class GuestType extends AbstractType
@@ -71,7 +72,8 @@ class GuestType extends AbstractType
                 ]
             ])
             ->add('agreed', CheckBoxType::class)
-            ->add('save', SubmitType::class);
+            ->add('save', SubmitType::class)
+            ;
     }/**
      * {@inheritdoc}
      */

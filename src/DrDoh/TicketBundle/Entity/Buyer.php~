@@ -25,7 +25,7 @@ class Buyer extends Guest
     /**
      * @var int
      *
-     * @ORM\Column(name="orderId", type="string",length=255, unique=true)
+     * @ORM\Column(name="orderId", type="integer", unique=true)
      */
     private $orderId;
 
@@ -50,6 +50,12 @@ class Buyer extends Guest
      */
     private $email;
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="Ticket_qte", type="integer")
+     */
+    private $TicketQte;
 /***************************** CONSTRUCTOR *************************/
       
 public function __construct(){
@@ -164,6 +170,4 @@ public function __construct(){
     {
         return $this->email;
     }
-
-    
 }

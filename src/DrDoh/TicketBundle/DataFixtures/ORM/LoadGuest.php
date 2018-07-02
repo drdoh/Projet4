@@ -28,8 +28,6 @@ class LoadGuest extends Fixture
         
 
         $manager->persist($guest1);
-        
-
         $manager->flush();
     }
 }

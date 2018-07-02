@@ -4,11 +4,11 @@ namespace DrDoh\TicketBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use DrDoh\TicketBundle\Entity\Ticket;
-use DrDoh\TicketBundle\Form\TicketType;
 use DrDoh\TicketBundle\Entity\Guest;
 use DrDoh\TicketBundle\Entity\Buyer;
-use DrDoh\TicketBundle\Form\GuestType;
 use DrDoh\TicketBundle\Form\BuyerType;
 use Symfony\Component\Validator\Constraints\DateTime;
 
@@ -16,27 +16,16 @@ class BookingController extends Controller
 {
 /* -------- \\\\\ Action -=> ticketForm : Controle la premiere page de formulaire /////-------- */
     public function ticketFormAction()
-    {  
-    /* -------- \\\\\ Creation des repositories /////-------- */
+    {       
+        $em = $this->getDoctrine()->getManager();
+        $em->clear();
+
+        $repo = $this->getDoctrine()->getManager()->getRepository('DrDohTicketBundle:Ticket');
+        $tickets = $repo->findAll();
         
-        $repository = $this
-            ->getDoctrine()
-            ->getManager()
-            ->getRepository('DrDohTicketBundle:Ticket');
-
-    /* -------- \\\\\ Recuperation des services /////-------- */ 
-
         $ticketsVerfification = $this->container->get('dr_doh_services.tickets_status');
+        $fullDateArray = $ticketsVerfification->getFullDate($tickets);
 
-    /* -------- \\\\\ Utilisation des services /////-------- */ 
-
-        $tickets = $repository->findAll();
-        $qteMax = $this->container->getParameter('ticketverification_qteMax');
-        $yearMax = $this->container->getParameter('ticketverification_yearMax');
-        $fullDateArray = $ticketsVerfification->getFullDate($tickets, $qteMax, $yearMax);
-
-        
-    /* -------- \\\\\ Appelle de la vue avec parametres /////-------- */     
         return $this->render('DrDohTicketBundle:Default:ticketForm.html.twig', array(
             'listFullDate' => $fullDateArray
         ));
@@ -45,100 +34,62 @@ class BookingController extends Controller
 /* -------- \\\\\ Action -=> guestForm : Controle la seconde page de formulaire /////-------- */
     public function guestFormAction(Request $request)
     {
-        /* -------- \\\\\$_POST = ticket_qte, choix, date /////-------- */ 
+        $session = $request->getSession(); 
 
-        if(isset($_POST['ticket_qte'])&& isset($_POST['choix'])&& isset($_POST['date'])){
-            $ticket_qte = intval($_POST['ticket_qte']);
-            $choix = $_POST['choix'];
-            $date = $_POST['date'];
-            $date = \DateTime::createFromFormat('d/m/Y', $date)->format('Y-m-d');
-            $date = new \DateTime($date);
-        }else{
-            $ticket_qte = count($_POST);
-            $choix = 'journee'; // COMMENT REUCPERER CETTE VARIABLE ...
-            $date = '01/02/1900'; // COMMENT REUCPERER CETTE VARIABLE ...
-            $date = \DateTime::createFromFormat('d/m/Y', $date)->format('Y-m-d');
-            $date = new \DateTime($date);
+        if($request->request->get('date') != null){
+            $session->set('date', $request->request->get('date'));
+            $session->set('choix', $request->request->get('choix'));
+            $session->set('ticket_qte', $request->request->get('ticket_qte'));
         }
-
-
-        /* -------- \\\\\ STRIPE /////-------- */ 
-                
-        \Stripe\Stripe::setApiKey("sk_test_VwDCVvhFbm8X0lNDfgBII72L");
-
-        $charge = \Stripe\Charge::create([
-            'amount' => 999,
-            'currency' => 'usd',
-            'source' => 'tok_visa',
-            'receipt_email' => 'jenny.rosen@example.com',
-        ]);
-
-        /* -------- \\\\\Generation du formulaire /////-------- */ 
+        
+        $date = $session->get('date');
+        $date = \DateTime::createFromFormat('d/m/Y', $date)->format('Y-m-d');
+        $date = new \DateTime($date);
 
         $buyer = new Buyer();
         $buyerForm = $this->get('form.factory')->create(BuyerType::class, $buyer);
 
-        /* -------- \\\\\Verification et envoi du formulaire /////-------- */ 
-
         if ($request->isMethod('POST') && $buyerForm->handleRequest($request)->isValid()){
-            $em = $this->getDoctrine()->getManager();
-
-            // Recuperation des valeur du formulaire 
             $orderedKeys = $buyerForm->getData("orderedKeys");
-            var_dump($orderedKeys);
-            
-            foreach($orderedKeys->getFirstName() as $key => $firstName)
-            {
-                if($key > 1){
-                    var_dump($orderedKeys);
-
-                    $guest = new Guest();
-                    $ticket = new Ticket();
-
-                    $ticket ->setDate($date);
-
-                    $guest  ->setFirstName($firstName)
-                            ->setLastName($orderedKeys->getLastName()[$key])            
-                            ->setCountry($orderedKeys->getCountry()[$key])             
-                            ->setBirthDate($orderedKeys->getBirthDate()[$key])             
-                            ->setDiscount($orderedKeys->getDiscount()[$key])
-                            ->setAgreed($orderedKeys->getAgreed())
-                            ->setTicket($ticket);             
-                    $em->persist($ticket);
-                    $em->persist($guest);
-                }else{
-                    $buyer = new Buyer();
-                    $ticket = new Ticket();
-                    $ticket->setDate($date);
-                    $buyer->setFirstName($firstName)
-                        ->setLastName($orderedKeys->getLastName()[$key])
-                        ->setEmail($orderedKeys->getEmail()[$key])
-                        ->setBirthDate($orderedKeys->getBirthDate()[$key])
-                        ->setDiscount($orderedKeys->getDiscount()[$key])
-                        ->setAgreed($orderedKeys->getAgreed())
-                        ->setCountry($orderedKeys->getCountry()[$key])
-                        ->setAmountPaid(159)
-                        ->setTicket($ticket);
-                    $em->persist($ticket);        
-                    $em->persist($buyer);
-                }
-                
-            }
-
-            $em->flush();
-
-            return $this->redirectToRoute('dr_doh_ticket_billetterie_stipe');
+            return $this->stripeFormAction($orderedKeys, $date);
         }
-
+        
         return $this->render('DrDohTicketBundle:Default:guestForm.html.twig', array(
             'form' => $buyerForm->createView(), 
-            'ticket_qte' => $ticket_qte,
+            'ticket_qte' => $session->get('ticket_qte'),
         ));
-     }
-
-    public function stripeFormAction(Request $request)
-    {
-        return $this->render('DrDohTicketBundle:Default:stripeForm.html.twig');   
     }
+/* -------- \\\\\ Action -=> stripeForm : Controle la page de payement /////-------- */
+    public function stripeFormAction($orderedKeys, $date)
+    {
+        $entitiesSetter = $this->container->get('dr_doh_services.set_entities');
+        $stripe = $this->container->get('dr_doh_services.stripe');
 
+        $em = $this->getDoctrine()->getManager();
+        $buyerInfo = $entitiesSetter->setEntities($orderedKeys, $date, $em);
+        
+        return $this->render('DrDohTicketBundle:Default:stripeForm.html.twig', array(
+            'buyerInfo' => $buyerInfo,
+            'publishable_key' => $stripe->getPublishableKey(),
+        ));   
+    }
+/* -------- \\\\\ Action -=> stripeCharge : Valide le payement /////-------- */
+    public function stripeChargeAction()
+    {
+        $stripe = $this->container->get('dr_doh_services.stripe');
+        $token  = $_POST['stripeToken'];
+        $email  = $_POST['stripeEmail'];
+        $invoiceAmount = 5000;
+        $customer = $stripe->getCustomer($email,$token);
+        $charge = $stripe->getCharge($customer,$invoiceAmount);
+        
+        var_dump($charge->paid);
+        exit;
+        $em = $this->getDoctrine()->getManager();
+        $em->flush();
+
+        echo '<h1>Successfully charged '.$invoiceAmount.'</h1>';
+        $url = $this->get('router')->generate('dr_doh_ticket_billetterie');
+        return new RedirectResponse($url);
+    }
 }

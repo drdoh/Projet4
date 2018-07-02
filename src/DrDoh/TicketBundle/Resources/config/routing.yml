@@ -9,3 +9,8 @@ dr_doh_ticket_billetterie_2:
 dr_doh_ticket_billetterie_stipe:
     path:     /payement
     defaults: { _controller: DrDohTicketBundle:Booking:stripeForm }
+
+dr_doh_ticket_billetterie_stipe_charge:
+    path:     /charge
+    defaults: { _controller: DrDohTicketBundle:Booking:stripeCharge }
+  

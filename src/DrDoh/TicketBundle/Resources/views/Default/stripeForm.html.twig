@@ -1,12 +1,46 @@
-<form action="your-server-side-code" method="POST">
-  <script
-    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-    data-key="pk_test_g6do5S237ekq10r65BnxO6S0"
-    data-amount="999"
-    data-name="Stripe.com"
-    data-description="Example charge"
-    data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-    data-locale="auto"
-    data-zip-code="true">
-  </script>
-</form>
+{% extends "::layout.html.twig"%}
+
+{% block title %} 
+    {{parent()}} Payement 
+{% endblock %}
+{% block body  %}
+    <div class="container">
+        <h2 class="text-white m-4">Bienvenue</h2> 
+        <div id="form_contener"></div>
+    
+        <div class="card text-white bg-dark mb-3">
+          <h3 class="card-header text-center">
+              Page de payement
+          </h3>
+          <div class="card-body">
+            <div class="well">
+                <div>{{buyerInfo.Prenom}} {{buyerInfo.Nom}}</div>
+                <div>Le montant de votre commande est de {{ buyerInfo.invoice_amount }}.00 €</div>
+                <div>Pour poursuivre cliquer sur le bouton ci dessous</div>
+
+
+            <form action="{{path('dr_doh_ticket_billetterie_stipe_charge',{'buyerInfo' : buyerInfo })}}" method="post">
+              <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                      data-image='{{ asset('img/logo-louvre.png') }}'
+                      data-name='Le Louvre'
+                      data-key="{{publishable_key}}"
+                      data-amount={{buyerInfo.invoice_amount * 100 }}
+                      data-locale="auto"
+                      data-label="Payer par carte"
+                      data-email={{buyerInfo.email}}
+                      data-allow-remember-me=false
+                      data-currency='eur'
+                      >
+              </script>
+            </form>
+            </div>
+          </div>
+    </div> 
+{% endblock %}
+
+{% block javascripts %}
+ {{parent()}}
+
+{% endblock %}
+
+{# 4242 4242 4242 4242 #}
