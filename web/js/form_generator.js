@@ -16,8 +16,27 @@ formGenerator = {
             if(formGenerator.i === 1 ){
                 for(var index in formGenerator.labels){
                     var modelName = "div"+formGenerator.formSelector+formGenerator.labels[index] ;
-                    var cibleName = "div"+formGenerator.formSelector+formGenerator.labels[index];
+                    var cibleName = "div"+formGenerator.formSelector+formGenerator.labels[index];                   
                     var labelFr = formGenerator.labels[index];
+                    switch(labelFr){
+                        case "lastName":
+                            labelFr = 'Nom';
+                            break;
+                        case "firstName":
+                            labelFr = 'Prenom';
+                            break;
+                        case "birthDate":
+                            labelFr = 'Date de naissance';
+                            break;
+                        case "discount":
+                            labelFr = 'Réduction';
+                            break;
+                        case "country":
+                            labelFr = 'Pays';
+                            break;
+                        default:
+                            labelFr = '';
+                    }
                     formGenerator.add($(modelName),$(cibleName), labelFr);
                 }
                 formGenerator.add($("div"+formGenerator.formSelector +"email"),$("div"+formGenerator.formSelector +"email"), 'E-mail');

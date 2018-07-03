@@ -28,7 +28,6 @@ price={
         $('#qte_full_price').text(ticketQte);
         price.unit();
         price.setQte();      
-
     },
 
     setQte: function(){

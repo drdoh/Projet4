@@ -17,9 +17,6 @@ class BookingController extends Controller
 /* -------- \\\\\ Action -=> ticketForm : Controle la premiere page de formulaire /////-------- */
     public function ticketFormAction()
     {       
-        $em = $this->getDoctrine()->getManager();
-        $em->clear();
-
         $repo = $this->getDoctrine()->getManager()->getRepository('DrDohTicketBundle:Ticket');
         $tickets = $repo->findAll();
         
@@ -35,7 +32,6 @@ class BookingController extends Controller
     public function guestFormAction(Request $request)
     {
         $session = $request->getSession(); 
-
         if($request->request->get('date') != null){
             $session->set('date', $request->request->get('date'));
             $session->set('choix', $request->request->get('choix'));
@@ -50,8 +46,11 @@ class BookingController extends Controller
         $buyerForm = $this->get('form.factory')->create(BuyerType::class, $buyer);
 
         if ($request->isMethod('POST') && $buyerForm->handleRequest($request)->isValid()){
-            $orderedKeys = $buyerForm->getData("orderedKeys");
-            return $this->stripeFormAction($orderedKeys, $date);
+            $formDatas = $buyerForm->getData("formDatas");
+            $em = $this->getDoctrine()->getManager();
+            $entitiesSetter = $this->container->get('dr_doh_services.set_entities');
+            $entitiesSetter->setEntities($formDatas, $date, $em);
+            return $this->stripeFormAction($formDatas, $date);
         }
         
         return $this->render('DrDohTicketBundle:Default:guestForm.html.twig', array(
@@ -59,17 +58,16 @@ class BookingController extends Controller
             'ticket_qte' => $session->get('ticket_qte'),
         ));
     }
+    
 /* -------- \\\\\ Action -=> stripeForm : Controle la page de payement /////-------- */
-    public function stripeFormAction($orderedKeys, $date)
+    public function stripeFormAction($formDatas, $date)
     {
-        $entitiesSetter = $this->container->get('dr_doh_services.set_entities');
         $stripe = $this->container->get('dr_doh_services.stripe');
 
-        $em = $this->getDoctrine()->getManager();
-        $buyerInfo = $entitiesSetter->setEntities($orderedKeys, $date, $em);
-        
+
+        var_dump($formDatas);
         return $this->render('DrDohTicketBundle:Default:stripeForm.html.twig', array(
-            'buyerInfo' => $buyerInfo,
+            'formDatas' => $formDatas,
             'publishable_key' => $stripe->getPublishableKey(),
         ));   
     }

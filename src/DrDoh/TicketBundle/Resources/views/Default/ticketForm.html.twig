@@ -72,16 +72,13 @@
     var heure=now.hour();
     var d = now.date();
     var m = now.month()+1
-        if(m<10){
-            m = "0" + m;
-        }
     var y = now.year();
 
     $(function () {
         $('#datetimepicker1').datetimepicker(
             {
             format: 'L',
-            minDate: y+m+d,
+            minDate: y+'/'+m+'/'+d,
             viewDate: 'moment',
             format: 'DD/MM/YYYY',
             locale: 'fr',
@@ -97,8 +94,11 @@
 
 function dateCheck(){
     var now = moment();
-    var heure=now.hour();
+    var h=now.hour();
     var d = now.date();
+        if(d<10){
+            d = "0" + d;
+        }
     var m = now.month()+1
         if(m<10){
             m = "0" + m;
@@ -107,7 +107,7 @@ function dateCheck(){
     var date = d + "/" + m + "/" + y;
     var chosen_date = $('#chosen_date').val();
 
-    if(heure>=14 && chosen_date === date ){
+    if(h>=14 && chosen_date === date ){
         $('#choix option').remove();
         $('#choix').append('<option value="demi-journee" id="BDJ">Billet demi journée (a partir de 14h00)</option>');
         $('#choix').append('<option value="journee" id="BJ">Billet journée</option>');
@@ -124,8 +124,6 @@ function dateCheck(){
     $('#datetimepicker1').on("change.datetimepicker", function (e) {
             dateCheck();
         });
-
-
     });
     </script>
 

@@ -14,14 +14,16 @@ class DrDohSetEntities
         $this->price_cal = $priceCal;
     }
 
-    public function setEntities($orderedKeys,$date,$em)
+    public function setEntities($formDatas,$date,$em)
     {
-        $totalPrice = $this->price_cal->getTotalPrice($orderedKeys, $date);
+
+
+        $totalPrice = $this->price_cal->getTotalPrice($formDatas, $date);
         $buyerData = [];
-        foreach($orderedKeys->getFirstName() as $key => $firstName)
+        foreach($formDatas->getFirstName() as $key => $firstName)
         {
-            $uPrice = $this->price_cal->getUPrice($this->price_cal->getGuestAge($orderedKeys->getBirthDate()[$key],$date),$orderedKeys->getDiscount()[$key]);
-            $priceType = $this->price_cal->getPriceType($this->price_cal->getGuestAge($orderedKeys->getBirthDate()[$key],$date),$orderedKeys->getDiscount()[$key]);
+            $uPrice = $this->price_cal->getUPrice($this->price_cal->getGuestAge($formDatas->getBirthDate()[$key],$date),$formDatas->getDiscount()[$key]);
+            $priceType = $this->price_cal->getPriceType($this->price_cal->getGuestAge($formDatas->getBirthDate()[$key],$date),$formDatas->getDiscount()[$key]);
 
             if($key > 1){
 
@@ -32,15 +34,16 @@ class DrDohSetEntities
 
                 $guest = new Guest();
                 $guest  ->setFirstName($firstName)
-                        ->setLastName($orderedKeys->getLastName()[$key])            
-                        ->setCountry($orderedKeys->getCountry()[$key])             
-                        ->setBirthDate($orderedKeys->getBirthDate()[$key])
-                        ->setDiscount($orderedKeys->getDiscount()[$key])
-                        ->setAgreed($orderedKeys->getAgreed())
+                        ->setLastName($formDatas->getLastName()[$key])            
+                        ->setCountry($formDatas->getCountry()[$key])             
+                        ->setBirthDate($formDatas->getBirthDate()[$key])
+                        ->setDiscount($formDatas->getDiscount()[$key])
+                        ->setAgreed($formDatas->getAgreed())
                         ->setTicket($ticket);
 
                 $em->persist($ticket);
                 $em->persist($guest);
+
             }else{
                 
                 $ticket = new Ticket();
@@ -50,29 +53,24 @@ class DrDohSetEntities
                 
                 $buyer = new Buyer();
                 $buyer  ->setFirstName($firstName)
-                        ->setLastName($orderedKeys->getLastName()[$key])
-                        ->setEmail($orderedKeys->getEmail()[$key])
-                        ->setBirthDate($orderedKeys->getBirthDate()[$key])
-                        ->setDiscount($orderedKeys->getDiscount()[$key])
-                        ->setAgreed($orderedKeys->getAgreed())
-                        ->setCountry($orderedKeys->getCountry()[$key])
+                        ->setLastName($formDatas->getLastName()[$key])
+                        ->setEmail($formDatas->getEmail()[$key])
+                        ->setBirthDate($formDatas->getBirthDate()[$key])
+                        ->setDiscount($formDatas->getDiscount()[$key])
+                        ->setAgreed($formDatas->getAgreed())
+                        ->setCountry($formDatas->getCountry()[$key])
                         ->setAmountPaid($totalPrice)
                         ->setTicket($ticket);
                 
                 $em->persist($ticket);        
                 $em->persist($buyer);
                 
-                $buyerData = array(
-                    'Nom' => $firstName, 
-                    'Prenom' => $orderedKeys->getLastName()[$key],
-                    'email' => $orderedKeys->getEmail()[$key],
-                    'invoice_amount' => $totalPrice
-                );
-            }
+           }
             
         }
         $em->flush();
-        return $buyerData;
+        var_dump($em);
+        exit;
     }
 
 }
