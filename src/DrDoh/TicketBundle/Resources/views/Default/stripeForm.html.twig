@@ -1,4 +1,4 @@
-{% extends "::layout.html.twig"%}
+{% extends "DrDohTicketBundle::main.html.twig"%}
 
 {% block title %} 
     {{parent()}} Payement 
@@ -71,8 +71,8 @@ $(function(){
     locale: 'auto',
     token: function(token){
         $('body').append('<form id="strip_form" method="post" action="{{path('dr_doh_ticket_billetterie_stipe_checkout')}}"></form>');
-        $('#strip_form').append('<input type="hiden" name="token" value='+token.id+'>');
-        $('#strip_form').append('<input type="hiden" name="email" value='+token.email+'>');
+        $('#strip_form').append('<input type="hidden" name="token" value='+token.id+'>');
+        $('#strip_form').append('<input type="hidden" name="email" value='+token.email+'>');
         // Test avec .attr()
         $('#strip_form').submit();
     }

@@ -38,7 +38,6 @@ class BookingController extends Controller
             $dispo = $ticketsVerfification->checkDispo($tickets, $_POST['date'], $_POST['ticket_qte']);
 
             if($dispo == true){
-
                 return $this->redirectToRoute('dr_doh_ticket_billetterie_2');
             }else{
                 $this->addFlash(
@@ -47,7 +46,6 @@ class BookingController extends Controller
                 );
             }
         }
-
         return $this->render('DrDohTicketBundle:Default:ticketForm.html.twig', array(
             'listFullDate' => $fullDateArray
         ));
@@ -56,9 +54,11 @@ class BookingController extends Controller
 /* -------- \\\\\ Action -=> guestForm : Controle la seconde page de formulaire /////-------- */
     public function guestFormAction(Request $request)
     {
+        // --------vvvvv Datas from Session vvvvv-------
         $session = $request->getSession(); 
         $date = $session->get('date');
 
+        // --------vvvvv Logic vvvvv-------
         $ticket = new Ticket();
         $ticketForm = $this->get('form.factory')->create(TicketType::class, $ticket);
 
@@ -78,15 +78,20 @@ class BookingController extends Controller
 /* -------- \\\\\ Action -=> stripeForm : Controle la page de payement /////-------- */
     public function stripeFormAction(Request $request)
     {
+        // --------vvvvv Services vvvvv-------
         $stripeService = $this->container->get('dr_doh_services.stripe');
         $priceCalService = $this->container->get('dr_doh_services.price_cal');
-        
+
+        // --------vvvvv Datas from Session vvvvv-------
         $session = $request->getSession(); 
         $formDatas = $session->get('form_datas');
         $date = $session->get('date');
+        // --------vvvvv Datas form Services vvvvv-------
         $prices = $priceCalService->getPrices($formDatas, $date);
         $invoiceAmount = $priceCalService->getTotalPrice($formDatas, $date); 
         $PriceType = $priceCalService->getPriceTypeArray($formDatas, $date);
+
+        // --------vvvvv Logic vvvvv-------
         return $this->render('DrDohTicketBundle:Default:stripeForm.html.twig'
         , array(
             'publishable_key' => $stripeService->getPublishableKey(),
@@ -136,31 +141,23 @@ class BookingController extends Controller
     
     public function sendingTicketAction($orderId)
     {
-        // On récupère l'objet à afficher (rien d'inconnu jusque là)
+        // --------vvvvv Datas form Repo vvvvv-------
         $em = $this->getDoctrine()->getManager();
         $buyerRepo = $em->getRepository('DrDohTicketBundle:Buyer');
-        $buyer = $buyerRepo->findByOrderId($orderId);
         $ticketRepo = $this->getDoctrine()->getManager()->getRepository('DrDohTicketBundle:Ticket');
+        $buyer = $buyerRepo->findByOrderId($orderId);
         $listTickets = $ticketRepo->findBy(array('buyer'=>$buyer[0]));
-   
-        // On crée une  instance pour définir les options de notre fichier pdf
+
         $options = new Options();
-        // Pour simplifier l'affichage des images, on autorise dompdf à utiliser 
-        // des  url pour les nom de  fichier
         $options->set('isRemoteEnabled', TRUE);
-        // On crée une instance de dompdf avec  les options définies
         $dompdf = new Dompdf($options);
-        // On demande à Symfony de générer  le code html  correspondant à 
-        // notre template, et on stocke ce code dans une variable
         $html = $this->renderView(
             'DrDohTicketBundle:Pdf:pdfView.html.twig', 
             array(
                 'listTickets' => $listTickets, 
                 'buyer'=> $buyer)
         );
-        // On envoie le code html  à notre instance de dompdf
         $dompdf->loadHtml($html);        
-        // On demande à dompdf de générer le  pdf
         $dompdf->render();
     
     $mailer = $this->container->get('mailer');
@@ -171,13 +168,12 @@ class BookingController extends Controller
             ->setBody('Hello','text/plain');
 
     $mailer->send($message);
-    var_dump($mailer,$message);
-    exit;
+
     // or, you can also fetch the mailer service this way
     // $this->get('mailer')->send($message);
 
-        // On renvoie  le flux du fichier pdf dans une  Response pour l'utilisateur
-        return new Response ($dompdf->stream());
+    // On renvoie  le flux du fichier pdf dans une  Response pour l'utilisateur
+    return new Response ($dompdf->stream());
 
     }
 

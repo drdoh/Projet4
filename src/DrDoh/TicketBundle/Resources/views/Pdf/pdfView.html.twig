@@ -1,66 +1,236 @@
-<html>
+<!DOCTYPE html>
+<html lang="fr">
   <head>
+    <meta charset="utf-8">
+    <title>Louvre</title>
     <style>
-      /* On commence par définir les propriétés de la page : les marges en haut
-       * et en bas permettront d'insérer un en-tête et un pied de page */
-      @page {
-        margin: 50px 0 25px 0;
+      .clearfix:after {
+      content: "";
+      display: table;
+      clear: both;
       }
-      /* La position fixed permet de placer les éléments sur toutes les pages
-       * du document pdf, le reste n'est que décoration */
-      #header, #footer {
-        position: fixed; 
-        left: 0px;
-        right: 0px;
-        color: #fff;
-        background-color: #000;
+
+      body {
+      position: relative;
+      width: 21cm;  
+      height: 29.7cm; 
+      margin: 0 auto; 
+      color: #555555;
+      background: #FFFFFF; 
+      font-family: Arial, sans-serif; 
+      font-size: 14px; 
+      font-family: SourceSansPro;
       }
-      #header {
-        top: -50px;
-        height: 50px;
+
+      header {
+      padding: 10px 0;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #AAAAAA;
       }
-      #footer {
-        bottom: -25px;
-        height: 25px;
+
+      #logo {
+      float: left;
+      margin-top: 8px;
       }
-      /* Pour améliorer un peu la lisibilité on ajoute une marge au corps de
-       * texte. Ca aurait pu être fait en agrandissant les marges au niveau
-       * de la page mais je trouve qu'utiliser un div dédié pour le contenu
-       * est cohérent */
-      #content { 
-        margin: 25px;
+
+      #logo img {
+      height: 70px;
       }
-      /* On teste quelques d'options css différentes */
-      h1 { text-transform: uppercase; text-align: center; font-weight: bold}
-      h2 {font-style: italic; font-weight: bold; border: solid 1px #ccc; }
-      /* On met même en place un système de colonnes pour tester les float */
-      .col-25, .col-75 { float: left; }
-      .col-25 { width: 25%; }
-      .col-75 { width: 75%; }
-      .row { clear: both; }
+
+      #company {
+      float: right;
+      text-align: right;
+      }
+
+      #details {
+      margin-bottom: 50px;
+      }
+
+      #client {
+      padding-left: 6px;
+      border-left: 6px solid #0087C3;
+      float: left;
+      }
+
+      h2.name {
+      font-size: 1.4em;
+      font-weight: bold;
+      margin: 0;
+      }
+
+      #invoice {
+      float: right;
+      text-align: right;
+      }
+
+      table {
+      width: 100%;
+      border-collapse: collapse;
+      border-spacing: 0;
+      margin-bottom: 20px;
+      }
+
+      table th,
+      table td {
+      padding: 20px;
+      background: #EEEEEE;
+      text-align: center;
+      border-bottom: 1px solid #FFFFFF;
+      }
+
+      table th {
+      white-space: nowrap;        
+      font-weight: 1.2em;
+      }
+
+      table td {
+      text-align: right;
+      }
+
+      table .no {
+      color: #FFFFFF;
+      font-size: 1em;
+      background: #0087C3;
+      }
+
+      table .ticketId {
+      background: #DDDDDD;
+      }
+
+      table .price {
+      background: #0087C3;
+      color: #FFFFFF;
+      }
+
+      table td.name
+      {
+      font-size: 1.2em;
+      }
+
+      table tbody tr:last-child td {
+      border: none;
+      }
+
+      table tfoot td {
+      padding: 10px 20px;
+      background: #FFFFFF;
+      border-bottom: none;
+      font-size: 1.2em;
+      white-space: nowrap; 
+      border-top: 1px solid #AAAAAA; 
+      }
+
+      table tfoot tr:first-child td {
+      border-top: none; 
+      }
+
+      table tfoot tr:last-child td {
+      color: #0087C3;
+      font-size: 1.4em;
+      border-top: 1px solid #0087C3; 
+      }
+
+      table tfoot tr td:first-child {
+      border: none;
+      }
+
+      #thanks{
+      font-size: 2em;
+      margin-bottom: 50px;
+      }
+
+      #notices{
+      padding-left: 6px;
+      border-left: 6px solid #0087C3; 
+      text-align: justify; 
+      }
+
+      #notices .notice {
+      font-size: 1.2em;
+      }
+
+      footer {
+      color: #777777;
+      width: 100%;
+      height: 30px;
+      position: absolute;
+      bottom: 0;
+      border-top: 1px solid #AAAAAA;
+      padding: 8px 0;
+      text-align: center;
+      }
     </style>
   </head>
-  <body>
-    <!-- On commence par ajouter le header et le footer pour qu'ils soient 
-      visibles sur toutes les pages. Si on les ajoute après avoir rempli plus
-      d'une page, ils ne seront insérés qu'après le saut de page -->
-    <div id="header">
-      <!-- Grâce aux options définies dans le contrôleur on peut insérer des 
-        images à partir de leur url absolue -->
-      {# <img src="{{ app.request.getSchemeAndHttpHost() ~ asset('/bundles/test/img/logo.png') }}" alt="logo"> #}
+
+<body>
+  <header class="clearfix">
+    <div id="logo">
+      <img src="{{ asset('img/logo-louvre.png') }}">
     </div>
-    <div id="footer">Texte du footer</div>
-    <!-- Maintenant on rempli le document -->        
-    <div id="content">
-        {% for ticket in listTickets %}
-      <h1>{{ticket.lastName}} {{ticket.firstName}}</h1>
-      {# {% for prop in object.properties %}
-        <div class="row">
-          <div class="col-25"><h3>{{prop.name}}</h3></div>
-          <div class="col-75">{{prop.value}}</div>
+    <div id="company" >
+      <h2 class="name">Musée du Louvre</h2>
+      <div>Rue de Rivoli,<br /> 75001, Paris</div>
+    </div>
+  </header>
+  <main>
+    <div id="details" class="clearfix">
+      <div id="invoice">
+        <h1>Billets d'accés au musée du Louvre</h1>
+        <h3>Uniquement valable le {{listTickets[0].date|date('d/m/Y')}}</h3>
+      </div>
+      <div id="client">
+        <div><strong>Client :</strong> {{listTickets[0].lastName}} {{listTickets[0].firstName}}</div>
+        <div><strong>Email :</strong> {{buyer[0].email}}</a></div>
+        <div><strong>Date de commande :</strong> {{buyer[0].orderDate.date|date('d/m/Y')}}</div>
+        <div><strong>N° de commande :</strong> {{buyer[0].orderId}}</div>
+      </div>
+
+    </div>
+      <table border="0" cellspacing="0" cellpadding="0">
+      <thead>
+          <tr>
+            <th class="no">#</th>
+            <th scope="col" class="name">Visiteur</th>
+            <th scope="col" class="discount">Type de Billet</th>
+            <th scope="col" class="ticketId">N° de Billet</th>
+            <th scope="col" class="price">Montant</th>
+          </tr>
+      </thead>
+      <tbody>
+          {% for valeur, option in listTickets%}
+              <tr>
+                  <td class="no">{{valeur + 1}}</th>
+                  <td class="name text-center">{{listTickets[valeur].lastName}} {{listTickets[valeur].firstName}}</td>
+                  <td class="discount text-center">{{listTickets[valeur].type}}</td>
+                  <td class="ticketId text-center">{{listTickets[valeur].ticketId}}</td>
+                  <td class="price text-center">{{listTickets[valeur].value}},00 €</td>
+              </tr>
+          {% endfor %}
+      </tbody>
+      
+      <tfoot>
+        <tr>
+          <td colspan="2"></td>
+          <td colspan="2"> TOTAL</td>
+          <td>{{buyer[0].amountPaid}},00 €</td>
+        </tr>  
+      </tfoot>
+    </table>
+        <div id="notices">
+          <div>INFORMATION :</div>
+          <br>
+          <div>Ce billet est unique. un seul exemplaire de ce billet permet d'acceder au l'enceinte de musée ouvert au public. Si un second exemplaire se presente au controle d'accès, le possesseur de cet exemplaire ne pourra pas entrer. Dans ce cas, le possesseur du billet et la personne ayant commandé le billet s'exposent à des poursuite judiciaire. Le billet étant nominatif, un contrôle d'identité pourra etre effectué.</div>
+          <br>
+          <div>Le e-ticket est uniquement valable s'il est imprimé en couleur ou en noir et blanc, a 100% sur une seule face de papier A4 blanc, vierge recto verso, sans modification de la taille d'impression en format avec une imprimante jet d'encre ou laser ; aucun autre support (electronique, écran pc, ecrant portable) n'est accepté.</div>
+          <br>
+          <div>Les tickets doivent disposer d'une bonne qualité d'impression; les billets partiellement imprimés, souillés, endomagés ou illisible ne seront pas acceptés et considérés de fait comme non valable. Ce billet n'est ni échangeable, ni remboursable. Il est personnel est incessible. Lors des contrôles à l'entrée du musée, une piece d'identité officielle en cours de validité avec photo pourra vous etre demandée pour identifier l'acheteur. Ce ticket est uniquement valable pour le date et l'heure precisés. Dans les autres cas, ce billet ne sera pas valable. Le client doit concerver ce titre pendant toute la durée de sa visite</div>
         </div>
-        #}
-      {% endfor %}  
-    </div>       
+  </main>
+
+  <footer>
+    Le louvre
+  </footer>
   </body>
 </html>
+
+

@@ -1,0 +1,21 @@
+{% extends "::layout.html.twig"%}
+{% block stylesheets %}
+    {{parent()}}
+    <link rel="stylesheet" href="{{ asset('css/TicketBundleStyle.css') }}">
+{% endblock %}
+{% block title %}{{parent()}}Le Louvre -{% endblock %}
+
+{% block nav %}
+    <div class="container-fluid">
+        <nav class="navbar navbar-dark bg-dark">
+            <a class="navbar-brand" href="#">
+                <img src="{{ asset('img/logo-louvre.png') }}" width="150"  class="d-inline-block align-top" alt="logo-louvre">
+            </a>
+            <h1 class="navbar text-white text-right">
+                Billetterie officielle du musée du Louvre
+            </h1>
+        </nav>        
+{% endblock %}
+
+
+
