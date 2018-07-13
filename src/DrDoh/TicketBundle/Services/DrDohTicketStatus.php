@@ -83,4 +83,24 @@ class DrDohTicketStatus
         $fullDatesArray = array_merge_recursive($holidaysArray, $fullDatesArray);
         return $fullDatesArray;
     }
+
+    /**
+     * Verifie la dispo
+     * 
+     * @return bool $fullDatesArray 
+     * 
+     */
+    public function checkDispo($tickets,$date, $qte){
+
+        $SoldTickets = $this->getSoldTickets($tickets);
+
+            $dispo = true;
+            if(array_key_exists($date,$SoldTickets) == true){
+                if($SoldTickets[$date] +  $qte > $this->qteMax){
+                    $dispo = false;
+                }    
+            } 
+            
+        return $dispo;
+    }
 }

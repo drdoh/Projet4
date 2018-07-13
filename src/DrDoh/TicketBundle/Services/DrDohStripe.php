@@ -35,8 +35,8 @@ class DrDohStripe
 
         $charge = \Stripe\Charge::create(array(
             'customer' => $customer->id,
-            'amount'   => $invoiceAmount,
-            'currency' => 'usd'
+            'amount'   => $invoiceAmount*100,
+            'currency' => 'eur'
         ));
 
         return $charge;

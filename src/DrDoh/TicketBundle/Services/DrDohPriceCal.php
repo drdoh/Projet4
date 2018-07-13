@@ -30,6 +30,7 @@ class DrDohPriceCal
 
             
     public function getGuestAge($BirthDate, $date){
+
         $diff=$date->diff($BirthDate); 
         $age = $diff->format('%y');
         return $age;
@@ -79,41 +80,41 @@ class DrDohPriceCal
     
     }
 
-    public function getPriceType($age,$discount ){
+    public function getPriceType($age,$discount){
 
         switch($age){
             case ($age <= $this->childMinAge):
-                $priceType = "bébé";
+                $priceType = "Bébé";
                 break;
             case $age > $this->childMinAge && $age<= $this->childMaxAge:
-                $priceType = "enfant";
+                $priceType = "Enfant";
                 break;
             case $age > $this->childMaxAge && $age <= $this->seniorMinAge:
-                $priceType = "normal";
+                $priceType = "Normal";
                 break;
             case $age > $this->seniorMinAge:
-                $priceType = "senior";
+                $priceType = "Senior";
                 break;
             default:
-                $priceType = "normal";
+                $priceType = "Normal";
             }
 
             if($discount != 'none'){
                 switch($discount){
-                    case "employee":
-                    $priceType = "employé";
+                        case "employee":
+                        $priceType = "Employé";
                     break;
-                    case "etude":
-                    $priceType = "etudiant";
+                        case "etude":
+                        $priceType = "Etudiant";
                     break;
                     case "military":
-                    $priceType = "militaire";
-                    break;
+                        $priceType = "Militaire";
+                        break;
                     case "ministary":
-                    $priceType = "membre du ministaire de la culture";
-                    break;
+                        $priceType = "Membre du ministaire de la culture";
+                        break;
                     default:
-                        $priceType = "normal";
+                        $priceType = "Normal";
                 }
             }
 
@@ -121,22 +122,41 @@ class DrDohPriceCal
     
     }
             
-    public function getTotalPrice($data, $date){   
+    public function getPrices($datas, $date){   
         
         $priceArray = [];
-
-        foreach($data->getFirstName() as $key => $value){
-            $birthDate = $data->getBirthDate()[$key];
+        
+        foreach($datas->getFirstName() as $key => $value){
+            $birthDate = $datas->getBirthDate()[$key];
             $age = $this->GetGuestAge($birthDate, $date);
-            $discount = $data->getDiscount()[$key];
+            $discount = $datas->getDiscount()[$key];
             $price = $this->getUPrice($age,$discount);
             
             $priceArray[] = $price;
         }
 
+        return $priceArray;
+    }
+
+    public function getTotalPrice($datas, $date){   
+        
+        $priceArray = $this->getPrices($datas, $date);
         $total = array_sum($priceArray);
         return $total;
     }
 
-        
+    public function getPriceTypeArray($datas, $date){
+        $priceTypeArray = [];
+
+        foreach($datas->getFirstName() as $key => $value){
+            $birthDate = $datas->getBirthDate()[$key];
+            $age = $this->GetGuestAge($birthDate, $date);
+            $discount = $datas->getDiscount()[$key];
+            $priceType = $this->getPriceType($age,$discount);
+            
+            $priceTypeArray[] = $priceType;
+        }
+
+        return $priceTypeArray;
+    }
 }

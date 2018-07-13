@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="buyer")
  * @ORM\Entity(repositoryClass="DrDoh\TicketBundle\Repository\BuyerRepository")
  */
-class Buyer extends Guest
+class Buyer
 {
 /***************************** ATTRIBUTE *************************/
     /**
@@ -46,7 +46,7 @@ class Buyer extends Guest
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string", length=255)
+     * @ORM\Column(name="email", type="string", length=255, nullable=true)
      */
     private $email;
 
@@ -165,5 +165,4 @@ public function __construct(){
         return $this->email;
     }
 
-    
 }

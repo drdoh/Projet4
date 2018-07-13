@@ -16,7 +16,14 @@
             </h3>
             <div class="card-body">
                 <div class="well">
-                    <form method="post" action="{{path('dr_doh_ticket_billetterie_2')}}">
+                    {% for message in app.flashes('notice') %}
+                        <div class="flash-notice alert alert-info text-center">
+                            <strong>
+                                {{ message }}
+                            </strong>
+                        </div>
+                    {% endfor %}
+                    <form method="post" action="{{path('dr_doh_ticket_billetterie')}}">
                         <div class="form-group">    
                             <label for="ticket_qte">Nombre de places (Maximum 6)</label><br />
                             <select name="ticket_qte" id="ticket_qte" class="form-control">

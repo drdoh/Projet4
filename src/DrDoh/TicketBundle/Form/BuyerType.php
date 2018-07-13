@@ -4,9 +4,7 @@ namespace DrDoh\TicketBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class BuyerType extends AbstractType
 {
@@ -15,18 +13,15 @@ class BuyerType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('email', CollectionType::class, array(
-                'entry_type' => EmailType::class, 
-                'allow_add' => true, 
-                'allow_delete' => true
-            ));
-         
-    }
-
-    public function getParent()
+        $builder->add('orderId')->add('orderDate')->add('amountPaid')->add('email')->add('agreed');
+    }/**
+     * {@inheritdoc}
+     */
+    public function configureOptions(OptionsResolver $resolver)
     {
-        return GuestType::class;
+        $resolver->setDefaults(array(
+            'data_class' => 'DrDoh\TicketBundle\Entity\Buyer'
+        ));
     }
 
     /**

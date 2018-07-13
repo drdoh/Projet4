@@ -12,34 +12,90 @@
           <h3 class="card-header text-center">
               Recapitulatif de commande
           </h3>
-          <div class="card-body">
-            <div class="well">
-                <div>{{buyerInfo.Prenom}} {{buyerInfo.Nom}}</div>
-                <div>Le montant de votre commande est de {{ buyerInfo.invoice_amount }}.00 €</div>
-                <div>Pour poursuivre cliquer sur le bouton ci dessous</div>
 
+            <div class="card-body">
+                <h5 class="card-title text-center pb-2">Reservation de {{app.session.get('ticket_qte')}} billets pour le {{app.session.get("date").date|date('d/m/Y')}}</h5>
 
-            <form action="{{path('dr_doh_ticket_billetterie_stipe_charge',{'buyerInfo' : buyerInfo })}}" method="post">
-              <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                      data-image='{{ asset('img/logo-louvre.png') }}'
-                      data-name='Le Louvre'
-                      data-key="{{publishable_key}}"
-                      data-amount={{buyerInfo.invoice_amount * 100 }}
-                      data-locale="auto"
-                      data-label="Payer par carte"
-                      data-email={{buyerInfo.email}}
-                      data-allow-remember-me=false
-                      data-currency='eur'
-                      >
-              </script>
-            </form>
+                <div class="well text-dark ">
+                    <table class="table table-striped table-light table-bordered">
+                        <thead>
+                            <tr>
+                            <th scope="col">Nom</th>
+                            <th scope="col">Prénom</th>
+                            <th scope="col">Billet</th>
+                            <th scope="col">Montant</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for valeur, option in app.session.get('form_datas').lastName%}
+                                <tr>
+                                    <td id="lastName" class="text-center">{{ app.session.get('form_datas').lastName[valeur]}}</td>
+                                    <td id="firstName" class="text-center">{{ app.session.get('form_datas').firstName[valeur]}}</td>
+                                    <td id="discount" class="text-center">{{ price_type[valeur - 1]}}</td>
+                                    <td id="price" class="text-center">{{ prices[valeur - 1]}},00 €</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfooter>
+                            <tr>
+                            <th scope="row"></th>
+                            <td></td>
+                            <th>Total</th>
+                            <th id="total_price" class="text-center">{{invoice_amount}},00 €</th>
+                            </tr>
+                        </tfooter>
+                    </table>
+                </div>
+                
+                <div class="text-white text-center p-2">Pour poursuivre cliquer sur le bouton ci dessous</div>
+                <div class="col-12 m-2 d-flex justify-content-around">
+                    <button class="btn btn-info col-5" type="submit" id="customButton" >Payer par CB</button>
+                    <button class="btn btn-secondary col-5" id="return">Modifier la commande</button>
+                </div>
+
             </div>
-          </div>
+
     </div> 
 {% endblock %}
 
 {% block javascripts %}
  {{parent()}}
+
+    <script>
+
+$(function(){
+
+    var handler = StripeCheckout.configure({
+    key: '{{publishable_key}}',
+    image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
+    locale: 'auto',
+    token: function(token){
+        $('body').append('<form id="strip_form" method="post" action="{{path('dr_doh_ticket_billetterie_stipe_checkout')}}"></form>');
+        $('#strip_form').append('<input type="hiden" name="token" value='+token.id+'>');
+        $('#strip_form').append('<input type="hiden" name="email" value='+token.email+'>');
+        // Test avec .attr()
+        $('#strip_form').submit();
+    }
+    });
+
+    document.getElementById('customButton').addEventListener('click', function(e) {
+    // Open Checkout with further options:
+    handler.open({
+        name: 'Le Louvre',
+        currency: 'eur',
+        amount: {{ invoice_amount * 100 }}
+    });
+    e.preventDefault();
+    });
+
+    // Close Checkout on page navigation:
+    window.addEventListener('popstate', function() {
+    handler.close({
+
+    });
+    });
+})
+</script>
 
 {% endblock %}
 
