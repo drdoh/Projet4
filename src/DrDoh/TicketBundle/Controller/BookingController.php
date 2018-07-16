@@ -138,7 +138,8 @@ class BookingController extends Controller
             return $this->redirectToRoute("dr_doh_ticket_billetterie_2");
         }
     }
-    
+
+/* -------- \\\\\ Action -=> sendingTicket : Envoye le billet et redirige sur la page d'accueil /////-------- */
     public function sendingTicketAction($orderId)
     {
         // --------vvvvv Datas form Repo vvvvv-------
@@ -148,6 +149,8 @@ class BookingController extends Controller
         $buyer = $buyerRepo->findByOrderId($orderId);
         $listTickets = $ticketRepo->findBy(array('buyer'=>$buyer[0]));
 
+
+        // --------vvvvv DOM PDF vvvvv------- 
         $options = new Options();
         $options->set('isRemoteEnabled', TRUE);
         $dompdf = new Dompdf($options);
@@ -159,21 +162,36 @@ class BookingController extends Controller
         );
         $dompdf->loadHtml($html);        
         $dompdf->render();
-    
-    $mailer = $this->container->get('mailer');
+        $pdf = $dompdf->output();
 
-        $message = (\Swift_Message::newInstance())
-            ->setFrom('ludovic.parhelia@gmail.com')
-            ->setTo('ludovic.parhelia@gmail.com')
-            ->setBody('Hello','text/plain');
+        // --------vvvvv Swift Mailer vvvvv------- 
+        $message = \Swift_Message::newInstance();
+        $imgUrl = $message->embed(Swift_Image::fromPath('../web/img/logo-louvre.png'));
 
-    $mailer->send($message);
+        $mailer = $this->container->get('mailer');
+        $filename = "Le Louvre : Billet d'accées.pdf";
+        
+        $message->setFrom('ludovic.parhelia@gmail.com')
+                ->setTo('ludovic.parhelia@gmail.com')
+                ->setSubject('Musée du Louvre : Vos billets d\'accés')
+                ->setBody(
+                    $this->renderView(
+                        'DrDohTicketBundle:Email:emailView.html.twig',
+                        array(
+                            'listTickets' => $listTickets,
+                            'buyer' => $buyer,
+                            'img_url'=> $imgUrl,
+                        )
+                    ),
+                'text/html'
+                );
+                
+        $attachement = \Swift_Attachment::newInstance($pdf, $filename, 'application/pdf' );
+        $message->attach($attachement);
 
-    // or, you can also fetch the mailer service this way
-    // $this->get('mailer')->send($message);
-
-    // On renvoie  le flux du fichier pdf dans une  Response pour l'utilisateur
-    return new Response ($dompdf->stream());
+        $mailer->send($message);
+    exit;
+    return $this->redirectToRoute("dr_doh_ticket_billetterie");
 
     }
 
