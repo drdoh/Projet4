@@ -1,227 +1,176 @@
-<!DOCTYPE html>
-<html lang="fr">
-  <head>
-    <meta charset="utf-8">
-    <title>Louvre</title>
-    <style>
-      .clearfix:after {
-      content: "";
-      display: table;
-      clear: both;
-      }
-
-      body {
-        height: 100%;
-        width: 100%;
-        color: #555555;
-        font-family: Arial, sans-serif;
-        font-size : 12px; 
-      }
-     
-      header {
-      top: -50px;
-      height: 70px;
-      width:100%;
-      padding: 10px 0;
-      margin-bottom: 20px;
-      border-bottom: 1px solid #AAAAAA;
-      }
-
-      #logo {
-      display: inline-block;
-      width : 50%;
-      margin-top: 8px;
-      }
-
-      #logo img {
-      height: 70px;
-      }
-
-      #company {
-      margin-top: 8px;
-      display: inline-block;
-      width : 50%;
-      text-align: right;
-      }
-
-      #details {
-      margin-bottom: 50px;
-      }
-
-      #client {
-      display: inline;
-      padding-left: 6px;
-      border-left: 6px solid #0087C3;
-      float: left;
-      }
-
-      h2.name {
-      font-size: 1.4em;
-      font-weight: bold;
-      margin: 0;
-      }
-
-      #invoice {
-      display: inline;
-      text-align: right;
-      }
-
-      table {
-      width: 100%;
-      border-collapse: collapse;
-      border-spacing: 0;
-      margin-bottom: 20px;
-      }
-
-      table th,
-      table td {
-      padding: 15px;
-      background: #EEEEEE;
-      text-align: center;
-      border-bottom: 1px solid #FFFFFF;
-      }
-
-      table th {
-      white-space: nowrap;        
-      font-weight: 1.2em;
-      }
-
-      table .no {
-      color: #FFFFFF;
-      font-size: 1em;
-      background: #0087C3;
-      }
-
-      table .ticketId {
-      background: #DDDDDD;
-      }
-
-      table .price {
-      background: #0087C3;
-      color: #FFFFFF;
-      }
-
-      table td.name
-      {
-        width :50%;
-      }
-
-      table .discount
-      {
-        background: #E8E8E8;
-      }
-
-      table tbody tr:last-child td {
-      border: none;
-      }
-
-      table tfoot td {
-      padding: 10px 20px;
-      background: #FFFFFF;
-      border-bottom: none;
-      color: #0087C3;
-      font-size: 1.4em;
-      white-space: nowrap; 
-      border-top: 3px solid #0087C3; 
-      }
-
-      table tfoot tr td:first-child {
-      border: none;
-      }
-
-
-      #notices{
-      padding-left: 6px;
-      border-left: 6px solid #0087C3; 
-      text-align: justify; 
-      }
-
-      #notices .notice {
-      font-size: 0.9em;
-      }
-
-      .notice {
-      font-style: italic;
-      }
-
-      footer {
-      color: #777777;
-      width: 100%;
-      height: 30px;
-      position: absolute;
-      bottom: -25px;
-      height: 25px;
-      border-top: 1px solid #AAAAAA;
-      padding: 8px 0;
-      text-align: center;
-      }
-    </style>
-  </head>
-
-  <body>
-    <header class="clearfix">
-      <div id="logo">
-        <img src="{{img_url}}"> 
-      </div>
-      <div id="company" >
-        <h2 class="name">Musée du Louvre</h2>
-        <div>Rue de Rivoli,<br /> 75001, Paris</div>
-      </div>
-    </header>
-    <main>
-      <div id="details" class="clearfix">
-        <div id="invoice">
-          <h1>Billets d'accés au musée du Louvre</h1>
-          <h3>Valable uniquement le {{listTickets[0].date|date('d/m/Y')}}</h3>
-        </div>
-        <div id="client">
-          <div><strong>Client :</strong> {{listTickets[0].lastName}} {{listTickets[0].firstName}}</div>
-          <div><strong>Email :</strong> {{buyer[0].email}}</a></div>
-          <div><strong>Date de commande :</strong> {{buyer[0].orderDate.date|date('d/m/Y')}}</div>
-          <div><strong>N° de commande :</strong> {{buyer[0].orderId}}</div>
-        </div>
-
-      </div>
-        <table border="0" cellspacing="0" cellpadding="0">
-        <thead>
-            <tr>
-
-              <th scope="col" class="name">Visiteur</th>
-              <th scope="col" class="price">Montant</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for valeur, option in listTickets%}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>Template mailing Alsacreations</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style type="text/css">
+            /* Fonts and Content */
+            body, td { font-family: 'Helvetica Neue', Arial, Helvetica, Geneva, sans-serif; font-size:14px; }
+            body { background-color: #2A374E; margin: 0; padding: 0; -webkit-text-size-adjust:none; -ms-text-size-adjust:none; }
+            h2{ padding-top:12px; /* ne fonctionnera pas sous Outlook 2007+ */color:#0E7693; font-size:22px; }
+            #priceTable {width: 100%; border-collapse: collapse; border-spacing: 0; margin-bottom: 20px;}
+            #priceTable th, #priceTable td {padding: 15px; background: #EEEEEE; text-align: center; border-bottom: 1px solid #FFFFFF;}
+            #priceTable th {white-space: nowrap; font-weight: 1.2em;}
+            #priceTable .price {background: #0087C3;color: #FFFFFF;}
+            #priceTable td.name{width :50%;}
+            #priceTable tbody tr:last-child td {border: none;}
+            #priceTable tfoot td {padding: 10px 20px; background: #FFFFFF;border-bottom: none;color: #0087C3;font-size: 1.4em;white-space: nowrap;border-top: 3px solid #0087C3;}
+            #priceTable tfoot tr td:first-child {border: none;}
+            .pagetoplogo-content{margin-top: 20px;margin-bottom: 20px;}
+            #notices{padding-left: 6px;border-left: 6px solid #0087C3;text-align: justify;}
+            #notices .notice {ont-size: 0.9em;}
+            .notice {font-style: italic;}
+            #client {padding-left: 6px;border-left: 6px solid #0087C3;margin-bottom:20px;}
+        </style>
+    
+    </head>
+    <body style="margin:0px; padding:0px; -webkit-text-size-adjust:none;">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:rgb(42, 55, 78)" >
+            <tbody>
                 <tr>
-                    <td class="name text-center">{{listTickets[valeur].lastName}} {{listTickets[valeur].firstName}}</td>
-                    <td class="price text-center">{{listTickets[valeur].value}},00 €</td>
+                    <td align="center" bgcolor="#2A374E">
+                        <table  cellpadding="0" cellspacing="0" border="0">
+                            <tbody>                            
+                                <tr>
+                                    <td class="w640"  width="640" height="10"></td>
+                                </tr>
+
+                                <!-- entete -->
+                                <tr class="pagetoplogo">
+                                    <td class="w640"  width="640">
+                                        <table  class="w640"  width="640" cellpadding="0" cellspacing="0" border="0" bgcolor="#F2F0F0">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="w30"  width="30"></td>
+                                                    <td  class="w580"  width="580" valign="middle" align="left">
+                                                        <div class="pagetoplogo-content">
+                                                            <img class="w580" style="text-decoration: none; display: block; color:#476688; font-size:30px;" src="{{img_url}}" alt="Mon Logo" width="482" height="108"/>
+                                                        </div>
+                                                    </td> 
+                                                    <td class="w30"  width="30"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <!-- separateur horizontal -->
+                                <tr>
+                                    <td  class="w640"  width="640" height="1" bgcolor="#d7d6d6"></td>
+                                </tr>
+
+                                <!-- contenu -->
+                                <tr class="content">
+                                    <td class="w640" class="w640"  width="640" bgcolor="#ffffff">
+                                        <table class="w640"  width="640" cellpadding="0" cellspacing="0" border="0">
+                                            <tbody>
+                                                <tr>
+                                                    <td  class="w30"  width="30"></td>
+                                                    <td  class="w580"  width="580">
+                                                        <!-- une zone de contenu -->
+                                                        <table class="w580"  width="580" cellpadding="0" cellspacing="0" border="0">
+                                                            <tbody>                                                            
+                                                                <tr>
+                                                                    <td class="w580"  width="580">
+                                                                        <h2 style="color:#0E7693; font-size:22px; padding-top:12px;">Merci pour votre commande</h2>
+                                                                        <h3>Nous vous souhaitons une bonne visite le {{listTickets[0].date|date('d/m/Y')}}</h3>
+                                                                        <div align="left" class="article-content">
+                                                                            <div id="client">
+                                                                                <div><strong>Client :</strong> {{listTickets[0].lastName}} {{listTickets[0].firstName}}</div>
+                                                                                <div><strong>Email :</strong> {{buyer[0].email}}</a></div>
+                                                                                <div><strong>Date de commande :</strong> {{buyer[0].orderDate.date|date('d/m/Y')}}</div>
+                                                                                <div><strong>N° de commande :</strong> {{buyer[0].orderId}}</div>
+                                                                            </div>
+
+                                                                            <table id="priceTable" border="0" cellspacing="0" cellpadding="0">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                    <th scope="col" class="name">Visiteur</th>
+                                                                                    <th scope="col" class="price">Montant</th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                    {% for valeur, option in listTickets%}
+                                                                                        <tr>
+                                                                                            <td class="name text-center">{{listTickets[valeur].lastName}} {{listTickets[valeur].firstName}}</td>
+                                                                                            <td class="price text-center">{{listTickets[valeur].value}},00 €</td>
+                                                                                        </tr>
+                                                                                    {% endfor %}
+                                                                                </tbody>
+                                                                                <tfoot>
+                                                                                    <tr>
+                                                                                        <td colspan="1"> TOTAL</td>
+                                                                                        <td>{{buyer[0].amountPaid}},00 €</td>
+                                                                                    </tr>  
+                                                                                </tfoot>
+                                                                            </table>
+                                
+                                                                            <div id="notices">
+                                                                                <div>INFORMATION :</div>
+                                                                                <div class="notice">Vous trouverez ci-joint le billet d’accès au musée pour la date du {{listTickets[0].date|date('d/m/Y')}}. Veuillez imprimer ce billet sur papier blanc au format A4. Ce billet devra être présenté à l’entrée du musée. </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class="w580"  width="580" height="1" bgcolor="#c7c5c5"></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                        <!-- fin zone -->                                                   
+
+
+                                                    </td>
+                                                    <td class="w30" class="w30"  width="30"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <!--  separateur horizontal de 15px de  haut-->
+                                <tr>
+                                    <td class="w640"  width="640" height="15" bgcolor="#ffffff"></td>
+                                </tr>
+
+                                <!-- pied de page -->
+                                <tr class="pagebottom">
+                                    <td class="w640"  width="640">
+                                        <table class="w640"  width="640" cellpadding="0" cellspacing="0" border="0" bgcolor="#c7c7c7">
+                                            <tbody>
+                                                <tr>
+                                                    <td colspan="5" height="10"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="w30"  width="30"></td>
+                                                    <td class="w580"  width="580" valign="top">
+                                                        <p align="right" class="pagebottom-content-left">
+                                                            <a style="color:#255D5C;" href="https://www.louvre.fr"><span style="color:#255D5C;">     
+
+                                                                Musée du Louvre<br />
+                                                            </span></a>
+                                                                Rue de Rivoli,<br /> 75001, Paris
+                                                        </p>
+                                                    </td>
+
+                                                    <td class="w30"  width="30"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="5" height="10"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                {# <tr>
+                                    <td class="w640"  width="640" height="60"></td>
+                                </tr> #}
+                            </tbody>
+                        </table>
+                    </td>
                 </tr>
-            {% endfor %}
-        </tbody>
-        
-        <tfoot>
-          <tr>
-            <td colspan="2"></td>
-            <td colspan="2"> TOTAL</td>
-            <td>{{buyer[0].amountPaid}},00 €</td>
-          </tr>  
-        </tfoot>
-      </table>
-          <div id="notices">
-            <div>INFORMATION :</div>
-            <br>
-            <div class="notice">Ce billet est unique. Un seul exemplaire de ce billet permet d'accéder au l'enceinte de musée ouvert au public. Si un second exemplaire se présente au contrôle d'accès, le possesseur de cet exemplaire ne pourra pas entrer. Dans ce cas, le possesseur du billet et la personne ayant commandé le billet s'exposent à des poursuites judiciaires. Le billet étant nominatif, un contrôle d'identité pourra être effectué.</div>
-            <br>
-            <div class="notice">Le e-ticket est uniquement valable s'il est imprimé en couleur ou en noir et blanc, à 100% sur une seule face de papier A4 blanc, vierge recto verso, sans modification de la taille d'impression en format avec une imprimante jet d'encre ou laser ; aucun autre support (électronique, écran PC, écran portable) n'est accepté.</div>
-            <br>
-            <div class="notice">Les tickets doivent disposer d'une bonne qualité d'impression; les billets partiellement imprimés, souillés, endommagés ou illisibles ne seront pas acceptés et considérés de fait comme non valables. Ce billet n'est ni échangeable ni remboursable. Il est personnel et incessible. Lors des contrôles à l'entrée du musée, une piece d'identité officielle en cours de validité avec photo pourra vous etre demandée pour identifier l'acheteur. Ce ticket est uniquement valable pour le date et l'heure precisés. Dans les autres cas, ce billet ne sera pas valable. Le client doit conserver ce titre pendant toute la durée de sa visite.</div>
-          </div>
-    </main>
-
-    <footer>
-      Le louvre
-    </footer>
-  </body>
+            </tbody>
+        </table>
+    </body>
 </html>
-
-

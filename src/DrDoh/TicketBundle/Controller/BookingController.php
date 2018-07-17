@@ -166,7 +166,7 @@ class BookingController extends Controller
 
         // --------vvvvv Swift Mailer vvvvv------- 
         $message = \Swift_Message::newInstance();
-        $imgUrl = $message->embed(Swift_Image::fromPath('../web/img/logo-louvre.png'));
+        $imgUrl = $message->embed(\Swift_Image::fromPath('../web/img/logo-louvre.png'));
 
         $mailer = $this->container->get('mailer');
         $filename = "Le Louvre : Billet d'accées.pdf";
