@@ -22,63 +22,92 @@ class TicketType extends AbstractType
     {
         $builder
             ->add(
-                'lastName',CollectionType::class, [
-                    'label'=> 'Nom',
-                    'entry_type' => TextType::class, 
+                'lastName',CollectionType::class,[
+                    'entry_type' => TextType::class,
                     'allow_add' => true, 
-                    'allow_delete' => true                    
+                    'allow_delete' => true,                    
+                    'attr' => ['class' => 'col-md-6'],
+                    'entry_options'=> [
+                        'label' => 'Nom',
+                        //'label_attr' => ['class' => 'col-2'],
+                    ], 
                 ]
             )
-            ->add('firstName',CollectionType::class, [
-                    'label'=> 'Prénom',
+            ->add(
+                'firstName',CollectionType::class, [
                     'entry_type' => TextType::class, 
                     'allow_add' => true, 
-                    'allow_delete' => true  
-                    ])
-            ->add('birthDate',CollectionType::class, [
-                'label'=> 'Date de naissance',
-                'allow_add' => true, 
-                'allow_delete' => true,
-                'entry_type' => BirthdayType::class,
-                'entry_options' =>[
-                    'input' => 'datetime',
-                    'placeholder' => [
-                        'month' => 'Mois',
-                        'year' => 'Année',
-                        'day' => 'Jours',],
-                        'format' => 'dd MM yyyy',
+                    'allow_delete' => true,
+                    'attr' => ['class' => 'col-md-6'],
+                    'entry_options'=> [
+                        'label' => 'Prénom'
+                    ],   
+                ]
+            )
+            ->add(
+                'birthDate',CollectionType::class,[
+                    'allow_add' => true, 
+                    'allow_delete' => true,
+                    'attr' => ['class' => 'col-md-4'],
+                    'entry_type' => BirthdayType::class,
+                    'entry_options' =>[
+                        'attr' => [
+                            'class' => 'datetimepicker-input',
+                            'data-toggle' =>'datetimepicker',
+                            'data-target'=>'#drdoh_ticketbundle_ticket_birthDate'
+                        ],
+                        'label'=> 'Date de naissance',
+                        'input' => 'datetime',
+                        'widget' => 'single_text',
+                        'placeholder' => [
+                            'month' => 'Mois',
+                            'year' => 'Année',
+                            'day' => 'Jours',
+                        ],
+                            'format' => 'dd MM yyyy',
                     ],
-                ])
-            ->add('country',CollectionType::class, [
-                'label'=> 'Pays',
-                'allow_add' => true, 
-                'allow_delete' => true,
-                'entry_type' => CountryType::class, 
-                'entry_options' => [
-                    'mapped' => true,
-                    'required' => false,
-                    'preferred_choices' => [
-                        'FR', 'DE', 'US', 'ES', 'GB', 'IT', 'JP',
+                ]
+            )
+            ->add(
+                'country',CollectionType::class,[
+                    'allow_add' => true, 
+                    'allow_delete' => true,
+                    'attr' => ['class' => 'col-md-4'],
+                    'entry_type' => CountryType::class, 
+                    'entry_options' => [
+                        'label'=> 'Pays',
+                        'mapped' => true,
+                        'required' => false,
+                        'preferred_choices' => [
+                            'FR', 'DE', 'US', 'ES', 'GB', 'IT', 'JP',
                         ],
                     ]
-                ])
-            ->add('discount',CollectionType::class, [
-                'label'=> 'Réduction',
-                'allow_add' => true, 
-                'allow_delete' => true,
-                'entry_type' => ChoiceType::class,
-                'entry_options' => array(
-                    'choices'  => array(
-                        '' => 'none',
-                        'Etudiant' => 'etude',
-                        'Employé de musée'     => 'employee',
-                        'Militaire'    => 'military',
-                        'Ministere de la culture'    => 'ministary',
-                        ),
-                    ),
-            ])
-            ->add('save', SubmitType::class);
-    }/**
+                ]
+            )
+            ->add(
+                'discount',CollectionType::class, [
+                    'allow_add' => true, 
+                    'allow_delete' => true,
+                    'attr' => ['class' => 'col-md-4'],
+                    'entry_type' => ChoiceType::class,
+                    'entry_options' => [
+                        'label'=> 'Réduction',
+                        'choices'  => [
+                            '' => 'none',
+                            'Etudiant' => 'etude',
+                            'Employé de musée'     => 'employee',
+                            'Militaire'    => 'military',
+                            'Ministere de la culture'    => 'ministary',
+                            ],
+                        ],
+                ]
+            )
+            ->add(
+                'save',SubmitType::class
+            );
+    }
+    
+    /**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)

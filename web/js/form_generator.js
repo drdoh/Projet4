@@ -19,73 +19,46 @@ formGenerator = {
                 for(var index in formGenerator.labels){
                     var modelName = "div"+formGenerator.formSelector+formGenerator.labels[index] ;
                     var cibleName = "div"+formGenerator.formSelector+formGenerator.labels[index];                   
-                    var label = formGenerator.labels[index];
-                    var labelFr = formGenerator.labelFr(label);
-                    var $prototype = formGenerator.proto($(modelName),labelFr);
+                    var $prototype = formGenerator.proto($(modelName));
                     $(cibleName).append($prototype);
                 } 
+                $('#form_1').wrap('<div class="card text-white bg-dark mb-3"></div>');
             }else{
-                $('#form_card').append('<div class="text-right"><h4 class="text-right" id="guest_index">Visiteur '+formGenerator.i+'</h4></div>');
-                $('#form_card').append('<div class="well" id="form_'+formGenerator.i+'"></div>');
+                $('#form_card').append('<div class="card-body" id="form_'+formGenerator.i+'"></div>');
+                $('#form_' + formGenerator.i).append('<h4 class="col-2 offset-10 w-25 text-center shadow p-2 mb-2 bg-info rounded" id="guest_index"><i class="far fa-user"></i> Visiteur '+formGenerator.i+'</h4>');
+                $('#form_' + formGenerator.i ).wrap('<div class="card text-white bg-dark mb-3"></div>')
                 $('#form_' + formGenerator.i ).append('<div class="form-row 1"></div>');
                 $('#form_' + formGenerator.i ).append('<div class="form-row 2"></div>');
 
 
-                var proto1 = formGenerator.proto($('div'+ formGenerator.formSelector +"lastName"), 'Nom');
-                var proto2 = formGenerator.proto($('div'+ formGenerator.formSelector +"firstName"), 'Prenom');
+                var proto1 = formGenerator.proto($('div'+ formGenerator.formSelector +"lastName"));
+                var proto2 = formGenerator.proto($('div'+ formGenerator.formSelector +"firstName"));
                 $('#form_' + formGenerator.i + ' .1').append(proto1);
                 $('#form_' + formGenerator.i + ' .1').append(proto2);
                 $('#form_' + formGenerator.i + ' .1 div').attr('class','form-group col-md-6');
     
     
-                var proto1 = formGenerator.proto($('div'+ formGenerator.formSelector +'birthDate'), 'Date de naissance');
-                var proto2 = formGenerator.proto($('div'+ formGenerator.formSelector +'discount'), 'Réduction');
-                var proto3 = formGenerator.proto($('div'+ formGenerator.formSelector +'country'), 'Pays');
+                var proto1 = formGenerator.proto($('div'+ formGenerator.formSelector +'birthDate'));
+                var proto2 = formGenerator.proto($('div'+ formGenerator.formSelector +'discount'));
+                var proto3 = formGenerator.proto($('div'+ formGenerator.formSelector +'country'));
                 $('#form_' + formGenerator.i + ' .2').append(proto1);
                 $('#form_' + formGenerator.i + ' .2').append(proto2);
                 $('#form_' + formGenerator.i + ' .2').append(proto3);
-                $('#form_' + formGenerator.i + ' .2 > div').attr('class','form-group col-md-4');
-                $('#form_' + formGenerator.i ).append('<hr>')
-                
+                $('#form_' + formGenerator.i + ' .2 > div').attr('class','form-group col-md-4');             
 
             }
                 formGenerator.i++;    
         }
     }, 
 
-    proto : function($model, label){
+    proto : function($model){
         var $newModel= $model.clone()
         var template = $newModel.attr('data-prototype')
-            .replace(/__name__label__/g, label)
-            .replace(/__name__/g,       formGenerator.i)
+            .replace(/__name__/g, formGenerator.i)
         ;
         var $prototype = $(template);
         return $prototype;
     },
-
-    labelFr : function(label){
-        switch(label){
-            case "lastName":
-                labelFr = "Nom";
-                break;
-            case "firstName":
-                labelFr = "Prénom";
-                break;
-            case "birthDate":
-                labelFr = "Date de Naissance";
-                break;
-            case "discount":
-                labelFr = "Réduction";
-                break;
-            case "country":
-                labelFr = "Pays";
-                break;
-            default:
-                labelFr;
-        }
-
-        return labelFr;
-    }
 
 }
 
