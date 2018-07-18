@@ -30,7 +30,6 @@ class DrDohPriceCal
 
             
     public function getGuestAge($BirthDate, $date){
-
         $diff=$date->diff($BirthDate); 
         $age = $diff->format('%y');
         return $age;
@@ -122,12 +121,20 @@ class DrDohPriceCal
     
     }
             
+    public function getTotalPrice($datas, $date){   
+        
+        $priceArray = $this->getPrices($datas, $date);
+        $total = array_sum($priceArray);
+        return $total;
+    }
+    
     public function getPrices($datas, $date){   
         
         $priceArray = [];
         
         foreach($datas->getFirstName() as $key => $value){
             $birthDate = $datas->getBirthDate()[$key];
+            $birthDate = new \DateTime($birthDate);
             $age = $this->GetGuestAge($birthDate, $date);
             $discount = $datas->getDiscount()[$key];
             $price = $this->getUPrice($age,$discount);
@@ -138,18 +145,12 @@ class DrDohPriceCal
         return $priceArray;
     }
 
-    public function getTotalPrice($datas, $date){   
-        
-        $priceArray = $this->getPrices($datas, $date);
-        $total = array_sum($priceArray);
-        return $total;
-    }
-
     public function getPriceTypeArray($datas, $date){
         $priceTypeArray = [];
 
         foreach($datas->getFirstName() as $key => $value){
             $birthDate = $datas->getBirthDate()[$key];
+            $birthDate = new \DateTime($birthDate);
             $age = $this->GetGuestAge($birthDate, $date);
             $discount = $datas->getDiscount()[$key];
             $priceType = $this->getPriceType($age,$discount);

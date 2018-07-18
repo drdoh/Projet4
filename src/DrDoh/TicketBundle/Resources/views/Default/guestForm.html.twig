@@ -26,21 +26,13 @@
                         {{form_errors(form)}}
                         {# NOM + PRENOM #}
                         <div class="form-row 1">
-
-                            
-                                {{form_errors(form.lastName)}}
                                 {{form_widget(form.lastName)}}
-
-                                {{form_errors(form.firstName)}}
                                 {{form_widget(form.firstName)}}
                         </div>
                         {# DATE DE NAISSANCE + REDUCTION + PAYS #}
                         <div class="form-row 2">
-                                {{form_errors(form.birthDate)}}
                                 {{form_widget(form.birthDate)}}
-                                {{form_errors(form.discount)}}
                                 {{form_widget(form.discount)}}
-                                {{form_errors(form.country)}}
                                 {{form_widget(form.country)}}
                         </div>
                             

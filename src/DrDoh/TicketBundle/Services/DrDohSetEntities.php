@@ -23,14 +23,14 @@ class DrDohSetEntities
 
         foreach($formDatas->getFirstName() as $key => $firstName)
         {
-            $uPrice = $this->price_cal->getUPrice($this->price_cal->getGuestAge($formDatas->getBirthDate()[$key],$date),$formDatas->getDiscount()[$key]);
-            $priceType = $this->price_cal->getPriceType($this->price_cal->getGuestAge($formDatas->getBirthDate()[$key],$date),$formDatas->getDiscount()[$key]);
+            $uPrice = $this->price_cal->getUPrice($this->price_cal->getGuestAge(new \DateTime($formDatas->getBirthDate()[$key]),$date),$formDatas->getDiscount()[$key]);
+            $priceType = $this->price_cal->getPriceType($this->price_cal->getGuestAge(new \DateTime($formDatas->getBirthDate()[$key]),$date),$formDatas->getDiscount()[$key]);
             
             $ticket = new Ticket();
             $ticket ->setLastName($formDatas->getLastName()[$key])
                     ->setFirstName($firstName)
                     ->setCountry($formDatas->getCountry()[$key])
-                    ->setBirthDate($formDatas->getBirthDate()[$key])
+                    ->setBirthDate(new \DateTime($formDatas->getBirthDate()[$key]))
                     ->setDiscount($formDatas->getDiscount()[$key])
                     ->setDate($date)
                     ->setValue($uPrice)

@@ -67,7 +67,7 @@ $(function(){
 
     var handler = StripeCheckout.configure({
     key: '{{publishable_key}}',
-    image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
+    image: '{{ asset('img/louvre-logo-mini.png') }}',
     locale: 'auto',
     token: function(token){
         $('body').append('<form id="strip_form" method="post" action="{{path('dr_doh_ticket_billetterie_stipe_checkout')}}"></form>');

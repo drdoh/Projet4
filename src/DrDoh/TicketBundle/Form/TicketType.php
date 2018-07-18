@@ -13,6 +13,8 @@ use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
+use Symfony\Component\Form\CallbackTransformer;
+
 class TicketType extends AbstractType
 {
     /**
@@ -57,14 +59,14 @@ class TicketType extends AbstractType
                             'data-target'=>'#drdoh_ticketbundle_ticket_birthDate'
                         ],
                         'label'=> 'Date de naissance',
-                        'input' => 'datetime',
+                        'input' => 'string',
                         'widget' => 'single_text',
                         'placeholder' => [
                             'month' => 'Mois',
                             'year' => 'Année',
                             'day' => 'Jours',
                         ],
-                            'format' => 'dd MM yyyy',
+                            'format' => 'dd/MM/yyyy',
                     ],
                 ]
             )
@@ -105,6 +107,7 @@ class TicketType extends AbstractType
             ->add(
                 'save',SubmitType::class
             );
+
     }
     
     /**
