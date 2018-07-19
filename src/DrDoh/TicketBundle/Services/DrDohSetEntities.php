@@ -16,23 +16,27 @@ class DrDohSetEntities
 
     public function setEntities($formDatas,$date,$email,$em)
     {
+        $priceDatas = $this->price_cal->getPricesArray($formDatas,$date);
         $totalPrice = $this->price_cal->getTotalPrice($formDatas, $date);
         $buyer = new Buyer();
         $buyer->setAmountPaid($totalPrice)
                 ->setEmail($email);
+        var_dump($date);
+        $date = \DateTime::createFromFormat('d/m/Y', $date)->format('Y-m-d');
 
         foreach($formDatas->getFirstName() as $key => $firstName)
         {
-            $uPrice = $this->price_cal->getUPrice($this->price_cal->getGuestAge(new \DateTime($formDatas->getBirthDate()[$key]),$date),$formDatas->getDiscount()[$key]);
-            $priceType = $this->price_cal->getPriceType($this->price_cal->getGuestAge(new \DateTime($formDatas->getBirthDate()[$key]),$date),$formDatas->getDiscount()[$key]);
+            $uPrice = $priceDatas[$key-1]['price'];
+            $priceType = $priceDatas[$key-1]['type'];
             
+
             $ticket = new Ticket();
             $ticket ->setLastName($formDatas->getLastName()[$key])
                     ->setFirstName($firstName)
                     ->setCountry($formDatas->getCountry()[$key])
-                    ->setBirthDate(new \DateTime($formDatas->getBirthDate()[$key]))
+                    ->setBirthDate(new \DateTime($formDatas->getBirthdate()[$key]))
                     ->setDiscount($formDatas->getDiscount()[$key])
-                    ->setDate($date)
+                    ->setDate(new \DateTime($date))
                     ->setValue($uPrice)
                     ->setType($priceType)
                     ->setBuyer($buyer);

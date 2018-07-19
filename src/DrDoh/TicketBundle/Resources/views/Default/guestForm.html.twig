@@ -7,15 +7,26 @@
 {% block body  %}
    <div class="container">
         <h2 class="text-white m-4">Bienvenue</h2> 
-   
         <div class="card text-white bg-dark mb-3">
             <h3 class="card-header text-center">
-            <p>
-                Vous prevoyez une visite pour la {{app.session.get("choix")}} du {{app.session.get("date")}} <br>
-                <br>
-                Indiquez vos coordonnées pour la reservation de {{app.session.get("ticket_qte")}} billet(s).  
-            </p>
+                <p>
+                    Vous prevoyez une visite pour la {{app.session.get("choix")}} du {{app.session.get("date")}} <br>
+                    <br>
+                    Indiquez vos coordonnées pour la reservation de {{app.session.get("ticket_qte")}} billet(s).  
+                </p>
+        <div class="progress m-4" >
+                <div class="progress-bar-striped bg-info progress-bar-animated" role="progressbar" style="width: 100%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">Choix du billet</div>
+                <div class="progress-bar bg-white " role="progressbar" style="width: 100%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">Visiteurs</div>
+                <div class="progress-bar bg-white" role="progressbar" style="width: 100%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">Payement</div>
+        </div>
             </h3>
+            {% for message in app.flashes('error') %}
+                <div class="flash-notice alert alert-info text-center">
+                    <strong>
+                        {{ message }}
+                    </strong>
+                </div>
+            {% endfor %}
         </div>
 {# vvvvv ------------vvvvvvv---------FORMULAIRE(S) BUYER ------------vvvvvvv---------vvvvv #}
                     {{form_start(form)}}

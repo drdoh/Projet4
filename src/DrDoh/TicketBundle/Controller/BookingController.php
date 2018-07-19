@@ -13,8 +13,8 @@ use DrDoh\TicketBundle\Entity\Buyer;
 use DrDoh\TicketBundle\Services\DrDohStripe;
 use DrDoh\TicketBundle\Form\TicketType;
 use Symfony\Component\Validator\Constraints\DateTime;
-use Dompdf\Options;
-use Dompdf\Dompdf;
+// use Dompdf\Options;
+// use Dompdf\Dompdf;
 
 class BookingController extends Controller
 {
@@ -117,15 +117,22 @@ class BookingController extends Controller
 /* -------- \\\\\ Action -=> stripeCharge : Valide le payement /////-------- */
     public function stripeCheckoutAction(Request $request)
     {
+        
         // --------vvvvv Services vvvvv-------
         $stripeService = $this->container->get('dr_doh_services.stripe');
         $entitiesSetter = $this->container->get('dr_doh_services.set_entities');
         $priceCalService = $this->container->get('dr_doh_services.price_cal');
+        $ticketsChecker = $this->container->get('dr_doh_services.tickets_status');
+
         // --------vvvvv Datas from Session vvvvv-------
         $session = $request->getSession();
         $formDatas = $session->get('form_datas');
         $date = $session->get('date');
 
+        // --------vvvvv Datas form Repo vvvvv-------
+        $repo = $this->getDoctrine()->getManager()->getRepository('DrDohTicketBundle:Ticket');
+        $tickets = $repo->TicketsAfterNow();
+        
         // --------vvvvv Datas form Post vvvvv-------
         $token  = $_POST['token'];
         $email  = $_POST['email'];
@@ -139,74 +146,55 @@ class BookingController extends Controller
         $em = $this->getDoctrine()->getManager();
         
         // --------vvvvv Logic vvvvv-------
-        try {
-            $charge = $stripeService->getCharge($customer,$invoiceAmount);
-            $orderId = $entitiesSetter->setEntities($formDatas,$date,$email,$em);
-
-            $this->addFlash("success","Bravo ça marche !");
-            return $this->redirectToRoute("dr_doh_ticket_billetterie_sending_ticket", array('orderId' => $orderId));
-
-        } catch(\Stripe\Error\Card $e) {
+        if ($request->isMethod('POST')){
+            $dispo = $ticketsChecker->checkDispo($tickets, $session->get('date'), $session->get('ticket_qte'));
             
-            $this->addFlash("error","Snif ça marche pas :(");
-            return $this->redirectToRoute("dr_doh_ticket_billetterie_2");
+            if($dispo == true){
+                try {
+                    $charge = $stripeService->getCharge($customer,$invoiceAmount);
+                    $orderId = $entitiesSetter->setEntities($formDatas,$date,$email,$em);
+        
+                    $this->addFlash("success","Bravo ça marche !");
+                    return $this->redirectToRoute("dr_doh_ticket_billetterie_sending_ticket", array('orderId' => $orderId));
+        
+                } catch(\Stripe\Error\Card $e) {
+                    
+                    $this->addFlash("error","Snif ça marche pas :(");
+                    return $this->redirectToRoute("dr_doh_ticket_billetterie_2");
+                }
+            }else{
+                return $this->redirectToRoute('dr_doh_ticket_billetterie');
+            }
         }
+
+        
+        
     }
 
 /* -------- \\\\\ Action -=> sendingTicket : Envoye le billet et redirige sur la page d'accueil /////-------- */
     public function sendingTicketAction($orderId)
     {
-        // --------vvvvv Datas form Repo vvvvv-------
+        // --------vvvvv Services vvvvv-------
+        $sendTickets = $this->container->get('dr_doh_services.sendTickets');
+
+        // --------vvvvv Repo vvvvv-------
         $em = $this->getDoctrine()->getManager();
         $buyerRepo = $em->getRepository('DrDohTicketBundle:Buyer');
         $ticketRepo = $this->getDoctrine()->getManager()->getRepository('DrDohTicketBundle:Ticket');
+        
+        // --------vvvvv Datas form Repo vvvvv-------
         $buyer = $buyerRepo->findByOrderId($orderId);
         $listTickets = $ticketRepo->findBy(array('buyer'=>$buyer[0]));
 
+        // --------vvvvv Logic vvvvv------- 
+        $sendTickets->sendTickets($buyer, $listTickets);
 
-        // --------vvvvv DOM PDF vvvvv------- 
-        $options = new Options();
-        $options->set('isRemoteEnabled', TRUE);
-        $dompdf = new Dompdf($options);
-        $html = $this->renderView(
-            'DrDohTicketBundle:Pdf:pdfView.html.twig', 
-            array(
-                'listTickets' => $listTickets, 
-                'buyer'=> $buyer)
-        );
-        $dompdf->loadHtml($html);        
-        $dompdf->render();
-        $pdf = $dompdf->output();
+    return $this->redirectToRoute("dr_doh_ticket_billetterie_thx");
+    }
 
-        // --------vvvvv Swift Mailer vvvvv------- 
-        $message = \Swift_Message::newInstance();
-        $imgUrl = $message->embed(\Swift_Image::fromPath('../web/img/logo-louvre.png'));
-
-        $mailer = $this->container->get('mailer');
-        $filename = "Le Louvre : Billet d'accées.pdf";
-        
-        $message->setFrom('ludovic.parhelia@gmail.com')
-                ->setTo('ludovic.parhelia@gmail.com')
-                ->setSubject('Musée du Louvre : Vos billets d\'accés')
-                ->setBody(
-                    $this->renderView(
-                        'DrDohTicketBundle:Email:emailView.html.twig',
-                        array(
-                            'listTickets' => $listTickets,
-                            'buyer' => $buyer,
-                            'img_url'=> $imgUrl,
-                        )
-                    ),
-                'text/html'
-                );
-                
-        $attachement = \Swift_Attachment::newInstance($pdf, $filename, 'application/pdf' );
-        $message->attach($attachement);
-
-        $mailer->send($message);
-    exit;
-    return $this->redirectToRoute("dr_doh_ticket_billetterie");
-
+    public function thxAction()
+    {
+        return $this->render("DrDohTicketBundle:Default:thx.html.twig");
     }
 
 }

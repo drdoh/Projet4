@@ -45,3 +45,9 @@ services:
        arguments: 
             $secretKey: '%stripe_secret_key%'
             $publishableKey: '%stripe_publishable_key%'
+
+   dr_doh_services.sendTickets:
+        class: DrDoh\TicketBundle\Services\DrDohSendTickets
+        arguments:
+            - "@templating"
+            - "@mailer"
