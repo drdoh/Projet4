@@ -10,4 +10,14 @@ namespace DrDoh\TicketBundle\Repository;
  */
 class TicketRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function TicketsAfterNow(){
+            $qb = $this->createQueryBuilder('t');
+            $now = new \DateTime();
+            $qb
+                ->where('t.date < :now')
+                ->setParameter('now', $now)
+                ;
+            
+            return $qb->getQuery()->getResult();
+    }
 }

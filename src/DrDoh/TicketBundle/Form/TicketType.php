@@ -78,8 +78,6 @@ class TicketType extends AbstractType
                     'entry_type' => CountryType::class, 
                     'entry_options' => [
                         'label'=> 'Pays',
-                        'mapped' => true,
-                        'required' => false,
                         'preferred_choices' => [
                             'FR', 'DE', 'US', 'ES', 'GB', 'IT', 'JP',
                         ],

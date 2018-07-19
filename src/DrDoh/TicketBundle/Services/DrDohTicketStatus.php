@@ -7,7 +7,7 @@ class DrDohTicketStatus
     private $qteMax;
     private $yearMax;
 
-    public function __construct($qteMax, $yearMax)
+    public function __construct(int $qteMax, int $yearMax)
     {
         $this->qteMax = $qteMax;
         $this->yearMax = $yearMax;
@@ -95,6 +95,9 @@ class DrDohTicketStatus
         $SoldTickets = $this->getSoldTickets($tickets);
 
             $dispo = true;
+
+            $date = \DateTime::createFromFormat('d/m/Y', $date)->format('Y-m-d');
+    
             if(array_key_exists($date,$SoldTickets) == true){
                 if($SoldTickets[$date] +  $qte > $this->qteMax){
                     $dispo = false;

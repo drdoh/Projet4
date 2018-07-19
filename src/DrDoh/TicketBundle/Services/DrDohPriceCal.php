@@ -14,7 +14,7 @@ class DrDohPriceCal
     private $childMinAge;
     private $seniorMinAge;
     
-    public function __construct($fullPrice,$childPrice,$babyPrice,$seniorPrice, $discountPrice, $devise,$childMaxAge,$childMinAge,$seniorMinAge )
+    public function __construct($fullPrice,$childPrice,$babyPrice,$seniorPrice,$discountPrice,$devise,$childMaxAge,$childMinAge,$seniorMinAge)
     {
         $this->fullPrice = $fullPrice;
         $this->childPrice = $childPrice;
@@ -25,139 +25,111 @@ class DrDohPriceCal
         $this->childMaxAge = $childMaxAge;
         $this->childMinAge = $childMinAge;
         $this->seniorMinAge = $seniorMinAge;
-
+    }
+       
+    private function selectDiscountType($discount){
+        switch($discount){
+            case "employee":
+                $discountPrice = $this->discountPrice;
+                $priceType = "Employé";
+                break;
+            case "etude":
+                $discountPrice = $this->discountPrice;
+                $priceType = "Etudiant";
+                break;
+            case "military":
+                $discountPrice = $this->discountPrice;
+                $priceType = "Militaire";
+                break;
+            case "ministary":
+                $discountPrice = $this->discountPrice;
+                $priceType = "Membre du ministaire de la culture";
+                break;
+            default:
+                $discountPrice = $this->fullPrice;
+                $priceType = "Normal";
+        }
+        
+        return $discountArray = ['type'=>$priceType,'price'=>$discountPrice];
     }
 
-            
-    public function getGuestAge($BirthDate, $date){
-        $diff=$date->diff($BirthDate); 
+    private function selectAgeType($age){
+        $age = intval($age);
+        switch($age){
+            case $age > $this->childMinAge && $age <= $this->childMaxAge:
+                $agePrice = $this->babyPrice;
+                $priceType = "Bébé";
+                break;
+            case $age > $this->childMinAge && $age <= $this->childMaxAge:
+                $agePrice = $this->childPrice;
+                $priceType = "Enfant";
+                break;
+            case $age > $this->seniorMinAge:
+                $agePrice = $this->seniorPrice;
+                $priceType = "Senior";
+                break;
+            default:
+                $agePrice = $this->fullPrice;
+                $priceType = "Normal";
+        }
+        return $ageArray = ['type'=>$priceType,'price'=>$agePrice];
+    }
+
+    private function selectType($age,$discount){
+        $discountArray = $this->selectDiscountType($discount);
+        $ageArray = $this->selectAgeType($age);
+        if($discountArray['price'] < $ageArray['price']){
+            return $discountArray;
+        }else{
+            return $ageArray;
+        }     
+    }
+
+    private function getGuestAge($birthDate, $date){
+        $date = \DateTime::createFromFormat('d/m/Y', $date)->format('Y-m-d');
+        $date = new \DateTime($date);
+
+        $birthDate = new \DateTime($birthDate);
+
+        $diff=$date->diff($birthDate); 
         $age = $diff->format('%y');
         return $age;
     }
 
-    public function getUPrice($age,$discount){
-
-        switch($age){
-            case $age <= $this->childMinAge:
-                $agePrice = $this->babyPrice;
-                break;
-            case $age > $this->childMinAge && $age<= $this->childMaxAge:
-                $agePrice = $this->childPrice;
-                break;
-            case $age > $this->childMaxAge && $age <= $this->seniorMinAge:
-                $agePrice = $this->fullPrice;
-                break;
-            case $age > $this->seniorMinAge:
-                $agePrice = $this->seniorPrice;
-                break;
-            default:
-                $agePrice = $this->fullPrice;
-        }
-
-        switch($discount){
-            case "employee":
-                $discountPrice = $this->discountPrice;
-                break;
-            case "etude":
-                $discountPrice = $this->discountPrice;
-                break;
-            case "military":
-                $discountPrice = $this->discountPrice;
-                break;
-            case "ministary":
-                $discountPrice = $this->discountPrice;
-                break;
-            default:
-                $discountPrice = $this->fullPrice;
-        }
-
-        if($discountPrice < $agePrice){
-            return $discountPrice;
-        }else{
-            return $agePrice;
-        }     
-    
+    private function getUPrice($age,$discount){
+        $val = $this->selectType($age,$discount);
+        return $priceType = $val['price'];     
     }
 
-    public function getPriceType($age,$discount){
-
-        switch($age){
-            case ($age <= $this->childMinAge):
-                $priceType = "Bébé";
-                break;
-            case $age > $this->childMinAge && $age<= $this->childMaxAge:
-                $priceType = "Enfant";
-                break;
-            case $age > $this->childMaxAge && $age <= $this->seniorMinAge:
-                $priceType = "Normal";
-                break;
-            case $age > $this->seniorMinAge:
-                $priceType = "Senior";
-                break;
-            default:
-                $priceType = "Normal";
-            }
-
-            if($discount != 'none'){
-                switch($discount){
-                        case "employee":
-                        $priceType = "Employé";
-                    break;
-                        case "etude":
-                        $priceType = "Etudiant";
-                    break;
-                    case "military":
-                        $priceType = "Militaire";
-                        break;
-                    case "ministary":
-                        $priceType = "Membre du ministaire de la culture";
-                        break;
-                    default:
-                        $priceType = "Normal";
-                }
-            }
-
-        return $priceType;
+    private function getPriceType($age,$discount){
+        $val = $this->selectType($age,$discount);
+        return $priceType = $val['type'];
     
     }
             
-    public function getTotalPrice($datas, $date){   
-        
-        $priceArray = $this->getPrices($datas, $date);
-        $total = array_sum($priceArray);
+    public function getTotalPrice($datas, $date){     
+        $priceArray = $this->getPricesArray($datas, $date);
+        foreach($priceArray as $pricesData){
+            $total =+ $pricesData['price'];
+        }
         return $total;
     }
     
-    public function getPrices($datas, $date){   
+    public function getPricesArray($datas, $date){   
         
         $priceArray = [];
-        
+
         foreach($datas->getFirstName() as $key => $value){
             $birthDate = $datas->getBirthDate()[$key];
-            $birthDate = new \DateTime($birthDate);
             $age = $this->GetGuestAge($birthDate, $date);
             $discount = $datas->getDiscount()[$key];
-            $price = $this->getUPrice($age,$discount);
-            
-            $priceArray[] = $price;
-        }
 
+            $price = $this->getUPrice($age,$discount);
+            $priceType = $this->getPriceType($age,$discount);
+
+            $priceArray[] = ['price'=>$price, 'type'=>$priceType];
+        }
         return $priceArray;
     }
 
-    public function getPriceTypeArray($datas, $date){
-        $priceTypeArray = [];
-
-        foreach($datas->getFirstName() as $key => $value){
-            $birthDate = $datas->getBirthDate()[$key];
-            $birthDate = new \DateTime($birthDate);
-            $age = $this->GetGuestAge($birthDate, $date);
-            $discount = $datas->getDiscount()[$key];
-            $priceType = $this->getPriceType($age,$discount);
-            
-            $priceTypeArray[] = $priceType;
-        }
-
-        return $priceTypeArray;
-    }
 }

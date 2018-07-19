@@ -9,6 +9,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use DrDoh\TicketBundle\Entity\Ticket;
 use DrDoh\TicketBundle\Entity\Guest;
 use DrDoh\TicketBundle\Entity\Buyer;
+//use DrDoh\TicketBundle\Services\DrDohTicketStatus;
+use DrDoh\TicketBundle\Services\DrDohStripe;
 use DrDoh\TicketBundle\Form\TicketType;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Dompdf\Options;
@@ -19,24 +21,24 @@ class BookingController extends Controller
 /* -------- \\\\\ Action -=> ticketForm : Controle la premiere page de formulaire /////-------- */
     public function ticketFormAction(Request $request)
     {       
+        // --------vvvvv Datas form Repo vvvvv-------
         $repo = $this->getDoctrine()->getManager()->getRepository('DrDohTicketBundle:Ticket');
-        $tickets = $repo->findAll();
-        
-        $ticketsVerfification = $this->container->get('dr_doh_services.tickets_status');
-        $fullDateArray = $ticketsVerfification->getFullDate($tickets);
+        $tickets = $repo->TicketsAfterNow();
 
+        // --------vvvvv Services vvvvv-------
+        $ticketsChecker = $this->container->get('dr_doh_services.tickets_status');
+        $fullDateArray = $ticketsChecker->getFullDate($tickets);
+        // --------vvvvv Logic vvvvv-------
         if ($request->isMethod('POST')){
 
+            // -------- Set Session -------              
             $session = $request->getSession();
-            $date =$request->request->get('date');
-            $date = \DateTime::createFromFormat('d/m/Y', $date)->format('Y-m-d');
-            $date = new \DateTime($date);
-            $session->set('date', $date);
+            $session->set('date', $request->request->get('date'));
             $session->set('choix', $request->request->get('choix'));
             $session->set('ticket_qte', $request->request->get('ticket_qte'));
 
-            $dispo = $ticketsVerfification->checkDispo($tickets, $_POST['date'], $_POST['ticket_qte']);
-
+            $dispo = $ticketsChecker->checkDispo($tickets, $session->get('date'), $session->get('ticket_qte'));
+            
             if($dispo == true){
                 return $this->redirectToRoute('dr_doh_ticket_billetterie_2');
             }else{
@@ -57,17 +59,31 @@ class BookingController extends Controller
         // --------vvvvv Datas from Session vvvvv-------
         $session = $request->getSession(); 
         $date = $session->get('date');
+        $ticketQte = $session->get('ticket_qte');
+
+        // --------vvvvv Services vvvvv-------
+        $ticketsChecker = $this->container->get('dr_doh_services.tickets_status');
+        
+        // --------vvvvv Datas form Repo vvvvv-------
+        $repo = $this->getDoctrine()->getManager()->getRepository('DrDohTicketBundle:Ticket');
+        $tickets = $repo->TicketsAfterNow();
 
         // --------vvvvv Logic vvvvv-------
         $ticket = new Ticket();
         $ticketForm = $this->get('form.factory')->create(TicketType::class, $ticket);
 
         if ($request->isMethod('POST') && $ticketForm->handleRequest($request)->isValid()){
+            
+            $dispo = $ticketsChecker->checkDispo($tickets, $date, $ticketQte);
+            
+            if($dispo == true){
+                $formDatas = $ticketForm->getData();
+                $session->set('form_datas',$formDatas);
+                return $this->redirectToRoute('dr_doh_ticket_billetterie_stipe');
+            }else{
+                return $this->redirectToRoute('dr_doh_ticket_billetterie');
+            }
 
-            $formDatas = $ticketForm->getData();
-            $session->set('form_datas',$formDatas);
-
-            return $this->redirectToRoute('dr_doh_ticket_billetterie_stipe');
         }
         
         return $this->render('DrDohTicketBundle:Default:guestForm.html.twig', array(
@@ -87,16 +103,14 @@ class BookingController extends Controller
         $formDatas = $session->get('form_datas');
         $date = $session->get('date');
         // --------vvvvv Datas form Services vvvvv-------
-        $prices = $priceCalService->getPrices($formDatas, $date);
+        $prices = $priceCalService->getPricesArray($formDatas, $date);
         $invoiceAmount = $priceCalService->getTotalPrice($formDatas, $date); 
-        $PriceType = $priceCalService->getPriceTypeArray($formDatas, $date);
 
         // --------vvvvv Logic vvvvv-------
         return $this->render('DrDohTicketBundle:Default:stripeForm.html.twig'
         , array(
             'publishable_key' => $stripeService->getPublishableKey(),
-            'invoice_amount'=> $invoiceAmount,
-            'price_type'=>  $PriceType,
+            'total'=> $invoiceAmount,
             'prices'=> $prices,
         ));   
     }

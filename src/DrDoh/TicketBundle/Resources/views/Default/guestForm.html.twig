@@ -11,7 +11,7 @@
         <div class="card text-white bg-dark mb-3">
             <h3 class="card-header text-center">
             <p>
-                Vous prevoyez une visite pour la {{app.session.get("choix")}} du {{app.session.get("date").date|date('d/m/Y')}} <br>
+                Vous prevoyez une visite pour la {{app.session.get("choix")}} du {{app.session.get("date")}} <br>
                 <br>
                 Indiquez vos coordonnées pour la reservation de {{app.session.get("ticket_qte")}} billet(s).  
             </p>
@@ -69,16 +69,16 @@ $(document).ready(function() {
 
     formGenerator.init(Qte,formSelector,labels);
     
-    console.log($('[id*="drdoh_ticketbundle_ticket_birthDate_"'));
-
-    $('[id*="drdoh_ticketbundle_ticket_birthDate_"').each(function(){
+    $('[id*="drdoh_ticketbundle_ticket_birthDate_"]').each(function(){
         $(this).attr('data-target','#'+this.id);
-        $(this).datetimepicker({format: 'L'});
-
+        $(this).datetimepicker({
+            format: 'L',
+            viewMode: 'years',
+            maxDate: moment(),
+            useCurrent: false,
+        });
     })
-
-
-    })
+})
 
 </script>
 

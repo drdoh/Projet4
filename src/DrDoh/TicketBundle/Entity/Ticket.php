@@ -49,6 +49,7 @@ class Ticket
      * @ORM\Column(name="birth_date", type="date")
      */
     private $birthDate;
+
     /**
      * @var string
      *
