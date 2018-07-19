@@ -6,34 +6,34 @@
 
 {% block body  %}
 
-    <div class="container">
-        <h2 class="text-white m-4">A bientôt</h2> 
-        <div id="form_contener"></div>
-    
-        <div class="card text-white bg-dark mb-3">
-            <h3 class="card-header text-center">
-                Commande acceptée
-            </h3>
-                <div class="progress m-4">
-                    <div class="progress-bar bg-info" role="progressbar" style="width: 100%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">Choix du billet</div>
-                    <div class="progress-bar" role="progressbar" style="width: 100%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">Visiteurs</div>
-                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">Payement</div>
-                </div>
-            <div class="card-body">
-                <div class="well">
-                    <div class="alert alert-success text-center m-2" role="alert">
-                        <strong>Merci pour votre commande !</strong> 
-                        <p>N'oubliez pas d'editer vos billets avant votre visite.</p>
-                        <hr>
-                        <p>
-                            <a class="btn btn-info" href="{{ path('dr_doh_ticket_billetterie')}}">Retour à l'accueil</a>
-                        </p>
-                    </div>
+<div class="container">
+    <h2 class="text-white m-4">A bientôt</h2> 
+    <div id="form_contener"></div>
+
+    <div class="card text-white bg-dark mb-3">
+
+        <h3 class="card-header text-center">
+            Commande acceptée
+            <div class="progress m-4">
+                <div class="progress-bar bg-info" role="progressbar" style="width: 100%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">Choix du billet</div>
+                <div class="progress-bar" role="progressbar" style="width: 100%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">Visiteurs</div>
+                <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">Payement</div>
+            </div>
+        </h3>
+
+        <div class="card-body">
+            <div class="well">
+                <div class="alert alert-success text-center m-2" role="alert">
+                    <strong>Merci pour votre commande !</strong> 
+                    <p>N'oubliez pas d'editer vos billets avant votre visite.</p>
+                    <hr>
+                    <p><a class="btn btn-info" href="{{ path('dr_doh_ticket_billetterie')}}">Retour à l'accueil</a></p>
                 </div>
             </div>
         </div>
-        
-    </div> 
+    </div>
+    
+</div> 
 
 {% endblock %}
 

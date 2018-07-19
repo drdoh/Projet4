@@ -19,8 +19,8 @@ services:
    dr_doh_services.tickets_status:
        class: DrDoh\TicketBundle\Services\DrDohTicketStatus
        arguments:
-            $qteMax: '%ticketstatus_qteMax%'
-            $yearMax: '%ticketstatus_yearMax%'
+            $qteMax: 1000
+            $yearMax: %ticketstatus_yearMax%
 
    dr_doh_services.price_cal:
        class: DrDoh\TicketBundle\Services\DrDohPriceCal

@@ -9,12 +9,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use DrDoh\TicketBundle\Entity\Ticket;
 use DrDoh\TicketBundle\Entity\Guest;
 use DrDoh\TicketBundle\Entity\Buyer;
-//use DrDoh\TicketBundle\Services\DrDohTicketStatus;
-use DrDoh\TicketBundle\Services\DrDohStripe;
 use DrDoh\TicketBundle\Form\TicketType;
 use Symfony\Component\Validator\Constraints\DateTime;
-// use Dompdf\Options;
-// use Dompdf\Dompdf;
 
 class BookingController extends Controller
 {
@@ -78,15 +74,15 @@ class BookingController extends Controller
             
             if($dispo == true){
                 $formDatas = $ticketForm->getData();
+                var_dump($formDatas);
+                exit;
                 $session->set('form_datas',$formDatas);
                 return $this->redirectToRoute('dr_doh_ticket_billetterie_stipe');
             }else{
                 return $this->redirectToRoute('dr_doh_ticket_billetterie');
             }
-
         }
-        
-        return $this->render('DrDohTicketBundle:Default:guestForm.html.twig', array(
+            return $this->render('DrDohTicketBundle:Default:guestForm.html.twig', array(
             'form' => $ticketForm->createView(), 
         ));
     }
