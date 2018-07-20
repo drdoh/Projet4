@@ -34,12 +34,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for valeur, option in app.session.get('form_datas').lastName%}
+                        {% for ticket in app.session.get('form_datas').ticket%}
                             <tr>
-                                <td id="lastName" class="text-center">{{ app.session.get('form_datas').lastName[valeur]}}</td>
-                                <td id="firstName" class="text-center">{{ app.session.get('form_datas').firstName[valeur]}}</td>
-                                <td id="discount" class="text-center">{{ prices[valeur - 1]['type']}}</td>
-                                <td id="price" class="text-center">{{ prices[valeur - 1]['price']}},00 €</td>
+
+                                <td id="lastName" class="text-center">{{ticket.lastName}}</td>
+                                <td id="firstName" class="text-center">{{ticket.firstName}}</td>
+                                <td id="discount" class="text-center">{{ticket.type}}</td>
+                                <td id="price" class="text-center">{{ticket.value}},00 €</td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -48,7 +49,7 @@
                         <th scope="row"></th>
                         <td></td>
                         <th>Total</th>
-                        <th id="total_price" class="text-center">{{total}},00 €</th>
+                        <th id="total_price" class="text-center">{{app.session.get('form_datas').amountPaid}},00 €</th>
                         </tr>
                     </tfooter>
                 </table>
@@ -72,10 +73,10 @@
     $(function(){
         var handler = StripeCheckout.configure({
             key: '{{publishable_key}}',
-            image: '{{ asset('img/louvre-logo-mini.png') }}',
+            image: '{{ asset("img/louvre-logo-mini.png") }}',
             locale: 'auto',
             token: function(token){
-                $('body').append('<form id="strip_form" method="post" action="{{path('dr_doh_ticket_billetterie_stipe_checkout')}}"></form>');
+                $('body').append('<form id="strip_form" method="post" action="{{path("dr_doh_ticket_billetterie_stipe_checkout")}}"></form>');
                 $('#strip_form').append('<input type="hidden" name="token" value='+token.id+'>');
                 $('#strip_form').append('<input type="hidden" name="email" value='+token.email+'>');
                 // Test avec .attr()
@@ -88,7 +89,7 @@
             handler.open({
                 name: 'Le Louvre',
                 currency: 'eur',
-                amount: {{ total * 100 }}
+                amount: "{{app.session.get('form_datas').amountPaid * 100 }}"
             })
                 
             e.preventDefault();

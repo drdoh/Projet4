@@ -52,7 +52,7 @@ class Buyer
 
     /**
      * 
-     * @ORM\OneToMany(targetEntity="DrDoh\TicketBundle\Entity\Ticket", mappedBy="buyer")
+     * @ORM\OneToMany(targetEntity="DrDoh\TicketBundle\Entity\Ticket", mappedBy="buyer",cascade={"persist"})
      */
     private $ticket;
 

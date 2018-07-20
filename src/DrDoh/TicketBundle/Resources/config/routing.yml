@@ -14,10 +14,6 @@ dr_doh_ticket_billetterie_stipe_checkout:
     path:     /checkout
     defaults: { _controller: DrDohTicketBundle:Booking:stripeCheckout }
 
-dr_doh_ticket_billetterie_sending_ticket:
-    path:     /sending/{orderId}
-    defaults: { _controller: DrDohTicketBundle:Booking:sendingTicket }
-
 dr_doh_ticket_billetterie_thx:
     path:     /remerciements
     defaults: { _controller: DrDohTicketBundle:Booking:thx }

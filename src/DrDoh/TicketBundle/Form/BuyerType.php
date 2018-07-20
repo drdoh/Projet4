@@ -34,7 +34,7 @@ class BuyerType extends AbstractType
                     ]
                 ]
             )
-            ->add('Commander',   SubmitType::class);
+            ->add('save',   SubmitType::class);
 
 
     }/**

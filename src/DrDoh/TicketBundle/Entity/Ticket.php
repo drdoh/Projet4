@@ -88,11 +88,9 @@ class Ticket
     /**
      * @var int
      *
-     * @ORM\ManyToOne(targetEntity="DrDoh\TicketBundle\Entity\Buyer")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity="DrDoh\TicketBundle\Entity\Buyer", inversedBy="ticket")
      */
     private $buyer;
-
 /***************************** CONSTRUCT *************************/
     public function __construct(){
         $uniqueId =  sha1(uniqid('',true));
@@ -118,7 +116,8 @@ class Ticket
      */
     public function setDate($date)
     {
-        $this->date = $date;
+        $date = \DateTime::createFromFormat('d/m/Y', $date)->format('Y-m-d');
+        $this->date = new \DateTime($date);
 
         return $this;
     }
@@ -286,7 +285,8 @@ class Ticket
      */
     public function setBirthDate($birthDate)
     {
-        $this->birthDate = $birthDate;
+  
+        $this->birthDate = new \DateTime($birthDate);
 
         return $this;
     }
@@ -328,11 +328,11 @@ class Ticket
     /**
      * Set buyer.
      *
-     * @param \DrDoh\TicketBundle\Entity\Buyer $buyer
+     * @param \DrDoh\TicketBundle\Entity\Buyer|null $buyer
      *
      * @return Ticket
      */
-    public function setBuyer(\DrDoh\TicketBundle\Entity\Buyer $buyer)
+    public function setBuyer(\DrDoh\TicketBundle\Entity\Buyer $buyer = null)
     {
         $this->buyer = $buyer;
 
@@ -342,7 +342,7 @@ class Ticket
     /**
      * Get buyer.
      *
-     * @return \DrDoh\TicketBundle\Entity\Buyer
+     * @return \DrDoh\TicketBundle\Entity\Buyer|null
      */
     public function getBuyer()
     {

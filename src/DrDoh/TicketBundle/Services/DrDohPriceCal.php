@@ -89,8 +89,6 @@ class DrDohPriceCal
         $date = \DateTime::createFromFormat('d/m/Y', $date)->format('Y-m-d');
         $date = new \DateTime($date);
 
-        $birthDate = new \DateTime($birthDate);
-
         $diff=$date->diff($birthDate); 
         $age = $diff->format('%y');
         return $age;
@@ -107,29 +105,29 @@ class DrDohPriceCal
     
     }
             
-    public function getTotalPrice($datas, $date){     
-        $priceArray = $this->getPricesArray($datas, $date);
-        foreach($priceArray as $pricesData){
-            $total =+ $pricesData['price'];
-        }
+    public function getTotalPrice($priceArray){     
+        $total = array_sum($priceArray);
         return $total;
     }
     
-    public function getPricesArray($datas, $date){   
+    public function setPrices($datas, $date){   
         
         $priceArray = [];
 
-        foreach($datas->getFirstName() as $key => $value){
-            $birthDate = $datas->getBirthDate()[$key];
+        foreach($datas->getTicket() as $ticket){
+            $birthDate = $ticket->getBirthDate();
             $age = $this->GetGuestAge($birthDate, $date);
-            $discount = $datas->getDiscount()[$key];
+            $discount = $ticket->getDiscount();
 
             $price = $this->getUPrice($age,$discount);
+            $ticket->setValue($price);
+            $ticket->setDate($date);
             $priceType = $this->getPriceType($age,$discount);
-
-            $priceArray[] = ['price'=>$price, 'type'=>$priceType];
+            $ticket->setType($priceType);
+            $priceArray[]= $price;
         }
-        return $priceArray;
+        $total = $this->getTotalPrice($priceArray);
+        $datas->setAmountPaid($total);
     }
 
 }
