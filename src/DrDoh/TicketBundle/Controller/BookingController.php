@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use DrDoh\TicketBundle\Entity\Ticket;
 use DrDoh\TicketBundle\Entity\Guest;
 use DrDoh\TicketBundle\Entity\Buyer;
-use DrDoh\TicketBundle\Form\TicketType;
+use DrDoh\TicketBundle\Form\BuyerType;
 use Symfony\Component\Validator\Constraints\DateTime;
 
 class BookingController extends Controller
@@ -65,8 +65,8 @@ class BookingController extends Controller
         $tickets = $repo->TicketsAfterNow();
 
         // --------vvvvv Logic vvvvv-------
-        $ticket = new Ticket();
-        $ticketForm = $this->get('form.factory')->create(TicketType::class, $ticket);
+        $buyer = new Buyer();
+        $buyerForm = $this->get('form.factory')->create(BuyerType::class, $buyer);
 
         if ($request->isMethod('POST') && $ticketForm->handleRequest($request)->isValid()){
             
@@ -83,7 +83,7 @@ class BookingController extends Controller
             }
         }
             return $this->render('DrDohTicketBundle:Default:guestForm.html.twig', array(
-            'form' => $ticketForm->createView(), 
+            'form' => $buyerForm->createView(), 
         ));
     }
     
@@ -185,7 +185,7 @@ class BookingController extends Controller
         // --------vvvvv Logic vvvvv------- 
         $sendTickets->sendTickets($buyer, $listTickets);
 
-    return $this->redirectToRoute("dr_doh_ticket_billetterie_thx");
+        return $this->redirectToRoute("dr_doh_ticket_billetterie_thx");
     }
 
     public function thxAction()

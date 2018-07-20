@@ -51,10 +51,11 @@ class Buyer
     private $email;
 
     /**
+     * @var object
      * 
-     * @ORM\OneToMany(targetEntity="DrDoh\TicketBundle\Entity\Ticket", mappedBy="buyer")
+     * @ORM\OneToMany(targetEntity="Louvre\TicketingBundle\Entity\Ticket", mappedBy="buyer")
      */
-    private $ticket;
+    private $billet;
 
 /***************************** CONSTRUCTOR *************************/
       
@@ -171,40 +172,4 @@ public function __construct(){
         return $this->email;
     }
 
-
-    /**
-     * Add billet.
-     *
-     * @param \Louvre\TicketingBundle\Entity\Ticket $billet
-     *
-     * @return Buyer
-     */
-    public function addTicket(\DrDoh\TicketBundle\Entity\Ticket $ticket)
-    {
-        $this->ticket[] = $ticket;
-
-        return $this;
-    }
-
-    /**
-     * Remove billet.
-     *
-     * @param \Louvre\TicketingBundle\Entity\Ticket $billet
-     *
-     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
-     */
-    public function removeTicket(\DrDoh\TicketBundle\Entity\Ticket $ticket)
-    {
-        return $this->ticket->removeElement($ticket);
-    }
-
-    /**
-     * Get billet.
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getTicket()
-    {
-        return $this->ticket;
-    }
 }

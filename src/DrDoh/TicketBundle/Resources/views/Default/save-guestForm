@@ -38,16 +38,35 @@
 {# vvvvv ------------vvvvvvv---------FORMULAIRE(S) BUYER ------------vvvvvvv---------vvvvv #}
     {{form_start(form)}}
 
-    <div id="form_card">     
+    <div id="form_card">
+        <div class="card-body " id="form_1">
+            
+            <h4 class="col-2 offset-10 w-25 text-center shadow p-2 mb-2 bg-info rounded" id="guest_index">
+                <i class="far fa-user"></i> Visiteur 1
+            </h4>
+            
             {{form_errors(form)}}
+            
+            {# NOM + PRENOM #}
+            <div class="form-row 1">
+                {{form_widget(form.lastName)}}
+                {{form_widget(form.firstName)}}
+            </div>
 
-            {{form_widget(form.ticket)}} 
+            {# DATE DE NAISSANCE + REDUCTION + PAYS #}
+            <div class="form-row 2">
+                {{form_widget(form.birthDate)}}
+                {{form_widget(form.discount)}}
+                {{form_widget(form.country)}}
+            </div>  
+
+        </div>
     </div>
                 
-    <div class="card-body bg-dark py-4">
+    <div class="card bg-dark py-4">
         <div class="row justify-content-around">
 
-            {# {{form_widget(form.save,{ 'label': 'Poursuivre','attr':{'class':'btn btn-info btn-lg btn-block col-5'}})}} #}
+            {{form_widget(form.save,{ 'label': 'Poursuivre','attr':{'class':'btn btn-info btn-lg btn-block col-5'}})}}
             {{form_rest(form)}}
             {{form_end(form)}}
             <input type="button" value="Annuler" OnClick="window.location.href='{{path('dr_doh_ticket_billetterie')}}'"  class="col-5 btn btn-secondary btn-lg btn-block "> </input>
@@ -63,10 +82,13 @@
 <script type="text/javascript" src="{{ asset('js/form_generator.js') }}"></script>
 <script>
     $(document).ready(function() {
-        
-        var Qte = parseInt("{{app.session.get("ticket_qte")}}");
 
-        formGenerator.init(Qte);
+        var Qte = parseInt("{{app.session.get("ticket_qte")}}");
+        var formSelector = "#drdoh_ticketbundle_ticket_";
+        var items = ["full" , "child" , "baby" , "older" , "discount" ];
+        var labels = ["lastName","firstName","birthDate","discount","country",]
+
+        formGenerator.init(Qte,formSelector,labels);
         
         $('[id*="drdoh_ticketbundle_ticket_birthDate_"]').each(function(){
             $(this).attr('data-target','#'+this.id);

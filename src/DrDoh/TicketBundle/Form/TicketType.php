@@ -24,86 +24,58 @@ class TicketType extends AbstractType
     {
         $builder
             ->add(
-                'lastName',CollectionType::class,[
-                    'entry_type' => TextType::class,
-                    'allow_add' => true, 
-                    'allow_delete' => true,                    
-                    'attr' => ['class' => 'col-md-6'],
-                    'entry_options'=> [
-                        'label' => 'Nom',
-                        //'label_attr' => ['class' => 'col-2'],
-                    ], 
+                'lastName',TextType::class, [
+                    'label' => 'Nom',
+                   // 'attr' => ['class' => 'col-md-6'],
+                    //'label_attr' => ['class' => 'col-2'],
+                ] 
+            )
+            ->add(
+                'firstName',TextType::class, [
+                    //'attr' => ['class' => 'col-md-6'],
+                    'label' => 'Prénom'
                 ]
             )
             ->add(
-                'firstName',CollectionType::class, [
-                    'entry_type' => TextType::class, 
-                    'allow_add' => true, 
-                    'allow_delete' => true,
-                    'attr' => ['class' => 'col-md-6'],
-                    'entry_options'=> [
-                        'label' => 'Prénom'
-                    ],   
-                ]
-            )
-            ->add(
-                'birthDate',CollectionType::class,[
-                    'allow_add' => true, 
-                    'allow_delete' => true,
-                    'attr' => ['class' => 'col-md-4'],
-                    'entry_type' => BirthdayType::class,
-                    'entry_options' =>[
-                        'attr' => [
-                            'class' => 'datetimepicker-input',
-                            'data-toggle' =>'datetimepicker',
-                            'data-target'=>'#drdoh_ticketbundle_ticket_birthDate'
-                        ],
-                        'label'=> 'Date de naissance',
-                        'input' => 'string',
-                        'widget' => 'single_text',
-                        'placeholder' => [
-                            'month' => 'Mois',
-                            'year' => 'Année',
-                            'day' => 'Jours',
-                        ],
-                            'format' => 'dd/MM/yyyy',
+                'birthDate',BirthdayType::class,[
+                    // 'attr' => [
+                    //     'class' => 'col-md-4 datetimepicker-input',
+                    //     'data-toggle' =>'datetimepicker',
+                    //     'data-target'=>'#drdoh_ticketbundle_ticket_birthDate'
+                    // ],
+                    'label'=> 'Date de naissance',
+                    'input' => 'string',
+                    'widget' => 'single_text',
+                    'placeholder' => [
+                        'month' => 'Mois',
+                        'year' => 'Année',
+                        'day' => 'Jours',
                     ],
+                        'format' => 'dd/MM/yyyy',
                 ]
             )
             ->add(
-                'country',CollectionType::class,[
-                    'allow_add' => true, 
-                    'allow_delete' => true,
-                    'attr' => ['class' => 'col-md-4'],
-                    'entry_type' => CountryType::class, 
-                    'entry_options' => [
+                'country',CountryType::class,[
                         'label'=> 'Pays',
                         'preferred_choices' => [
                             'FR', 'DE', 'US', 'ES', 'GB', 'IT', 'JP',
                         ],
-                    ]
+                        // 'attr' => ['class' => 'col-md-4'],
                 ]
             )
             ->add(
-                'discount',CollectionType::class, [
-                    'allow_add' => true, 
-                    'allow_delete' => true,
-                    'attr' => ['class' => 'col-md-4'],
-                    'entry_type' => ChoiceType::class,
-                    'entry_options' => [
-                        'label'=> 'Réduction',
-                        'choices'  => [
-                            '' => 'none',
-                            'Etudiant' => 'etude',
-                            'Employé de musée'     => 'employee',
-                            'Militaire'    => 'military',
-                            'Ministere de la culture'    => 'ministary',
-                            ],
-                        ],
+                'discount',ChoiceType::class, [
+                    'label'=> 'Réduction',
+                    // 'attr' => ['class' => 'col-md-4'],
+                    'choices'  => [
+                        '' => 'none',
+                        'Etudiant' => 'etude',
+                        'Employé de musée'     => 'employee',
+                        'Militaire'    => 'military',
+                        'Ministere de la culture'    => 'ministary',
+                    ],
+
                 ]
-            )
-            ->add(
-                'save',SubmitType::class
             );
 
     }
