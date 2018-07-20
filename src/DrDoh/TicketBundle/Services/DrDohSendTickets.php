@@ -36,8 +36,8 @@ class DrDohSendTickets
         return $pdf;
     }
 
-    public function sendTickets($formDatas){
-        var_dump($formDatas->getTicket());
+    public function sendTickets($buyer, $listTickets){
+
         $message = \Swift_Message::newInstance();
         $imgUrl = $message->embed(\Swift_Image::fromPath('../web/img/logo-louvre.png'));
 

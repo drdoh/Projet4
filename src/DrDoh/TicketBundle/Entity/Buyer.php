@@ -182,7 +182,7 @@ public function __construct(){
     public function addTicket(\DrDoh\TicketBundle\Entity\Ticket $ticket)
     {
         $this->ticket[] = $ticket;
-
+        $ticket->setBuyer($this);
         return $this;
     }
 

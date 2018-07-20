@@ -66,15 +66,15 @@ class BookingController extends Controller
 
         // --------vvvvv Logic vvvvv-------
         $buyer = new Buyer();
-        $buyerForm = $this->createForm(BuyerType::class, $buyer);
+        $buyerForm = $this->get('form.factory')->create(BuyerType::class, $buyer);
 
         if ($request->isMethod('POST') && $buyerForm->handleRequest($request)->isValid()){
             
             $dispo = $ticketsChecker->checkDispo($tickets, $date, $ticketQte);
             
             if($dispo == true){
-                $formDatas = $buyerForm->getData();
-                $session->set('form_datas',$formDatas);
+                $buyer = $buyerForm->getData();
+                $session->set('buyer',$buyer);
                 return $this->redirectToRoute('dr_doh_ticket_billetterie_stipe');
             }else{
                 return $this->redirectToRoute('dr_doh_ticket_billetterie');
@@ -94,11 +94,11 @@ class BookingController extends Controller
 
         // --------vvvvv Datas from Session vvvvv-------
         $session = $request->getSession(); 
-        $formDatas = $session->get('form_datas');
+        $buyer = $session->get('buyer');
         $date = $session->get('date');
-        
+
         // --------vvvvv Datas form Services vvvvv-------
-        $priceCalService->setPrices($formDatas, $date); 
+        $priceCalService->setPrices($buyer, $date); 
 
         // --------vvvvv Logic vvvvv-------
         return $this->render('DrDohTicketBundle:Default:stripeForm.html.twig'
@@ -108,16 +108,15 @@ class BookingController extends Controller
     }
 /* -------- \\\\\ Action -=> stripeCharge : Valide le payement /////-------- */
     public function stripeCheckoutAction(Request $request)
-    {
-        
+    {     
         // --------vvvvv Services vvvvv-------
         $stripeService = $this->container->get('dr_doh_services.stripe');
-        $sendTickets = $this->container->get('dr_doh_services.sendTickets');
+        // $entitiesSetter = $this->container->get('dr_doh_services.set_entities');
         $ticketsChecker = $this->container->get('dr_doh_services.tickets_status');
 
         // --------vvvvv Datas from Session vvvvv-------
         $session = $request->getSession();
-        $formDatas = $session->get('form_datas');
+        $buyer = $session->get('buyer');
         $date = $session->get('date');
 
         // --------vvvvv Datas form Repo vvvvv-------
@@ -127,11 +126,10 @@ class BookingController extends Controller
         // --------vvvvv Datas form Post vvvvv-------
         $token  = $_POST['token'];
         $email  = $_POST['email'];
-
+        
         // --------vvvvv Datas form Services vvvvv-------
-        $formDatas = $session->get('form_datas');
         $customer = $stripeService->getCustomer($email, $token);
-        $invoiceAmount = $formDatas->getAmountPaid();
+        $invoiceAmount = $buyer->getAmountPaid();
 
         // --------vvvvv Entities Manager vvvvv-------
         $em = $this->getDoctrine()->getManager();
@@ -143,13 +141,13 @@ class BookingController extends Controller
             if($dispo == true){
                 try {
                     $charge = $stripeService->getCharge($customer,$invoiceAmount);
-                    $em->persist($formDatas);
+                    $orderId = $buyer->getOrderId();
+                
+                    $em->persist($buyer);
                     $em->flush();
-                    $orderId = $formDatas->getId();
+                    
                     $this->addFlash("success","Bravo ça marche !");
-                    $sendTickets->sendTickets($formDatas);
-                    exit;
-                    return $this->redirectToRoute("dr_doh_ticket_billetterie_thx");
+                    return $this->redirectToRoute("dr_doh_ticket_billetterie_sending_ticket", ['orderId'=> $orderId]);
         
                 } catch(\Stripe\Error\Card $e) {
                     
@@ -159,10 +157,33 @@ class BookingController extends Controller
             }else{
                 return $this->redirectToRoute('dr_doh_ticket_billetterie');
             }
-        }
+        }      
         
     }
-/* -------- \\\\\ Action -=> thx : Page de remerciement /////-------- */
+
+/* -------- \\\\\ Action -=> sendingTicket : Envoye le billet et redirige sur la page d'accueil /////-------- */
+    public function sendingTicketAction($orderId, Request $request)
+    {
+        // --------vvvvv Services vvvvv-------
+        $sendTickets = $this->container->get('dr_doh_services.sendTickets');
+
+        // --------vvvvv Repo vvvvv-------
+        $em = $this->getDoctrine()->getManager();
+        $buyerRepo = $em->getRepository('DrDohTicketBundle:Buyer');
+        $ticketRepo = $this->getDoctrine()->getManager()->getRepository('DrDohTicketBundle:Ticket');
+        
+        // --------vvvvv Datas form Repo vvvvv-------
+        $buyer = $buyerRepo->findByOrderId($orderId);
+    
+        
+        $listTickets = $ticketRepo->findBy(array('buyer'=>$buyer[0]));
+
+        // --------vvvvv Logic vvvvv------- 
+        $sendTickets->sendTickets($buyer, $listTickets);
+
+        return $this->redirectToRoute("dr_doh_ticket_billetterie_thx");
+    }
+
     public function thxAction()
     {
         return $this->render("DrDohTicketBundle:Default:thx.html.twig");
