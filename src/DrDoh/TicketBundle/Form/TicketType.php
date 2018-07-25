@@ -26,12 +26,11 @@ class TicketType extends AbstractType
             ->add(
                 'lastName',TextType::class, [
                     'label' => 'Nom',
-                    'invalid_message'=>'Le format doit être de type JJ\MM\AAAA. Le format actuel n\'est pas valide',
                 ] 
             )
             ->add(
                 'firstName',TextType::class, [
-                    'label' => 'Prénom'
+                    'label' => 'Prénom',
                 ]
             )
             ->add(
@@ -49,8 +48,8 @@ class TicketType extends AbstractType
                         'year' => 'Année',
                         'day' => 'Jours',
                     ],
-                        'format' => 'dd/MM/yyyy',
-                        'invalid_message'=>'Le format doit être de type JJ\MM\AAAA. Le format actuel n\'est pas valide',
+                    'format' => 'dd/MM/yyyy',
+                    'invalid_message'=>'Le format doit être de type JJ\MM\AAAA. Le format actuel n\'est pas valide',
                 ]
             )
             ->add(
@@ -63,7 +62,12 @@ class TicketType extends AbstractType
             )
             ->add(
                 'discount',ChoiceType::class, [
-                    'label'=> 'Réduction',
+                    'label'=> 'Réduction ⓘ',
+                    'label_attr'=>[
+                        'title' => 'ATTENTION : Un justificatif vous sera demandé à l\'entrée du musée',
+                        'data-toggle'=>'tooltip',
+                        'data-placement'=>'right',
+                    ],
                     'choices'  => [
                         '' => 'none',
                         'Etudiant' => 'etude',

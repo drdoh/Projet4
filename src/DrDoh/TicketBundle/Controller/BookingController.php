@@ -124,8 +124,8 @@ class BookingController extends Controller
         $tickets = $repo->TicketsAfterNow();
         
         // --------vvvvv Datas form Post vvvvv-------
-        $token  = $_POST['token'];
-        $email  = $_POST['email'];
+        $token  = $request->request->get('token');
+        $email  = $request->request->get('email');
         
         // --------vvvvv Datas form Services vvvvv-------
         $customer = $stripeService->getCustomer($email, $token);
@@ -146,12 +146,10 @@ class BookingController extends Controller
                     $em->persist($buyer);
                     $em->flush();
                     
-                    $this->addFlash("success","Bravo ça marche !");
                     return $this->redirectToRoute("dr_doh_ticket_billetterie_sending_ticket", ['orderId'=> $orderId]);
         
                 } catch(\Stripe\Error\Card $e) {
                     
-                    $this->addFlash("error","Snif ça marche pas :(");
                     return $this->redirectToRoute("dr_doh_ticket_billetterie_2");
                 }
             }else{
@@ -166,7 +164,7 @@ class BookingController extends Controller
     {
         // --------vvvvv Services vvvvv-------
         $sendTickets = $this->container->get('dr_doh_services.sendTickets');
-
+        
         // --------vvvvv Repo vvvvv-------
         $em = $this->getDoctrine()->getManager();
         $buyerRepo = $em->getRepository('DrDohTicketBundle:Buyer');
@@ -174,13 +172,13 @@ class BookingController extends Controller
         
         // --------vvvvv Datas form Repo vvvvv-------
         $buyer = $buyerRepo->findByOrderId($orderId);
-    
+        
         
         $listTickets = $ticketRepo->findBy(array('buyer'=>$buyer[0]));
-
+        
         // --------vvvvv Logic vvvvv------- 
         $sendTickets->sendTickets($buyer, $listTickets);
-
+        
         return $this->redirectToRoute("dr_doh_ticket_billetterie_thx");
     }
 

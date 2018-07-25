@@ -71,7 +71,7 @@
             function(id){
                 $(this).parent().attr('data-target-input','nearest');
                 $(this).parent().attr('id',this.id);
-                $(this).parent().attr('class','form-group date');
+                $(this).parent().addClass('date');
                 $(this).parent().attr('style','position: relative');
                 $(this).attr('data-target','#'+this.id);
                 $('#'+this.id).datetimepicker({
@@ -79,8 +79,12 @@
                     viewMode: 'years',
                     maxDate: Date.now(),
                     useCurrent: false,
-                })
-            });
+            })
+        });
+
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
     })
 </script>
 {% endblock %}
