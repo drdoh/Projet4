@@ -50,8 +50,7 @@
             {{form_widget(form.save,{ 'label': 'Poursuivre','attr':{'class':'btn btn-info btn-lg btn-block col-5'}})}}
             {{form_rest(form)}}
             {{form_end(form)}}
-            <input type="button" value="Annuler" OnClick="window.location.href='{{path('dr_doh_ticket_billetterie')}}'"  class="col-5 btn btn-secondary btn-lg btn-block "> </input>
-            
+            <a href="{{path('dr_doh_ticket_billetterie')}}" class="col-5 btn btn-secondary btn-lg btn-block ">Annuler</a>
         </div>
     </div>
 </div> 
@@ -64,21 +63,24 @@
 <script>
     $(document).ready(function() {
         
-        var Qte = parseInt("{{app.session.get("ticket_qte")}}");
+        var Qte = parseInt('{{app.session.get("ticket_qte")}}');
 
         formGenerator.init(Qte);
         
-        $('[id*="drdoh_ticketbundle_ticket_birthDate_"]').each(function(){
-            $(this).attr('data-target','#'+this.id);
-            $(this).datetimepicker({
-                format: 'L',
-                viewMode: 'years',
-                maxDate: moment(),
-                useCurrent: false,
+        $('.datetimepicker-input').each(
+            function(id){
+                $(this).parent().attr('data-target-input','nearest');
+                $(this).parent().attr('id',this.id);
+                $(this).parent().attr('class','form-group date');
+                $(this).parent().attr('style','position: relative');
+                $(this).attr('data-target','#'+this.id);
+                $('#'+this.id).datetimepicker({
+                    format: 'L',
+                    viewMode: 'years',
+                    maxDate: Date.now(),
+                    useCurrent: false,
+                })
             });
-        })
     })
 </script>
 {% endblock %}
-
-    

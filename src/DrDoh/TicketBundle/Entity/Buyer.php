@@ -4,6 +4,8 @@ namespace DrDoh\TicketBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * Buyer
  *
@@ -53,6 +55,8 @@ class Buyer
     /**
      * 
      * @ORM\OneToMany(targetEntity="DrDoh\TicketBundle\Entity\Ticket", mappedBy="buyer",cascade={"persist"})
+     * 
+     * @Assert\Valid()
      */
     private $ticket;
 

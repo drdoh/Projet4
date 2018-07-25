@@ -39,12 +39,7 @@
 
                     <div class="form-group">
                         <label>Date de votre visite</label>
-                        <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-                            <input id="chosen_date" type="text" name="date" class="form-control datetimepicker-input" data-target="#datetimepicker1"/>
-                            <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
-                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                            </div>
-                        </div>
+                            <input id="datetimepicker1" type="text" name="date" class="form-control datetimepicker-input" data-target="#datetimepicker1" data-toggle="datetimepicker"/>
                     </div>
                     
                     <div class="form-group">  
@@ -69,7 +64,7 @@
     {{parent()}}
 
 <script type="text/javascript">
-   
+
     var now = moment();
     var heure=now.hour();
     var d = now.date();
@@ -80,17 +75,16 @@
         $('#datetimepicker1').datetimepicker(
             {
             format: 'L',
+            defaultDate: y+'/'+m+'/'+d,
             minDate: y+'/'+m+'/'+d,
-            viewDate: 'moment',
-            format: 'DD/MM/YYYY',
             locale: 'fr',
             daysOfWeekDisabled:[0],
             disabledDates: [
                 {% for fullDate in listFullDate %}
                 "{{fullDate}}" ,
                 {% endfor %}
-                "99/99/9999 99:99"
-                ]
+                "99/99/9999 99:99",
+                ],
             }
         );
 
@@ -122,7 +116,7 @@ function dateCheck(){
     }
 }
     dateCheck();
-   
+    
     $('#datetimepicker1').on("change.datetimepicker", function (e) {
             dateCheck();
         });

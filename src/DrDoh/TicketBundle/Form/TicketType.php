@@ -26,23 +26,21 @@ class TicketType extends AbstractType
             ->add(
                 'lastName',TextType::class, [
                     'label' => 'Nom',
-                   // 'attr' => ['class' => 'col-md-6'],
-                    //'label_attr' => ['class' => 'col-2'],
+                    'invalid_message'=>'Le format doit être de type JJ\MM\AAAA. Le format actuel n\'est pas valide',
                 ] 
             )
             ->add(
                 'firstName',TextType::class, [
-                    //'attr' => ['class' => 'col-md-6'],
                     'label' => 'Prénom'
                 ]
             )
             ->add(
                 'birthDate',BirthdayType::class,[
-                    // 'attr' => [
-                    //     'class' => 'col-md-4 datetimepicker-input',
-                    //     'data-toggle' =>'datetimepicker',
-                    //     'data-target'=>'#drdoh_ticketbundle_ticket_birthDate'
-                    // ],
+                    'attr' => [
+                        'class' => 'datetimepicker-input',
+                        'data-toggle' =>'datetimepicker',
+                        'data-target'=>'#drdoh_ticketbundle_ticket_birthDate'
+                    ],
                     'label'=> 'Date de naissance',
                     'input' => 'string',
                     'widget' => 'single_text',
@@ -52,6 +50,7 @@ class TicketType extends AbstractType
                         'day' => 'Jours',
                     ],
                         'format' => 'dd/MM/yyyy',
+                        'invalid_message'=>'Le format doit être de type JJ\MM\AAAA. Le format actuel n\'est pas valide',
                 ]
             )
             ->add(
@@ -60,13 +59,11 @@ class TicketType extends AbstractType
                         'preferred_choices' => [
                             'FR', 'DE', 'US', 'ES', 'GB', 'IT', 'JP',
                         ],
-                        // 'attr' => ['class' => 'col-md-4'],
                 ]
             )
             ->add(
                 'discount',ChoiceType::class, [
                     'label'=> 'Réduction',
-                    // 'attr' => ['class' => 'col-md-4'],
                     'choices'  => [
                         '' => 'none',
                         'Etudiant' => 'etude',

@@ -19,7 +19,7 @@ services:
    dr_doh_services.tickets_status:
        class: DrDoh\TicketBundle\Services\DrDohTicketStatus
        arguments:
-            $qteMax: 1000
+            $qteMax: %ticketstatus_qteMax%
             $yearMax: %ticketstatus_yearMax%
 
    dr_doh_services.price_cal:
@@ -34,11 +34,6 @@ services:
             $childMaxAge: '%pricecal_childMaxAge%'
             $childMinAge: '%pricecal_childMinAge%'
             $seniorMinAge: '%pricecal_seniorMinAge%'
-
-   dr_doh_services.set_entities:
-       class: DrDoh\TicketBundle\Services\DrDohSetEntities
-       arguments: 
-            - "@dr_doh_services.price_cal"
 
    dr_doh_services.stripe:
        class: DrDoh\TicketBundle\Services\DrDohStripe

@@ -4,6 +4,8 @@ namespace DrDoh\TicketBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * Ticket
  *
@@ -26,6 +28,17 @@ class Ticket
      * @var string
      *
      * @ORM\Column(name="last_name", type="string", length=255)
+     * @Assert\Regex(
+     *  pattern="/\d/",
+     *  match=false,
+     *  message="Votre nom ne peux pas comtenir de nombre"
+     * )
+     * @Assert\Length(
+     *  min=3,
+     *  max=255,
+     *  minMessage = "Votre nom doit avoir au moins {{ limit }} caractères",
+     *  maxMessage = "Votre nom ne peut avoir plus de {{ limit }} caractères"
+     * )
      */
     private $lastName;
 
@@ -33,6 +46,17 @@ class Ticket
      * @var string
      *
      * @ORM\Column(name="first_name", type="string", length=255)
+     * @Assert\Regex(
+     *  pattern="/\d/",
+     *  match=false,
+     *  message="Votre prénom ne peux pas comtenir de nombre"
+     * )
+     * @Assert\Length(
+     *  min=3,
+     *  max=255,
+     *  minMessage = "Votre prénom doit avoir au moins {{ limit }} caractères",
+     *  maxMessage = "Votre prénom ne peut avoir plus de {{ limit }} caractères"
+     * )
      */
     private $firstName;
 
@@ -40,13 +64,15 @@ class Ticket
      * @var string
      *
      * @ORM\Column(name="country", type="string", length=255)
+     * @Assert\NotBlank(message="Le champ « pays » ne peut pas être vide")
      */
     private $country;
 
     /**
-     * @var \DateTime
+     * @var \Date
      *
      * @ORM\Column(name="birth_date", type="date")
+     * @Assert\Date()
      */
     private $birthDate;
 
@@ -54,6 +80,8 @@ class Ticket
      * @var string
      *
      * @ORM\Column(name="discount", type="string", length=255))
+     * @Assert\NotBlank()
+     * @Assert\Choice({"none","etude", "employee", "military","ministary"})
      */
     private $discount; 
 
