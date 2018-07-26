@@ -26,7 +26,7 @@ class DrDohPriceCal
         $this->childMinAge = $childMinAge;
         $this->seniorMinAge = $seniorMinAge;
     }
-       
+    
     private function selectDiscountType($discount){
         switch($discount){
             case "employee":
@@ -110,9 +110,11 @@ class DrDohPriceCal
         return $total;
     }
     
-    public function setPrices($datas, $date){   
+    public function setPrices($session){   
         
         $priceArray = [];
+        $datas = $session->get('buyer');
+        $date = $session->get('userChoices')['date'];
 
         foreach($datas->getTicket() as $ticket){
             $birthDate = $ticket->getBirthDate();

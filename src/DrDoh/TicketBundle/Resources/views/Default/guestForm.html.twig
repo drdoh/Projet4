@@ -14,9 +14,9 @@
         <h3 class="card-header text-center">
 
             <p>
-                Vous prevoyez une visite pour la {{app.session.get("choix")}} du {{app.session.get("date")}} <br>
+                Vous prevoyez une visite pour la {{app.session.get("userChoices")['choix']}} du {{app.session.get("userChoices")['date']}} <br>
                 <br>
-                Indiquez vos coordonnées pour la reservation de {{app.session.get("ticket_qte")}} billet(s).  
+                Indiquez vos coordonnées pour la reservation de {{app.session.get("userChoices")['ticket_qte']}} billet(s).  
             </p>
 
             <div class="progress m-4" >
@@ -63,8 +63,7 @@
 <script>
     $(document).ready(function() {
         
-        var Qte = parseInt('{{app.session.get("ticket_qte")}}');
-
+        var Qte = parseInt('{{ app.session.get("userChoices")["ticket_qte"] }}');
         formGenerator.init(Qte);
         
         $('.datetimepicker-input').each(
@@ -79,7 +78,8 @@
                     viewMode: 'years',
                     maxDate: Date.now(),
                     useCurrent: false,
-            })
+                    widgetPositioning: {vertical:'top'},
+                })
         });
 
         $(function () {

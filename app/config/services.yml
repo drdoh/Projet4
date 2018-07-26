@@ -13,3 +13,34 @@ services:
         # this means you cannot fetch services directly from the container via $container->get()
         # if you need to do this, you can override this setting on individual services
         public: false
+
+    DrDoh\TicketBundle\:
+        resource: '../../src/DrDoh/TicketBundle/*'
+        exclude: '../../src/DrDoh/TicketBundle/{Entity,Repository}'
+
+    DrDoh\TicketBundle\Services\DrDohTicketStatus:
+        arguments:
+            $qteMax: '%ticketstatus_qteMax%'
+            $yearMax: '%ticketstatus_yearMax%'
+
+    DrDoh\TicketBundle\Services\DrDohPriceCal:
+        arguments:
+            $fullPrice: '%pricecal_full%'
+            $childPrice: '%pricecal_child%'
+            $babyPrice: '%pricecal_baby%'
+            $seniorPrice: '%pricecal_senior%'
+            $discountPrice: '%pricecal_discount%'
+            $devise: '%pricecal_devise%'
+            $childMaxAge: '%pricecal_childMaxAge%'
+            $childMinAge: '%pricecal_childMinAge%'
+            $seniorMinAge: '%pricecal_seniorMinAge%'
+
+    DrDoh\TicketBundle\Services\DrDohStripe:
+        arguments: 
+            $secretKey: '%stripe_secret_key%'
+            $publishableKey: '%stripe_publishable_key%'
+
+    DrDoh\TicketBundle\Services\DrDohSendTickets:
+        arguments:
+            - "@templating"
+            - "@mailer"

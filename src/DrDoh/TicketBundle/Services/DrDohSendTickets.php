@@ -40,11 +40,9 @@ class DrDohSendTickets
 
         $message = \Swift_Message::newInstance();
         $imgUrl = $message->embed(\Swift_Image::fromPath('../web/img/logo-louvre.png'));
-
         $filename = "Le Louvre : Billet d'accées.pdf";
-        
         $message->setFrom('ludovic.parhelia@gmail.com')
-                ->setTo('ludovic.parhelia@gmail.com')
+                ->setTo($buyer->getEmail('email'))
                 ->setSubject('Musée du Louvre : Vos billets d\'accés')
                 ->setBody(
                     $this->templating->render(

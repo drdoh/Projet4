@@ -10,7 +10,7 @@ if (PHP_VERSION_ID < 70000) {
 
 $kernel = new AppKernel('prod', false);
 if (PHP_VERSION_ID < 70000) {
-    $kernel->loadClassCache();
+    // $kernel->loadClassCache();
 }
 //$kernel = new AppCache($kernel);
 

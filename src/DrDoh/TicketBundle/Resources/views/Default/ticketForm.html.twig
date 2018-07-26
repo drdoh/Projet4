@@ -81,7 +81,7 @@
             daysOfWeekDisabled:[0],
             disabledDates: [
                 {% for fullDate in listFullDate %}
-                "{{fullDate}}" ,
+                "{{fullDate}}",
                 {% endfor %}
                 "99/99/9999 99:99",
                 ],
@@ -101,7 +101,7 @@ function dateCheck(){
         }
     var y = now.year();
     var date = d + "/" + m + "/" + y;
-    var chosen_date = $('#chosen_date').val();
+    var chosen_date = $('#datetimepicker1').val();
 
     if(h>=14 && chosen_date === date ){
         $('#choix option').remove();

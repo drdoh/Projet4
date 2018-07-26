@@ -15,34 +15,39 @@ parameters:
     stripe_secret_key: 'sk_test_VwDCVvhFbm8X0lNDfgBII72L'
     stripe_publishable_key: 'pk_test_Fq9NCZF4ZYN0Uh48FV4we6g8'
 
-services:
-   dr_doh_services.tickets_status:
-       class: DrDoh\TicketBundle\Services\DrDohTicketStatus
-       arguments:
-            $qteMax: %ticketstatus_qteMax%
-            $yearMax: %ticketstatus_yearMax%
+# services:
+#     dr_doh_services.tickets_status:
+#         public: true
+#         autowire: true
+#         class: DrDoh\TicketBundle\Services\DrDohTicketStatus
+#         arguments:
+#             $qteMax: '%ticketstatus_qteMax%'
+#             $yearMax: '%ticketstatus_yearMax%'
 
-   dr_doh_services.price_cal:
-       class: DrDoh\TicketBundle\Services\DrDohPriceCal
-       arguments:
-            $fullPrice: '%pricecal_full%'
-            $childPrice: '%pricecal_child%'
-            $babyPrice: '%pricecal_baby%'
-            $seniorPrice: '%pricecal_senior%'
-            $discountPrice: '%pricecal_discount%'
-            $devise: '%pricecal_devise%'
-            $childMaxAge: '%pricecal_childMaxAge%'
-            $childMinAge: '%pricecal_childMinAge%'
-            $seniorMinAge: '%pricecal_seniorMinAge%'
+#     dr_doh_services.price_cal:
+#         public: true
+#         class: DrDoh\TicketBundle\Services\DrDohPriceCal
+#         arguments:
+#             $fullPrice: '%pricecal_full%'
+#             $childPrice: '%pricecal_child%'
+#             $babyPrice: '%pricecal_baby%'
+#             $seniorPrice: '%pricecal_senior%'
+#             $discountPrice: '%pricecal_discount%'
+#             $devise: '%pricecal_devise%'
+#             $childMaxAge: '%pricecal_childMaxAge%'
+#             $childMinAge: '%pricecal_childMinAge%'
+#             $seniorMinAge: '%pricecal_seniorMinAge%'
 
-   dr_doh_services.stripe:
-       class: DrDoh\TicketBundle\Services\DrDohStripe
-       arguments: 
-            $secretKey: '%stripe_secret_key%'
-            $publishableKey: '%stripe_publishable_key%'
+#     dr_doh_services.stripe:
+#         public: true
+#         class: DrDoh\TicketBundle\Services\DrDohStripe
+#         arguments: 
+#             $secretKey: '%stripe_secret_key%'
+#             $publishableKey: '%stripe_publishable_key%'
 
-   dr_doh_services.sendTickets:
-        class: DrDoh\TicketBundle\Services\DrDohSendTickets
-        arguments:
-            - "@templating"
-            - "@mailer"
+#     dr_doh_services.sendTickets:
+#         public: true
+#         class: DrDoh\TicketBundle\Services\DrDohSendTickets
+#         arguments:
+#             - "@templating"
+#             - "@mailer"

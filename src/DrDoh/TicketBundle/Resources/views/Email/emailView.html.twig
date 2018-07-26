@@ -78,9 +78,9 @@
                                                                         <div align="left" class="article-content">
                                                                             <div id="client">
                                                                                 <div><strong>Client :</strong> {{listTickets[0].lastName}} {{listTickets[0].firstName}}</div>
-                                                                                <div><strong>Email :</strong> {{buyer[0].email}}</a></div>
-                                                                                <div><strong>Date de commande :</strong> {{buyer[0].orderDate.date|date('d/m/Y')}}</div>
-                                                                                <div><strong>N° de commande :</strong> {{buyer[0].orderId}}</div>
+                                                                                <div><strong>Email :</strong> {{buyer.email}}</a></div>
+                                                                                <div><strong>Date de commande :</strong> {{buyer.orderDate.date|date('d/m/Y')}}</div>
+                                                                                <div><strong>N° de commande :</strong> {{buyer.orderId}}</div>
                                                                             </div>
 
                                                                             <table id="priceTable" border="0" cellspacing="0" cellpadding="0">
@@ -101,7 +101,7 @@
                                                                                 <tfoot>
                                                                                     <tr>
                                                                                         <td colspan="1"> TOTAL</td>
-                                                                                        <td>{{buyer[0].amountPaid}},00 €</td>
+                                                                                        <td>{{buyer.amountPaid}},00 €</td>
                                                                                     </tr>  
                                                                                 </tfoot>
                                                                             </table>
