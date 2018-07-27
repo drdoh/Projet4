@@ -23,7 +23,7 @@ formGenerator = {
         $('fieldset').each(function(index){
             console.log(index);
             $('fieldset').children('legend').text(' Visiteur n°'+(index+1));
-            $('.initialism').text('Oups !');
+            $('.form-error-icon').text('Oups !');
             $('fieldset').children('legend').prepend('<i class="far fa-user"></i>' );
         })
 

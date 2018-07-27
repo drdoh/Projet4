@@ -1,0 +1,39 @@
+{% extends "DrDohTicketBundle::main.html.twig"%}
+
+{% block title %} 
+    {{parent()}} Erreur {{status_code}}
+{% endblock %}
+
+{% block body  %}
+
+<div class="container">
+    <h2 class="text-white m-4">Erreur {{status_code}}</h2> 
+    <div id="form_contener"></div>
+
+    <div class="card text-white bg-dark mb-3">
+
+        <h3 class="card-header text-center">
+            La page demandée n'existe pas
+        </h3>
+
+        <div class="card-body">
+            <div class="well">
+                <div class="alert alert-success text-center m-2" role="alert">
+                    <strong>Vous êtes perdu ?</strong> 
+                    <p>Cliquez sur le bouton ci-dessous pour revenir à l'accueil.</p>
+                    <hr>
+                    <p><a class="btn btn-info" href="{{ path('dr_doh_ticket_billetterie')}}">Retour à l'accueil</a></p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
+</div> 
+
+{% endblock %}
+
+{% block javascripts %}
+
+{% endblock %}
+    

@@ -20,3 +20,8 @@ monolog:
         console:
             type: console
             process_psr_3_messages: false
+            
+swiftmailer:
+    transport: gmail
+    username: "ludovic.parhelia@gmail.com"
+    password: "Khiva@95150"

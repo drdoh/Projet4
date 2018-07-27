@@ -79,7 +79,7 @@ class BookingController extends Controller
             'form' => $buyerForm->createView(), 
         ));
     }
-    
+
 /* -------- \\\\\ Action -=> stripeForm : Controle la page de payement /////-------- */
     public function stripeFormAction(Request $request, SessionInterface $session, DrDohPriceCal $DrDohPriceCal, DrDohStripe $DrDohStripe)
     {
@@ -92,6 +92,7 @@ class BookingController extends Controller
             'publishable_key' => $DrDohStripe->getPublishableKey(),
         ));   
     }
+
 /* -------- \\\\\ Action -=> stripeCharge : Valide le payement /////-------- */
     public function stripeCheckoutAction(Request $request, SessionInterface $session, DrDohStripe $DrDohStripe, DrDohTicketStatus $DrDohTicketStatus, EntityManagerInterface $em)
     {     
