@@ -21,12 +21,10 @@ formGenerator = {
         $('fieldset').attr('class','mb-3 card-body bg-dark text-white');
         $('fieldset').children('legend').attr("class","w-25 text-center shadow-lg p-2 bg-info rounded");
         $('fieldset').each(function(index){
-            console.log(index);
-            $('fieldset').children('legend').text(' Visiteur n°'+(index+1));
+            $(this).children('legend').text(' Visiteur n°'+(index+1));
+            $(this).children('legend').prepend('<i class="far fa-user"></i>' );
             $('.form-error-icon').text('Oups !');
-            $('fieldset').children('legend').prepend('<i class="far fa-user"></i>' );
         })
-
     },
         
     addCategory : function($container, index) {

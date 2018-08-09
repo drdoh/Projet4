@@ -70,21 +70,21 @@
     var d = now.date();
     var m = now.month()+1
     var y = now.year();
+    
 
     $(function () {
         $('#datetimepicker1').datetimepicker(
             {
-            format: 'L',
-            defaultDate: y+'/'+m+'/'+d,
-            minDate: y+'/'+m+'/'+d,
-            locale: 'fr',
-            daysOfWeekDisabled:[0],
-            disabledDates: [
-                {% for fullDate in listFullDate %}
-                "{{fullDate}}",
-                {% endfor %}
-                "99/99/9999 99:99",
-                ],
+                format: 'L',
+                defaultDate: moment(now),
+                minDate: moment(now),
+                locale: 'fr',
+                daysOfWeekDisabled:[0],
+                disabledDates: [
+                    {% for fullDate in listFullDate %}
+                    moment("{{fullDate}}"),
+                    {% endfor %}
+                    ],
             }
         );
 
@@ -98,7 +98,7 @@ function dateCheck(){
     var m = now.month()+1
         if(m<10){
             m = "0" + m;
-        }
+       }
     var y = now.year();
     var date = d + "/" + m + "/" + y;
     var chosen_date = $('#datetimepicker1').val();
@@ -124,4 +124,3 @@ function dateCheck(){
 </script>
 
 {% endblock %}
-    
